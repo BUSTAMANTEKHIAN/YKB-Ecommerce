@@ -1,0 +1,642 @@
+
+/* =========================
+   SHOPIFY-LEVEL ECOM UI
+========================= */
+
+:root{
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --text:#1a1a1a;
+    --muted:#6b7280;
+    --primary:#088178;
+    --radius:18px;
+}
+
+body{
+    background: var(--bg);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* =========================
+   HERO (SHOPIFY STYLE)
+========================= */
+
+#page-header{
+    background:
+        linear-gradient(120deg, rgba(0,0,0,.65), rgba(0,0,0,.25)),
+        url("../images/banner/bn1.jfif");
+    background-size: cover;
+    background-position: center;
+    height: 50vh;
+    border-radius: 0 0 40px 40px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+#page-header h2{
+    font-size: 44px;
+    color: white;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+#page-header p{
+    color: rgba(255,255,255,.85);
+}
+
+/* =========================
+   PRODUCT GRID (SHOPIFY LAYOUT)
+========================= */
+
+#product1 .pro-container{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 28px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* =========================
+   PRODUCT CARD (SHOPIFY STYLE)
+========================= */
+
+#product1 .pro{
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+    transition: all .35s ease;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+/* hover lift like Shopify */
+#product1 .pro:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+}
+
+/* image */
+#product1 .pro img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+    transition: .5s ease;
+}
+
+#product1 .pro:hover img{
+    transform: scale(1.08);
+}
+
+/* text area */
+#product1 .des{
+    padding: 14px 16px 55px;
+}
+
+#product1 .des span{
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+#product1 .des h5{
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 6px 0;
+    line-height: 1.4;
+}
+
+#product1 .des h4{
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 8px;
+}
+
+/* stars */
+#product1 .des i{
+    color: #fbbf24;
+    font-size: 12px;
+}
+
+/* =========================
+   ADD TO CART BUTTON (SHOPIFY STYLE)
+========================= */
+
+#product1 .cart{
+    position:absolute;
+    bottom:14px;
+    right:14px;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(0,0,0,0.08);
+    transition: all .3s ease;
+}
+
+#product1 .cart i{
+    color: var(--primary);
+    transition: .3s;
+}
+
+/* hover effect */
+#product1 .cart:hover{
+    background: var(--primary);
+    transform: scale(1.1) rotate(10deg);
+}
+
+#product1 .cart:hover i{
+    color: white;
+}
+
+/* =========================
+   PAGINATION (SHOPIFY CLEAN)
+========================= */
+
+#pagination{
+    text-align:center;
+    margin: 50px 0;
+}
+
+#pagination a{
+    display:inline-block;
+    padding:10px 16px;
+    margin:0 5px;
+    background:white;
+    border-radius:12px;
+    color:var(--text);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition:.3s;
+}
+
+#pagination a:hover{
+    background: var(--primary);
+    color:white;
+}
+
+.badge{
+    position:absolute;
+    top:15px;
+    left:15px;
+    background:#088178;
+    color:white;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:12px;
+}
+
+/* =========================
+   MOBILE OPTIMIZATION
+========================= */
+
+@media (max-width:768px){
+
+    #page-header h2{
+        font-size: 32px;
+    }
+
+    #product1 .pro-container{
+        gap: 18px;
+        padding: 25px 12px;
+    }
+
+    #product1 .pro img{
+        height: 220px;
+    }
+}
+
+/* Toast Notification */
+
+#toast{
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#088178;
+    color:white;
+    padding:14px 22px;
+    border-radius:10px;
+    font-weight:600;
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+    z-index:9999;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+#toast.show{
+    opacity:1;
+    visibility:visible;
+}
+
+/* =========================
+   CART BUTTON CLICK ANIMATION
+========================= */
+
+#product1 .cart.clicked{
+    background: var(--primary);
+    transform: scale(0.9);
+}
+
+#product1 .cart.clicked i{
+    color:white;
+}
+
+@keyframes popProduct{
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.03);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+}
+
+#product1 .pro.added{
+    animation:popProduct .35s ease;
+}
+
+@keyframes badgeBounce{
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.4);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+}
+
+#cart-count.bounce{
+    animation:badgeBounce .35s ease;
+}
+
+/* =========================
+   SHOPIFY CART DRAWER
+========================= */
+
+#drawer-overlay{
+
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:999;
+
+}
+
+#drawer-overlay.active{
+
+    opacity:1;
+    visibility:visible;
+
+}
+
+#cart-drawer{
+
+    position:fixed;
+
+    top:0;
+    right:-420px;
+
+    width:400px;
+    max-width:100%;
+
+    height:100vh;
+
+    background:white;
+
+    box-shadow:-8px 0 25px rgba(0,0,0,.15);
+
+    transition:.35s ease;
+
+    z-index:1000;
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+#cart-drawer.active{
+
+    right:0;
+
+}
+
+.drawer-header{
+
+    padding:20px;
+
+    border-bottom:1px solid #eee;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.drawer-header h3{
+
+    margin:0;
+
+}
+
+#close-drawer{
+
+    background:none;
+    border:none;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+}
+
+#drawer-items{
+
+    flex:1;
+
+    overflow:auto;
+
+    padding:20px;
+
+}
+
+.drawer-item{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+}
+
+.drawer-item img{
+
+    width:70px;
+    height:70px;
+
+    object-fit:cover;
+
+    border-radius:10px;
+
+}
+
+.drawer-footer{
+
+    border-top:1px solid #eee;
+
+    padding:20px;
+
+}
+
+#view-cart-btn{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    background:#088178;
+
+    color:white;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+}
+
+.drawer-info{
+
+    flex:1;
+
+}
+
+.drawer-info h4{
+
+    margin:0 0 5px;
+
+    font-size:15px;
+
+}
+
+.drawer-info p{
+
+    color:#088178;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+
+}
+
+.drawer-controls{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.drawer-controls button{
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:8px;
+
+    padding:6px 10px;
+
+    background:#f2f2f2;
+
+    transition:.25s;
+
+}
+
+.drawer-controls button:hover{
+
+    background:#088178;
+
+    color:white;
+
+}
+
+.drawer-controls span{
+
+    min-width:20px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+}
+
+.drawer-controls .remove{
+
+    margin-left:auto;
+
+    background:#ffeaea;
+
+    color:#e53935;
+
+}
+
+.drawer-controls .remove:hover{
+
+    background:#e53935;
+
+    color:white;
+
+}
+
+/* =========================
+   SHOP TOOLS
+========================= */
+
+#shop-tools{
+
+    max-width:1200px;
+
+    margin:40px auto 0;
+
+    padding:0 20px;
+
+}
+
+.search-box{
+
+    background:white;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:15px 20px;
+
+    border-radius:14px;
+
+    box-shadow:0 6px 20px rgba(0,0,0,.06);
+
+}
+
+.search-box input{
+
+    width:100%;
+
+    border:none;
+
+    outline:none;
+
+    font-size:16px;
+
+    background:transparent;
+
+}
+
+.search-box i{
+
+    color:#088178;
+
+}
+
+.stock{
+    margin-top:6px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.in-stock{
+    color:#28a745;
+}
+
+.out-stock{
+    color:#dc3545;
+}
+
+.cart.disabled{
+    background:#ccc;
+    cursor:not-allowed;
+    pointer-events:none;
+}
+
+.cart.disabled{
+    background:#d1d5db;
+    cursor:not-allowed;
+    pointer-events:auto;
+}
+
+.cart.disabled i{
+    color:#6b7280;
+}
+
+.cart.disabled:hover{
+    transform:none;
+    background:#d1d5db;
+}
+
+.cart.disabled:hover i{
+    color:#6b7280;
+}
+
+/* =========================
+   FILTER BAR
+========================= */
+
+.filter-bar{
+    display:flex;
+    gap:16px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+.filter-bar select{
+    padding:12px 16px;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    background:white;
+    font-size:14px;
+    font-weight:600;
+    color:#111827;
+    cursor:pointer;
+    min-width:180px;
+    box-shadow:0 4px 12px rgba(0,0,0,.04);
+}
+
+.filter-bar select:focus{
+    outline:none;
+    border-color:#088178;
+}

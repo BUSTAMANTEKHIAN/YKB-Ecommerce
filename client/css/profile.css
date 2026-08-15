@@ -1,0 +1,157 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #0b1220;
+    color: white;
+}
+
+/* LAYOUT */
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 220px;
+    background: #111827;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    color: #38bdf8;
+}
+
+.sidebar a {
+    padding: 10px;
+    margin: 5px 0;
+    color: #cbd5e1;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+    background: #1f2937;
+    color: white;
+}
+
+.logout {
+    margin-top: auto;
+    background: red;
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 30px;
+}
+
+/* HEADER */
+.header-card {
+    background: #111827;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.banner {
+    height: 120px;
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+}
+
+/* PROFILE SECTION */
+.profile-section {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* AVATAR */
+.avatar-wrapper {
+    position: relative;
+}
+
+#profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #38bdf8;
+    object-fit: cover;
+}
+
+/* CAMERA */
+.camera {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #38bdf8;
+    padding: 6px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* INFO */
+.info h2 {
+    margin: 0;
+}
+
+.info p {
+    color: #cbd5e1;
+}
+
+.info button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    background: #38bdf8;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* STATS */
+.stats {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card {
+    flex: 1;
+    background: #111827;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-box {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 12px;
+    width: 300px;
+}
+
+.modal-box input {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+}

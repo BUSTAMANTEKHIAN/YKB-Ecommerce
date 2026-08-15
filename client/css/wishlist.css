@@ -1,0 +1,444 @@
+/* =====================================================
+   YKB Clothing — Wishlist
+   Design language: garment hang-tags pinned to a board.
+   Tokens
+   ----------------------------------------------------- */
+
+:root {
+    --paper:   #FAF7F1;
+    --paper-2: #F1ECE1;
+    --ink:     #1C1A16;
+    --ink-70:  #4A463D;
+    --stone:   #8B8477;
+    --kraft:   #C9AD7F;
+    --brass:   #97742E;
+    --wine:    #7A2A34;
+    --wine-ink:#5C1F27;
+    --line:    #E4DDCD;
+
+    --font-display: "Fraunces", serif;
+    --font-body: "Inter", sans-serif;
+    --font-mono: "Space Mono", monospace;
+
+    --radius-lg: 22px;
+    --radius-sm: 10px;
+    --shadow-card: 0 18px 34px rgba(28, 26, 22, 0.10);
+    --shadow-card-hover: 0 26px 46px rgba(28, 26, 22, 0.16);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--paper);
+    font-family: var(--font-body);
+    color: var(--ink);
+}
+
+/* ===== Top bar ===== */
+
+.site-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 8%;
+    border-bottom: 1px solid var(--line);
+}
+
+.site-bar__mark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.site-bar__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-70);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color .2s ease;
+}
+
+.site-bar__back:hover { color: var(--wine); }
+
+/* ===== Page ===== */
+
+#wishlist-page {
+    min-height: 100vh;
+    padding: 60px 8% 120px;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* ===== Header ===== */
+
+.wishlist-header {
+    text-align: center;
+    padding: 30px 20px 46px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 50px;
+}
+
+.wishlist-header__eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 14px;
+}
+
+.wishlist-header h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(38px, 5vw, 58px);
+    margin: 0 0 14px;
+    letter-spacing: .2px;
+}
+
+.wishlist-header p {
+    font-size: 17px;
+    color: var(--ink-70);
+    margin: 0;
+}
+
+/* ===== Toolbar ===== */
+
+.wishlist-toolbar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 46px;
+}
+
+.wishlist-count {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--ink-70);
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    padding: 10px 22px;
+    border-radius: 50px;
+}
+
+/* ===== Grid ===== */
+
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 290px));
+    justify-content: center;
+    gap: 46px 34px;
+}
+
+/* ===== Hang-tag card ===== */
+
+.wish-card {
+    --tilt: 0deg;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: visible;
+    box-shadow: var(--shadow-card);
+    transform: rotate(var(--tilt));
+    transition: transform .35s ease, box-shadow .35s ease;
+    animation: pinDown .5s ease both;
+}
+
+.wish-card:nth-child(6n+1) { --tilt: -1.6deg; }
+.wish-card:nth-child(6n+2) { --tilt: 1.2deg; }
+.wish-card:nth-child(6n+3) { --tilt: -0.6deg; }
+.wish-card:nth-child(6n+4) { --tilt: 1.8deg; }
+.wish-card:nth-child(6n+5) { --tilt: -1.2deg; }
+.wish-card:nth-child(6n+6) { --tilt: 0.6deg; }
+
+@keyframes pinDown {
+    from { opacity: 0; transform: translateY(24px) rotate(var(--tilt)); }
+    to   { opacity: 1; transform: translateY(0) rotate(var(--tilt)); }
+}
+
+.wish-card:hover {
+    transform: rotate(0deg) translateY(-8px);
+    box-shadow: var(--shadow-card-hover);
+    z-index: 2;
+}
+
+/* Punch hole + loop, sitting above the card like a real tag */
+
+.wish-card__loop {
+    position: absolute;
+    top: -16px;
+    left: 28px;
+    width: 26px;
+    height: 26px;
+}
+
+.wish-card__loop svg { width: 100%; height: 100%; display: block; }
+
+/* Tag index number */
+
+.wish-card__index {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--stone);
+}
+
+/* Image (fabric swatch) */
+
+.wish-card__image {
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--paper-2);
+}
+
+.wish-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s ease;
+}
+
+.wish-card:hover .wish-card__image img { transform: scale(1.08); }
+
+/* Perforation line, like a tear-off tag edge */
+
+.wish-card__perf {
+    height: 0;
+    border-top: 1.5px dashed var(--line);
+    margin: 0 18px;
+}
+
+/* Info */
+
+.wish-card__body {
+    padding: 20px 22px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.wish-card__name {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0;
+    min-height: 50px;
+}
+
+.wish-card__price {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--wine-ink);
+    margin: 4px 0 16px;
+}
+
+/* Buttons, styled like ribbon tabs */
+
+.wish-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.move-cart,
+.remove-wish {
+    flex: 1;
+    border: none;
+    padding: 13px 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.move-cart {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.move-cart:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 22px rgba(28,26,22,.25);
+}
+
+.remove-wish {
+    background: transparent;
+    color: var(--wine);
+    border: 1.5px solid var(--wine);
+}
+
+.remove-wish:hover:not(:disabled) {
+    background: var(--wine);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.move-cart:disabled,
+.remove-wish:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.wish-card.is-removing {
+    opacity: 0;
+    transform: scale(.92) rotate(var(--tilt));
+    transition: opacity .3s ease, transform .3s ease;
+}
+
+/* ===== Loading skeletons ===== */
+
+.wish-skeleton {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    height: 400px;
+    overflow: hidden;
+    position: relative;
+}
+
+.wish-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 30%, rgba(0,0,0,.05) 50%, transparent 70%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+    from { background-position: 150% 0; }
+    to   { background-position: -50% 0; }
+}
+
+/* ===== Empty / error states ===== */
+
+.wishlist-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 100px 40px;
+    border: 1.5px dashed var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--paper-2);
+}
+
+.wishlist-state__loop {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 24px;
+    opacity: .6;
+}
+
+.wishlist-state__loop svg { width: 100%; height: 100%; }
+
+.wishlist-state h2 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 10px;
+}
+
+.wishlist-state p {
+    font-size: 15px;
+    color: var(--ink-70);
+    margin: 0 0 26px;
+}
+
+.wishlist-state .shop-btn {
+    display: inline-block;
+    padding: 14px 32px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: transform .2s ease;
+}
+
+.wishlist-state .shop-btn:hover { transform: translateY(-3px); }
+
+.wishlist-state.is-error h2 { color: var(--wine-ink); }
+
+/* ===== Toasts ===== */
+
+.toast-stack {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 999;
+}
+
+.toast {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+    animation: toastIn .25s ease;
+    max-width: 320px;
+}
+
+.toast.toast--success { background: #21402C; }
+.toast.toast--error { background: var(--wine-ink); }
+
+.toast.is-leaving {
+    animation: toastOut .25s ease forwards;
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(12px); }
+}
+
+/* ===== Mobile ===== */
+
+@media (max-width: 768px) {
+    .site-bar { padding: 18px 6%; }
+
+    #wishlist-page { padding: 40px 6% 90px; }
+
+    .wishlist-header { padding: 10px 10px 34px; margin-bottom: 34px; }
+
+    .wishlist-grid { grid-template-columns: 1fr; gap: 40px; }
+
+    .wish-buttons { flex-direction: column; }
+
+    .toast-stack { left: 16px; right: 16px; bottom: 16px; }
+    .toast { max-width: none; }
+}

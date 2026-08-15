@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YKB CLOTHING</title> 
+    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/product.css">
+
+</head>
+<body>
+
+    <section id="header">
+
+        <a href="#">
+            <img src= "images/banner/b1.png" class="logo" alt="YKB Clothing">
+        </a>
+
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a class="active" href="shop.html">Shop</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            
+                <li id="lg-bag">
+                    <a href="cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span id="cart-count">0</span>
+                    </a>
+                </li>
+            
+                <li id="close">
+                    <a href="#" aria-label="Close Menu">
+                        <i class="far fa-times"></i>
+                    </a>
+                </li>
+
+                <li class="wishlist-icon">
+                    <a href="wishlist.html" style="position: relative;">
+                        <i class="fas fa-heart"></i>
+                        <span id="wishlist-count">0</span>
+                    </a>
+                </li>
+
+            <button id="dark-mode-btn">
+                <i class="fas fa-moon"></i>
+            </button>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="prodetails" class="section-p1 section-m1">
+        <div class="single-pro-image">
+
+    <img src="images/products/no-image.png"
+         width="100%"
+         id="MainImg"
+         alt="Product Image">
+
+    <div class="small-img-group" id="thumbnail-group">
+
+        <div class="small-img-col">
+            <img src="images/products/no-image.png"
+                 width="100%"
+                 class="small-img">
+        </div>
+
+        <div class="small-img-col">
+            <img src="images/products/no-image.png"
+                 width="100%"
+                 class="small-img">
+        </div>
+
+        <div class="small-img-col">
+            <img src="images/products/no-image.png"
+                 width="100%"
+                 class="small-img">
+        </div>
+
+        <div class="small-img-col">
+            <img src="images/products/no-image.png"
+                 width="100%"
+                 class="small-img">
+        </div>
+
+    </div>
+
+</div>
+    
+
+    <div class="single-pro-details">
+        <h6 id="product-category">Loading...</h6>
+        <input type="hidden" id="product-id">
+        <h4 id="product-name">Men's Fashion T shirt</h4>
+        <h2 id="product-price">₱13,900</h2>
+        <p id="product-stock"></p>
+        <label for="size">Size</label>
+        <select id="size" name="size">
+            <option value="" selected disabled>Select Size</option>
+            <option value="XXL">XXL</option>
+            <option value="XL">XL</option>
+            <option value="Large">Large</option>
+            <option value="Medium">Medium</option>
+            <option value="Small">Small</option>
+        </select>
+        <label for="quantity">Quantity</label>
+        <input type="number" value="1" id="quantity" name="quantity">
+        
+        <div class="button-group">
+            <button class="normal" id="add-cart">Add To Cart</button>
+            <button class="normal buy-now" id="buy-now">Buy Now</button>
+                
+            <button id="wishlist-btn">
+                <i class="far fa-heart"></i>
+            </button>
+        </div>
+        <h4>Product Details</h4>
+        <span id="product-description">
+        Loading...
+        </span>
+    </div>
+    </section>
+
+    <section id="reviews" class="section-p1 section-m1">
+
+    <h2>Customer Reviews</h2>
+
+    <div id="review-summary">
+        <h3>⭐ <span id="avg-rating">0.0</span>/5</h3>
+        <p><span id="review-count">0</span> Reviews</p>
+    </div>
+
+    <div id="review-list">
+        <p>Loading reviews...</p>
+    </div>
+
+    <hr style="margin:30px 0;">
+
+    <h3>Write a Review</h3>
+
+    <form id="review-form">
+
+        <label>Rating</label>
+        <select id="review-rating" required>
+            <option value="">Select Rating</option>
+            <option value="5">★★★★★</option>
+            <option value="4">★★★★☆</option>
+            <option value="3">★★★☆☆</option>
+            <option value="2">★★☆☆☆</option>
+            <option value="1">★☆☆☆☆</option>
+        </select>
+
+        <textarea
+            id="review-text"
+            rows="4"
+            placeholder="Share your experience with this product..."
+            required
+        ></textarea>
+
+        <br>
+
+        <button type="submit" class="normal">
+            Submit Review
+        </button>
+
+    </form>
+
+</section>
+    
+        <section id="product1" class="section-p1">
+        <h2>Featured Products</h2>
+        <p>Summer Collection New Morden Design</p>
+
+        <div class="pro-container" id="related-products"></div>
+
+    </section>
+
+    <section id="newsletter" class="section-p1 section-m1">
+        <div class="newstext">
+            <h4>Sign Up For Newsletter</h4>
+            <p>Get E-mail updates about our latest shop and <span>special offers.</span> 
+            </p>
+        </div>
+        <div class="form">
+            <input type="text" placeholder="Your Email Address">
+            <button class="normal">Sign Up</button>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo" src="images/banner/b1.png" alt="">
+            <h4>Contact</h4>
+            <p> <strong>Address:</strong> 4170 Malaban Binan laguna ilaya st, zone 4</p>
+            <p> <strong>Phone:</strong> 09510699549</p>
+            <p> <strong>Hours:</strong> 9:00am - 9:00pm Mon - Sat</p>
+            <div class="follow">
+                <h4>Follow us</h4>
+                <div class="icon">
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-tiktok"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About us</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms and Conditions</a>
+            <a href="#">Contact us</a>
+        </div>
+
+        <div class="col">
+            <h4>My account</h4>
+            <a href="#">Sign in</a>
+            <a href="#">View Cart</a>
+            <a href="#">My Wishlist</a>
+            <a href="#">Track My Order</a>
+            <a href="#">Help</a>
+        </div>
+        
+        <div class="col install">
+            <h4>Install app</h4>
+            <p>From app Store or Google Play</p>
+            <div class="row">
+                <img src="images/pay/pay1.webp" alt="">
+                <img src="images/pay/pay2.webp" alt="">
+            </div>
+            <p>Secure Payment Gateway </p>
+            <img src="images/pay/pay3.jpg" alt="">
+        </div>
+
+        <div class="copyright">
+            <p>© 2025, Tech2 etc - HTML CSS Ecommerce Template</p>
+             </div>
+    </footer>
+
+    <script>
+        var MainImg = document.getElementById("MainImg");
+        var smalling = document.getElementsByClassName("small-img");
+
+        smalling [0].onclick = function () {
+            MainImg.src = smalling [0].src;
+        }
+        smalling [1].onclick = function () {
+            MainImg.src = smalling [1].src;
+        }
+        smalling [2].onclick = function () {
+            MainImg.src = smalling [2].src;
+        }
+        smalling [3].onclick = function () {
+            MainImg.src = smalling [3].src;
+        }
+        
+    </script>
+
+
+
+    <script src="js/script.js"></script>   
+    <script src="js/product.js"></script>
+    <script src="js/darkmode.js"></script>
+
+</body>
+</html>

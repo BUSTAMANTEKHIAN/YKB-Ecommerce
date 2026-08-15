@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YKB CLOTHING</title> 
+    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+
+    <link rel="stylesheet" href="css/styles.css">
+    
+    
+</head>
+<body>
+
+    <section id="header">
+
+        <a href="index.html" class="brand-logo">
+            <img src="images/banner/b1.png" class="logo" alt="YKB Clothing">
+            <div class="brand-text">
+                <span class="brand-name">YKB Clothing</span>
+                <span class="brand-tag">Premium Streetwear</span>
+            </div>
+        </a>
+        
+
+        <div>
+            <ul id="navbar">
+
+    <li>
+        <a href="index.html">Home</a>
+    </li>
+
+    <li>
+        <a href="shop.html">Shop</a>
+    </li>
+
+    <li>
+        <a href="blog.html">Blog</a>
+    </li>
+
+    <li>
+        <a href="about.html">About</a>
+    </li>
+
+    <li>
+        <a href="contact.html">Contact</a>
+    </li>
+
+    <li id="auth-area">
+
+    <div id="guest-links">
+        <a href="login.html" class="nav-login">Login</a>
+        <a href="register.html" class="nav-register">Register</a>
+    </div>
+
+    <div id="user-menu" class="user-menu hidden">
+        <a href="#" id="user-btn">
+            <i class="fas fa-user-circle"></i>
+            <span id="nav-username"></span>
+        </a>
+
+        <div class="dropdown" id="user-dropdown">
+            <a href="profile.html" id="profile-link">My Profile</a>
+            <a href="orders.html">My Orders</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
+
+</li>
+
+    <li class="wishlist-icon">
+        <a href="wishlist.html">
+            <i class="fas fa-heart"></i>
+            <span id="wishlist-count">0</span>
+        </a>
+    </li>
+
+    <li id="lg-bag">
+        <a href="cart.html">
+            <i class="fas fa-shopping-bag"></i>
+            <span id="cart-count">0</span>
+        </a>
+    </li>
+
+    <li>
+        <button id="dark-mode-btn">
+            <i class="fas fa-moon"></i>
+        </button>
+    </li>
+
+    <!-- Mobile close button -->
+    <li id="close-item">
+        <a href="#" id="close"><i class="fas fa-times"></i></a>
+    </li>
+
+</ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="hero">
+
+
+<div class="hero-content">
+
+    <span class="hero-badge">NEW COLLECTION 2026</span>
+
+    <h1>
+        Elevate Your
+        <span>Streetwear Style</span>
+    </h1>
+
+    <p>
+        Discover premium essentials, limited drops, and timeless pieces designed for everyday confidence.
+    </p>
+
+    <div class="hero-actions">
+
+        <button class="hero-primary" onclick="window.location.href='shop.html'">
+            Shop Collection
+        </button>
+
+        <a href="#product1" class="hero-secondary">
+            Explore Best Sellers
+        </a>
+
+    </div>
+
+    <div class="hero-stats">
+
+        <div>
+            <strong>10K+</strong>
+            <span>Happy Customers</span>
+        </div>
+
+        <div>
+            <strong>500+</strong>
+            <span>Premium Products</span>
+        </div>
+
+        <div>
+            <strong>4.9★</strong>
+            <span>Customer Rating</span>
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+
+    <section id="feature" class="section-p1">
+        <div class="fe-box">
+            <img src= "images/banner/f1.png">
+            <h6>Free Shipping</h6>
+        </div>
+        <div class="fe-box">
+            <img src= "images/banner/f2.png">
+            <h6>Online Order</h6>
+        </div>
+        <div class="fe-box">
+            <img src= "images/banner/f3.png">
+            <h6>Save Money</h6>
+        </div>
+        <div class="fe-box">
+            <img src= "images/banner/f4.png">
+            <h6>Promotions</h6>
+        </div>
+        <div class="fe-box">
+            <img src= "images/banner/f5.png">
+            <h6>Happy Sell</h6>
+        </div>
+        <div class="fe-box">
+            <img src= "images/banner/f6.png">
+            <h6>F24/7 Support</h6>
+        </div>
+    </section>
+
+    <!-- FIX: added class="product-section" (shared with the Women section below)
+         and kept id="product1" unique to this section only. Styles.css now
+         targets .product-section instead of the old duplicated #product1 id. -->
+
+    <section id="product1" class="section-p1 product-section">
+
+    <div class="section-heading">
+    <span class="section-chip">Men Collection</span>
+    <h2>Featured Essentials</h2>
+    <p>
+        Curated premium streetwear pieces designed for everyday comfort,
+        modern style, and timeless wear.
+    </p>
+
+    <div class="search-wrapper">
+        <i class="fas fa-search"></i>
+        <input
+            type="text"
+            id="home-search"
+            placeholder="Search products, brands, or categories...">
+    </div>
+</div>
+
+<div class="product-toolbar">
+
+    <div class="filter-buttons">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="Hoodie">Hoodies</button>
+        <button class="filter-btn" data-category="Shirt">Shirts</button>
+        <button class="filter-btn" data-category="Jacket">Jackets</button>
+        <button class="filter-btn" data-category="Accessories">Accessories</button>
+    </div>
+
+    <select id="sort-products">
+        <option value="newest">Newest</option>
+        <option value="low-high">Price: Low to High</option>
+        <option value="high-low">Price: High to Low</option>
+    </select>
+
+</div>
+
+        <div class="pro-container"></div>
+    </section>
+
+    <section id="banner" class="section-m1">
+        <h4>Repair Services </h4>
+        <h2>Up to <span>70% off</span> - All t-shirt & Accessories</h2>
+        <button class="normal"> Explore More</button>
+    </section>
+
+    <!-- FIX: this used to share id="product1" with the section above, which
+         is invalid HTML (duplicate IDs). Now it has its own unique id and
+         the same "product-section" class so the shared CSS styling still
+         applies. -->
+    
+    <section id="product2" class="section-p1 product-section">
+
+
+    <div class="section-heading">
+        <span class="section-chip">Women Collection</span>
+        <h2>New Arrivals</h2>
+        <p>
+            Discover the latest silhouettes, seasonal trends, and elevated wardrobe
+            staples crafted for effortless everyday style.
+        </p>
+    </div>
+    
+    <!-- Dynamic products from MySQL -->
+    <div class="pro-container"></div>
+    
+    
+    </section>
+
+
+    <section id="sm-banner" class="section-p1">
+
+    <div class="banner-box">
+        <h4>Crazy Deals</h4>
+        <h2>Buy 1 Get 1 Free</h2>
+        <span>The best classic clothing is on sale</span>
+        <button class="white">Learn More</button>
+    </div>
+
+    <div class="banner-box banner-box2">
+        <h4>Spring Collection</h4>
+        <h2>Upcoming Season</h2>
+        <span>New modern designs available now</span>
+        <button class="white">Collection</button>
+    </div>
+
+</section>
+
+    <section id="banner3">
+        <div class="banner-box">
+            <h2>Seasonal Sale</h2>
+            <h3>Winter Collection -50% OFF</h3>
+        </div>
+        <div class="banner-box banner-box2">
+            <h2>NEW COLLECTION</h2>
+            <h3>Spring / Summer 2025</h3>
+        </div>
+        <div class="banner-box banner-box3">
+            <h2>T-shirt</h2>
+            <h3>New Trendy Prints</h3>
+        </div>
+    </section>
+
+    <section id="newsletter" class="section-p1 section-m1">
+        <div class="newstext">
+            <h4>Sign Up For Newsletter</h4>
+            <p>Get E-mail updates about our latest shop and <span>special offers.</span> 
+            </p>
+        </div>
+        <div class="form">
+            <input type="text" placeholder="Your Email Address">
+            <button class="normal" onclick="window.location.href='login.html'" >Sign Up</button>
+            
+        </div>
+    </section>
+
+
+
+    <script src="js/script.js"></script>   
+    <script src="js/auth.js"></script>
+    <script src="js/index-products.js"></script>
+</body>
+</html>

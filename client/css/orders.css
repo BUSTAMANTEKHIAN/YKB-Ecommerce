@@ -1,0 +1,277 @@
+body{
+    background:#f5f5f5;
+}
+
+.order-buttons{
+    margin-top:25px;
+    display:flex;
+    gap:15px;
+    justify-content:flex-end;
+    flex-wrap:wrap;
+}
+
+.receipt-btn,
+.buy-btn{
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.receipt-btn{
+    background:#222;
+    color:#fff;
+}
+
+.buy-btn{
+    background:#088178;
+    color:#fff;
+}
+
+.receipt-btn:hover{
+    background:#444;
+}
+
+.buy-btn:hover{
+    background:#06665f;
+}
+
+@media(max-width:768px){
+
+    .orders-header h1{
+        font-size:32px;
+    }
+
+    .order-top{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .product{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .product img{
+        margin-right:0;
+        margin-bottom:15px;
+    }
+
+    .order-buttons{
+        justify-content:center;
+    }
+
+    .order-total{
+        text-align:center;
+    }
+}
+
+.orders-page{
+    max-width:1200px;
+    margin:50px auto;
+    padding:20px;
+}
+
+.orders-header{
+    margin-bottom:40px;
+}
+
+.orders-header h1{
+    font-size:40px;
+    color:#222;
+    margin-bottom:10px;
+}
+
+.orders-header p{
+    color:#777;
+}
+
+.order-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.order-top{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.order-id{
+    font-weight:600;
+}
+
+.order-date{
+    color:#777;
+}
+
+.order-status{
+    background:#eaf8f7;
+    color:#088178;
+    padding:8px 15px;
+    border-radius:20px;
+    font-size:14px;
+    font-weight: bold;
+}
+
+.order-status.processing{
+    background:#eaf8f7;
+    color:#088178;
+}
+
+.order-status.cancelled{
+    background:#ffe5e5;
+    color:#dc3545;
+}
+
+.order-status.delivered{
+    background:#e7f1ff;
+    color:#0d6efd;
+}
+
+.product{
+    display:flex;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.product img{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:10px;
+    margin-right:20px;
+}
+
+.product-info h4{
+    margin-bottom:10px;
+}
+
+.order-total{
+    text-align:right;
+    font-size:22px;
+    font-weight:bold;
+    color:#088178;
+}
+
+.empty{
+    background:#fff;
+    padding:60px;
+    text-align:center;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.orders-page{
+    opacity:1 !important;
+    transform:none !important;
+}
+
+.cancel-btn{
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+    background:#dc3545;
+    color:#fff;
+}
+
+.cancel-btn:hover{
+    background:#b02a37;
+}
+
+.order-status.pending{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.order-status.processing{
+    background:#d1ecf1;
+    color:#0c5460;
+}
+
+.order-status.delivered{
+    background:#d4edda;
+    color:#155724;
+}
+
+.order-status.cancelled{
+    background:#f8d7da;
+    color:#721c24;
+}
+
+/* =========================
+   ORDER TRACKER
+========================= */
+
+.order-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+
+.order-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+
+.status-badge{
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    color:#fff;
+}
+
+.status-badge.pending{ background:#f59e0b; }
+.status-badge.processing{ background:#2563eb; }
+.status-badge.shipped{ background:#7c3aed; }
+.status-badge.delivered{ background:#16a34a; }
+.status-badge.cancelled{ background:#ef4444; }
+
+.tracker{
+    margin-top:18px;
+}
+
+.tracker-bar{
+    width:100%;
+    height:8px;
+    background:#e5e7eb;
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.tracker-fill{
+    height:100%;
+    background:#088178;
+    transition:width .4s ease;
+}
+
+.tracker-steps{
+    display:flex;
+    justify-content:space-between;
+    margin-top:10px;
+    font-size:12px;
+    color:#9ca3af;
+}
+
+.tracker-steps span.active{
+    color:#111827;
+    font-weight:700;
+}

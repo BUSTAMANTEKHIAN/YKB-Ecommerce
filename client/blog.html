@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YKB CLOTHING</title> 
+    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/blog.css">
+</head>
+<body>
+
+    <section id="header">
+
+        <a href="#">
+            <img src= "images/banner/b1.png" class="logo" alt="YKB Clothing">
+        </a>
+
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a class="active" href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li class="wishlist-icon">
+                    <a href="wishlist.html">
+                        <i class="fas fa-heart"></i>
+                        <span id="wishlist-count">0</span>
+                    </a>
+                </li>
+                <li id="lg-bag">
+                    <a class="active" href="cart.html" style="position: relative;">
+                        <i class="fas fa-shopping-bag"></i>
+                    
+                        <!-- CART BADGE -->
+                        <span id="cart-count">0</span>
+                    </a>
+                </li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="page-header" class="blog-header">
+        <h2>#Read More</h2>
+        <p>Read All Case Studies About Our Products!</p>
+    </section> 
+
+    <section id="blog-search">
+
+    <button id="dark-mode-btn">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="search-box">
+    <i class="fas fa-search"></i>
+    <input
+        type="text"
+        id="search-input"
+        placeholder="Search blog..."
+        autocomplete="off"
+    >
+    <div id="search-suggestions" class="suggestions-box"></div>
+</div>
+
+</section>
+
+<section id="blog"></section>
+
+<section id="pagination" class="section-p1"></section>
+
+<!-- Modal -->
+<div id="blog-modal">
+    <div class="modal-content">
+        <span id="close-modal">&times;</span>
+        <h2 id="modal-title"></h2>
+        <p id="modal-date"></p>
+        <img id="modal-image">
+        <p id="modal-text"></p>
+    </div>
+</div>
+
+    <section id="newsletter" class="section-p1 section-m1">
+        <div class="newstext">
+            <h4>Sign Up For Newsletter</h4>
+            <p>Get E-mail updates about our latest shop and <span>special offers.</span> 
+            </p>
+        </div>
+        <div class="form">
+            <input type="text" placeholder="Your Email Address">
+            <button class="normal">Sign Up</button>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo" src="images/banner/b1.png" alt="">
+            <h4>Contact</h4>
+            <p> <strong>Address:</strong> 4170 Malaban Binan laguna ilaya st, zone 4</p>
+            <p> <strong>Phone:</strong> 09510699549</p>
+            <p> <strong>Hours:</strong> 9:00am - 9:00pm Mon - Sat</p>
+            <div class="follow">
+                <h4>Follow us</h4>
+                <div class="icon">
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-tiktok"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div></div>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="about.html">About us</a>
+            <a href="checkout.html">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms and Conditions</a>
+            <a href="contact.html">Contact us</a>
+        </div>
+
+        <div class="col">
+            <h4>My account</h4>
+            <a href="register.html">Sign in</a>
+            <a href="cart.html">View Cart</a>
+            <a href="shop.html">My Wishlist</a>
+            <a href="orders.html">Track My Order</a>
+            <a href="#">Help</a>
+        </div>
+        
+        <div class="col install">
+            <h4>Install app</h4>
+            <p>From app Store or Google Play</p>
+            <div class="row">
+                <img src="images/pay/pay1.webp" alt="">
+                <img src="images/pay/pay2.webp" alt="">
+            </div>
+            <p>Secure Payment Gateway </p>
+            <img src="images/pay/pay3.jpg" alt="">
+        </div>
+
+        <div class="copyright">
+            <p>© 2025, Tech2 etc - HTML CSS Ecommerce Template</p>
+             </div>
+    </footer>
+
+
+    <script src="js/blog.js"></script>
+    <script src="js/script.js"></script>
+
+</body>
+</html>

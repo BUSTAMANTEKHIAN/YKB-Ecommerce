@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YKB Admin Dashboard</title>
+    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="css/admin.css">
+
+
+</head>
+<body>
+
+<div class="admin-layout">
+
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+        <h2>YKB Admin</h2>
+        <p>Store Management</p>
+    </div>
+
+    <nav class="sidebar-nav">
+
+        <a href="#dashboard" class="active">
+            <i class="fas fa-chart-pie"></i>
+            Dashboard
+        </a>
+
+        <a href="#products">
+            <i class="fas fa-box"></i>
+            Products
+        </a>
+
+        <a href="#orders">
+            <i class="fas fa-shopping-bag"></i>
+            Orders
+        </a>
+
+        <a href="#users">
+            <i class="fas fa-users"></i>
+            Users
+        </a>
+
+    </nav>
+
+    <button id="adminLogout" class="logout-btn">
+        <i class="fas fa-right-from-bracket"></i>
+        Logout
+    </button>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+
+    <header class="topbar">
+
+        <div>
+            <h1>Dashboard Overview</h1>
+            <p>Welcome back, Admin</p>
+        </div>
+
+        <div class="admin-user">
+            <i class="fas fa-user-circle"></i>
+            <span id="adminName">Admin</span>
+        </div>
+
+    </header>
+
+    <!-- STATS -->
+    <section class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="icon blue">
+                <i class="fas fa-box"></i>
+            </div>
+
+            <div class="stat-info">
+                <h3 id="totalProducts">0</h3>
+                <p>Total Products</p>
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="icon green">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+
+            <div class="stat-info">
+                <h3 id="totalOrders">0</h3>
+                <p>Total Orders</p>
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="icon purple">
+                <i class="fas fa-peso-sign"></i>
+            </div>
+
+            <div class="stat-info">
+                <h3 id="totalRevenue">₱0</h3>
+                <p>Total Revenue</p>
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="icon orange">
+                <i class="fas fa-triangle-exclamation"></i>
+            </div>
+
+            <div class="stat-info">
+                <h3 id="lowStock">0</h3>
+                <p>Low Stock</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SALES ANALYTICS -->
+    <section class="products-section" style="margin-bottom:32px;">
+
+        <div class="section-header">
+            <h2>Sales Analytics</h2>
+        </div>
+
+        <canvas id="salesChart" height="120"></canvas>
+
+    </section>
+
+
+
+    <!-- PRODUCTS -->
+    <section class="products-section" id="products">
+
+        <div class="section-header">
+
+            <h2>Product Management</h2>
+
+            <button id="addProductBtn">
+                <i class="fas fa-plus"></i>
+                Add Product
+            </button>
+
+        </div>
+
+        <div id="lowStockAlert" class="alert-banner" style="display:none;">
+            ⚠ Some products are running low on stock.
+        </div>
+
+        <table class="products-table">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="productsTableBody">
+
+                <tr>
+                    <td colspan="7" class="loading">
+                        Loading products...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+    <!-- ORDERS -->
+<section class="products-section" id="orders" style="margin-top:32px;">
+
+    <div class="section-header">
+        <h2>Order Management</h2>
+    </div>
+
+    <table class="products-table">
+
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody id="ordersTableBody">
+
+            <tr>
+                <td colspan="6" class="loading">
+                    Loading orders...
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</section>
+
+<!-- REVIEWS -->
+<section class="products-section" id="reviews" style="margin-top:32px;">
+
+    <div class="section-header">
+        <h2>Review Management</h2>
+    </div>
+
+    <table class="products-table">
+
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Customer</th>
+                <th>Rating</th>
+                <th>Review</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="reviewsTableBody">
+            <tr>
+                <td colspan="6" class="loading">
+                    Loading reviews...
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+</section>
+
+<!-- USERS -->
+<section class="products-section" id="users" style="margin-top:32px;">
+
+    <div class="section-header">
+        <h2>User Management</h2>
+
+        <input
+            type="text"
+            id="userSearch"
+            placeholder="Search users..."
+            style="padding:10px 14px;border-radius:10px;border:1px solid #ddd;"
+        >
+    </div>
+
+    <table class="products-table">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody id="usersTableBody">
+
+            <tr>
+                <td colspan="6" class="loading">
+                    Loading users...
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</section>
+
+<!-- CONTACT MESSAGES -->
+<section class="products-section" id="messages" style="margin-top:32px;">
+
+    <div class="section-header">
+        <h2>Contact Messages</h2>
+    </div>
+
+    <table class="products-table">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="messagesTableBody">
+            <tr>
+                <td colspan="6" class="loading">
+                    Loading messages...
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+</section>
+
+</main>
+
+
+</div>
+
+<!-- ADD PRODUCT MODAL -->
+<div class="modal" id="productModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>Add New Product</h2>
+            <button id="closeModal">&times;</button>
+        </div>
+
+        <form id="productForm">
+
+            <input type="hidden" id="productId">
+
+            <div class="form-grid">
+
+                <input type="text" id="name" placeholder="Product Name" required>
+
+                <input type="text" id="brand" placeholder="Brand" required>
+
+                <select id="category" required>
+                    <option value="">Select Category</option>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Hoodie">Hoodie</option>
+                    <option value="Shirt">Shirt</option>
+                    <option value="Jacket">Jacket</option>
+                    <option value="Accessories">Accessories</option>
+                </select>
+
+                <input type="number" id="price" placeholder="Price" required>
+
+                <input type="number" id="stock" placeholder="Stock" required>
+
+                <div class="image-upload">
+                    <label for="imageFile">Choose Product Image</label>
+                    <input type="file" id="imageFile" accept="image/*" required>
+                    <img id="imagePreview" src="" alt="Preview">
+                    <input type="hidden" id="image">
+                </div>
+
+            </div>
+
+            <textarea
+                id="description"
+                placeholder="Product Description"
+                rows="4"
+                required></textarea>
+
+            <button type="submit" class="save-btn">
+                Save Product
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- ORDER DETAILS MODAL -->
+<div class="modal" id="orderModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Order Details</h2>
+            <button id="closeOrderModal">&times;</button>
+        </div>
+
+        <div id="orderDetails">
+            <p>Loading order...</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+</html>

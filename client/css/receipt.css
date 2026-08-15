@@ -1,0 +1,228 @@
+body{
+    background:#f5f7fa;
+    font-family:'Poppins',sans-serif;
+    padding:40px;
+}
+
+.receipt-container{
+    max-width:850px;
+    margin:auto;
+    background:#fff;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.1);
+}
+
+.receipt-header{
+    background:linear-gradient(
+        135deg,
+        #088178,
+        #0aa89c
+    );
+    color:#fff;
+    text-align:center;
+    padding:50px;
+}
+
+.receipt-logo{
+    width:140px;
+    margin-bottom:20px;
+}
+
+.receipt-header h1{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.receipt-header p{
+    opacity:.9;
+}
+
+.receipt-info{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+    padding:40px;
+}
+
+.info-card{
+    background:#f8f9fa;
+    padding:20px;
+    border-radius:15px;
+}
+
+.info-card h4{
+    color:#088178;
+    margin-bottom:10px;
+}
+
+.info-card p{
+    margin:0;
+    color:#555;
+    font-size:15px;
+}
+
+.receipt-product{
+    display:flex;
+    align-items:center;
+    padding:25px 40px;
+    border-bottom:1px solid #eee;
+}
+
+.receipt-product img{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:15px;
+    margin-right:20px;
+}
+
+.product-details{
+    flex:1;
+}
+
+.product-details h3{
+    margin-bottom:10px;
+}
+
+.product-price{
+    color:#088178;
+    font-weight:bold;
+}
+
+.receipt-total{
+    padding:40px;
+}
+
+.total-row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+.grand-total{
+    font-size:28px;
+    font-weight:bold;
+    color:#088178;
+    border-top:2px solid #eee;
+    padding-top:20px;
+}
+
+.receipt-actions{
+    display:flex;
+    gap:20px;
+    padding:40px;
+}
+
+.receipt-actions button{
+    flex:1;
+    border:none;
+    padding:16px;
+    border-radius:12px;
+    cursor:pointer;
+    background:#088178;
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.receipt-actions button:hover{
+    transform:translateY(-3px);
+}
+
+@media(max-width:768px){
+
+    .receipt-info{
+        grid-template-columns:1fr;
+    }
+
+    .receipt-product{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .receipt-product img{
+        margin-right:0;
+        margin-bottom:20px;
+    }
+
+    .receipt-actions{
+        flex-direction:column;
+    }
+}
+
+.status{
+    display:inline-block;
+    padding:8px 15px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.status.pending{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.status.processing{
+    background:#eaf8f7;
+    color:#088178;
+}
+
+.status.cancelled{
+    background:#ffe5e5;
+    color:#dc3545;
+}
+
+.status.delivered{
+    background:#e7f1ff;
+    color:#0d6efd;
+}
+
+.timeline{
+    padding:40px;
+}
+
+.timeline h3{
+    margin-bottom:20px;
+    color:#088178;
+}
+
+.timeline-item{
+    padding:15px 20px;
+    margin-bottom:15px;
+    background:#f5f5f5;
+    border-left:5px solid #ccc;
+    border-radius:10px;
+}
+
+.timeline-item.active{
+    background:#eaf8f7;
+    border-left-color:#088178;
+    color:#088178;
+    font-weight:bold;
+}
+
+.timeline-item.cancelled{
+    background:#ffe5e5;
+    border-left-color:#dc3545;
+    color:#dc3545;
+    font-weight:bold;
+}
+
+.thank-you{
+    margin-top:15px;
+    opacity:.9;
+}
+
+.summary-card{
+    margin:40px;
+    padding:25px;
+    background:#f8f9fa;
+    border-radius:20px;
+}
+
+.summary-card h3{
+    color:#088178;
+    margin-bottom:15px;
+}

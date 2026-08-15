@@ -1,0 +1,114 @@
+.success-page{
+    min-height:100vh;
+    background:#f5f5f5;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    opacity:1 !important;
+    transform:none !important;
+}
+
+.success-card{
+    width:100%;
+    max-width:700px;
+    background:#fff;
+    padding:50px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+    color:#222;
+    opacity:1;
+}
+
+.success-card h1{
+    margin-bottom:20px;
+    color:#222;
+}
+
+.checkmark{
+    width:100px;
+    height:100px;
+    background:#088178;
+    color:#fff;
+    border-radius:50%;
+    margin:0 auto 30px;
+    font-size:50px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+
+
+.message{
+    color:#777;
+    margin-bottom:35px;
+    line-height:28px;
+}
+
+.order-info{
+    background:#f8f8f8;
+    padding:25px;
+    border-radius:15px;
+    margin-bottom:35px;
+}
+
+.order-info h2{
+    color:#088178;
+    margin-top:10px;
+}
+
+.order-status{
+    display:flex;
+    justify-content:space-around;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-bottom:40px;
+}
+
+.status-item{
+    width:150px;
+}
+
+.status-item span{
+    font-size:35px;
+}
+
+.status-item p{
+    margin-top:10px;
+    color:#555;
+}
+
+.buttons{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.shopping-btn,
+.normal{
+    padding:15px 30px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.normal{
+    background:#088178;
+    color:white;
+}
+
+.shopping-btn{
+    background:#222;
+    color:white;
+}
+
+.normal:hover{
+    background:#06665f;
+}
+
+.shopping-btn:hover{
+    background:#444;
+}

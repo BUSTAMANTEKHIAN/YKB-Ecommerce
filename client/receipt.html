@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Receipt | YKB Clothing</title>
+    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+    <link rel="stylesheet" href="css/receipt.css">
+</head>
+<body>
+
+<div class="receipt-container">
+
+    <div class="receipt-header">
+        <img src="images/banner/b1.png" class="receipt-logo">
+        <h1>Ordered Successful 🎉</h1>
+        <p>Thank you for shopping with YKB Clothing.</p>
+        <p class="thank-you">
+            We appreciate your order and hope you enjoy your purchase!
+        </p>
+    </div>
+
+    <div id="receipt-content"></div>
+
+    <div class="receipt-actions">
+        <button onclick="window.print()">
+            🖨 Print Receipt
+        </button>
+
+        <button onclick="window.location.href='index.html'">
+            🛍 Continue Shopping
+        </button>
+    </div>
+
+</div>
+
+<script src="js/receipt.js"></script>
+</body>
+</html>

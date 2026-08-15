@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Account</title>
+    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>YKB</h2>
+
+        <a class="active" href="profile.html">👤 Profile</a>
+        <a href="orders.html">📦 Orders</a>
+        <a href="settings.html">⚙️ Settings</a>
+
+        <button onclick="logout()" class="logout">Logout</button>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- HEADER CARD -->
+        <div class="header-card">
+
+            <div class="banner"></div>
+
+            <div class="profile-section">
+
+                <div class="avatar-wrapper">
+                    <img id="profile-image" src="images/default-user.png">
+                    <label class="camera">
+                        📷
+                        <input type="file" id="upload-image" hidden>
+                    </label>
+                </div>
+
+                <div class="info">
+                    <h2 id="profile-name"></h2>
+                    <p id="profile-email"></p>
+
+                    <button id="editBtn">Edit Profile</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats">
+
+            <div class="card">
+                <h3 id="orderCount">0</h3>
+                <p>Orders</p>
+            </div>
+
+            <div class="card">
+                <h3 id="totalSpent">₱0</h3>
+                <p>Total Spent</p>
+            </div>
+
+            <div class="card">
+                <h3>Active</h3>
+                <p>Status</p>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+
+    <div class="modal-box">
+        <h3>Edit Profile</h3>
+
+        <input type="text" id="edit-name" placeholder="Username">
+        <input type="email" id="edit-email" placeholder="Email">
+
+        <button onclick="saveProfile()">Save</button>
+        <button onclick="closeModal()">Cancel</button>
+    </div>
+
+</div>
+
+<script src="js/profile.js"></script>
+<script src="js/auth.js"></script>
+
+</body>
+</html>

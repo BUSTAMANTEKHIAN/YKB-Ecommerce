@@ -1,0 +1,579 @@
+/* =====================================================
+   YKB Clothing — Cart
+   Design language: the order slip / fitting-room rail.
+   Same tokens as wishlist.css & checkout.css, scoped only
+   to cart-specific selectors — the shared header/nav in
+   styles.css is left untouched.
+   ----------------------------------------------------- */
+
+:root{
+    --paper:   #FAF7F1;
+    --paper-2: #F1ECE1;
+    --ink:     #1C1A16;
+    --ink-70:  #4A463D;
+    --stone:   #8B8477;
+    --kraft:   #C9AD7F;
+    --brass:   #97742E;
+    --wine:    #7A2A34;
+    --wine-ink:#5C1F27;
+    --forest:  #21402C;
+    --line:    #E4DDCD;
+
+    --font-display: "Fraunces", serif;
+    --font-body: "Inter", sans-serif;
+    --font-mono: "Space Mono", monospace;
+
+    --radius-lg: 20px;
+    --radius-sm: 10px;
+    --shadow-card: 0 16px 32px rgba(28,26,22,.08);
+}
+
+/* CART HEADER
+   (Previously there were two banner rules fighting each other:
+   #page-header.cart-header { background-image: bn2.png }  <- ID selector, always won
+   .cart-header { background-image: b19.jpg }               <- class selector, never showed
+   Kept one rule, using the ID selector since that's what actually renders.) */
+
+#page-header.cart-header{
+    background-image: url(images/banner/bn2.png);
+    width: 100%;
+    height: 35vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    position: relative;
+}
+
+.cart-header::after{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(28,26,22,.35), rgba(28,26,22,.6));
+    top: 0;
+    left: 0;
+}
+
+.cart-header__eyebrow{
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--kraft);
+    margin-bottom: 10px;
+}
+
+.cart-header h2,
+.cart-header p{
+    color: #fff;
+    z-index: 2;
+    position: relative;
+}
+
+.cart-header h2{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 42px;
+    margin: 0 0 8px;
+}
+
+.cart-header p{
+    font-size: 14px;
+    opacity: .9;
+}
+
+/* CART TABLE */
+
+#cart{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    min-height: 80px;
+}
+
+#cart table{
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--line);
+}
+
+#cart table img{
+    width: 66px;
+    height: 66px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+#cart table thead{
+    background: var(--paper-2);
+}
+
+#cart table thead td,
+#cart table thead th{
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    font-size: 11px;
+    padding: 18px 16px;
+    color: var(--brass);
+}
+
+#cart table tbody tr{
+    border-bottom: 1px solid var(--line);
+    transition: .3s;
+}
+
+#cart table tbody tr:hover{
+    background: var(--paper);
+}
+
+#cart table tbody tr.row-busy{
+    opacity: .55;
+}
+
+#cart table tbody td{
+    padding: 16px;
+    font-size: 14px;
+    color: var(--ink-70);
+    text-align: center;
+    vertical-align: middle;
+}
+
+#cart table tbody td:nth-child(3){
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--ink);
+    text-align: left;
+}
+
+#cart table tbody td:nth-child(5),
+#cart table tbody td:nth-child(7){
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--ink);
+}
+
+#cart button{
+    border: none;
+    background: var(--ink);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+#cart button:hover:not(:disabled){
+    background: var(--brass);
+}
+
+#cart button:disabled{
+    background: var(--stone);
+    cursor: not-allowed;
+}
+
+/* Loading state, shown while the initial cart fetch is in flight */
+.cart-loading{
+    display: none;
+    text-align: center;
+    padding: 40px;
+    color: var(--ink-70);
+    font-size: 15px;
+    font-family: var(--font-mono);
+}
+
+.cart-loading.show{
+    display: block;
+}
+
+.cart-loading i{
+    color: var(--brass);
+    margin-right: 8px;
+}
+
+/* COUPON + TOTAL */
+
+#cart-add{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+#coupon,
+#subtotal,
+#payment-method{
+    flex: 1;
+    min-width: 280px;
+    background: #fff;
+    padding: 22px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--line);
+}
+
+#coupon h3,
+#subtotal h3{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 18px;
+    padding-bottom: 15px;
+    margin: 0;
+}
+
+#coupon input{
+    padding: 12px 16px;
+    width: 60%;
+    margin-right: 10px;
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    font-family: var(--font-body);
+}
+
+#coupon input:focus{
+    outline: none;
+    border-color: var(--brass);
+}
+
+#coupon button,
+#subtotal button,
+.checkout-btn{
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: var(--font-body);
+    transition: .3s;
+}
+
+#coupon button:hover,
+#subtotal button:hover,
+.checkout-btn:not(:disabled):hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(28,26,22,.22);
+}
+
+#subtotal table{
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#subtotal table td{
+    width: 50%;
+    padding: 12px 4px;
+    font-size: 14px;
+    color: var(--ink-70);
+    border-bottom: 1.5px dashed var(--line);
+}
+
+#subtotal table tr:last-child td{
+    border-bottom: none;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+    font-family: var(--font-mono);
+    font-size: 18px;
+    color: var(--ink);
+}
+
+#subtotal table tr:last-child td strong{
+    font-weight: 700;
+}
+
+/* CHECKOUT BUTTON */
+
+.checkout-btn{
+    width: 100%;
+    font-size: 15px;
+    padding: 16px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.checkout-btn:disabled{
+    background: var(--paper-2);
+    color: var(--stone);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    border: 1px solid var(--line);
+}
+
+#payment-method{
+    margin-top: 0;
+}
+
+#payment-method h3{
+    font-family: var(--font-display);
+    font-weight: 600;
+    margin: 0 0 4px;
+    font-size: 18px;
+}
+
+#payment-method .payment-hint{
+    font-size: 12px;
+    color: var(--stone);
+    margin: 0 0 16px;
+}
+
+#payment-method label{
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-70);
+    cursor: pointer;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    transition: border-color .2s ease, background .2s ease;
+}
+
+#payment-method label:has(input:checked){
+    border-color: var(--ink);
+    background: var(--paper-2);
+    color: var(--ink);
+}
+
+#payment-method input{
+    accent-color: var(--ink);
+    margin-right: 2px;
+}
+
+/* CART BADGE */
+
+#cart-count{
+    position: absolute;
+    top: -8px;
+    right: -10px;
+
+    background: var(--wine);
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* TOAST STACK
+   Mirrors the pattern used on wishlist.html / checkout.html so cart
+   messages look and behave the same way across the site. */
+
+.toast-stack{
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    top: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.toast{
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 13px 18px;
+    border-radius: var(--radius-sm);
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: 0 14px 28px rgba(0,0,0,.22);
+    animation: slideIn .3s ease;
+    max-width: 300px;
+}
+
+.toast.toast--success{ background: var(--forest); }
+.toast.toast--error{ background: var(--wine-ink); }
+
+.toast.is-leaving{
+    animation: slideOut .25s ease forwards;
+}
+
+@keyframes slideIn{
+    from{ transform: translateX(100%); opacity: 0; }
+    to{ transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut{
+    from{ transform: translateX(0); opacity: 1; }
+    to{ transform: translateX(100%); opacity: 0; }
+}
+
+/* EMPTY / GUEST STATE */
+
+#empty-cart-image{
+    display: none;
+    text-align: center;
+    padding: 46px 20px;
+    border: 1.5px dashed var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--paper-2);
+    margin-bottom: 4px;
+}
+
+#empty-cart-image.show{
+    display: block;
+}
+
+#empty-cart-image i{
+    font-size: 44px;
+    color: var(--brass);
+    margin-bottom: 16px;
+}
+
+#empty-cart-image h3{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+#empty-cart-image p{
+    color: var(--ink-70);
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+#empty-cart-image .normal{
+    display: inline-block;
+    background: var(--ink);
+    color: #fff;
+    padding: 11px 26px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+    transition: transform .2s ease;
+}
+
+#empty-cart-image .normal:hover{
+    transform: translateY(-2px);
+}
+
+.qty-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.qty-box button{
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.qty-box span{
+    min-width: 20px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+}
+
+.qty-box button:disabled{
+    background: var(--stone);
+    cursor: not-allowed;
+}
+
+.remove-btn{
+    background: transparent !important;
+    color: var(--wine) !important;
+    border: 1.5px solid var(--wine) !important;
+}
+
+.remove-btn:hover:not(:disabled){
+    background: var(--wine) !important;
+    color: #fff !important;
+}
+
+.remove-btn:disabled{
+    color: var(--stone) !important;
+    border-color: var(--line) !important;
+    background: transparent !important;
+}
+
+/* MOBILE */
+
+@media(max-width: 799px){
+
+    #cart{
+        overflow-x: auto;
+    }
+
+    #cart table img{
+        width: 54px;
+        height: 54px;
+    }
+
+    #cart table td{
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .cart-header h2{
+        font-size: 30px;
+    }
+
+    #cart-add{
+        flex-direction: column;
+    }
+
+    #coupon,
+    #subtotal{
+        width: 100%;
+    }
+
+    #coupon input{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #coupon button{
+        width: 100%;
+    }
+
+    .toast-stack{
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+    }
+
+    .toast{
+        max-width: none;
+    }
+}

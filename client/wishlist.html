@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>My Wishlist — YKB Clothing</title>
+    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+
+    <link rel="stylesheet" href="css/wishlist.css">
+</head>
+<body>
+
+    <!-- ===== Minimal top bar ===== -->
+    <header class="site-bar">
+        <a href="index.html" class="site-bar__mark">YKB</a>
+        <a href="shop.html" class="site-bar__back">
+            <i class="fa-solid fa-arrow-left-long"></i> Continue shopping
+        </a>
+    </header>
+
+    <section id="wishlist-page" class="section-p1">
+
+        <div class="wishlist-header">
+            <span class="wishlist-header__eyebrow">Saved pieces</span>
+            <h1>Your Wishlist</h1>
+            <p>Everything you've tagged to come back to, held right here.</p>
+        </div>
+
+        <div class="wishlist-toolbar">
+            <span id="wishlist-total" class="wishlist-count">0 items tagged</span>
+        </div>
+
+        <div id="wishlist-items" class="wishlist-grid">
+            <!-- Wishlist items will appear here -->
+        </div>
+
+    </section>
+
+    <!-- Toast notifications -->
+    <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+    <script src="js/wishlist.js"></script>
+</body>
+</html>

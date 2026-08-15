@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Successful | YKB Clothing</title>
+    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+    <link rel="stylesheet" href="css/order-success.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<section class="success-page show"> 
+
+    <div class="success-card">
+
+        <div class="checkmark">✓</div>
+
+        <h1>Thank You For Your Order!</h1>
+
+        <p class="message">
+            Your order has been placed successfully and is now being processed.
+        </p>
+
+        <div class="order-info">
+            <p><strong>Order Number:</strong></p>
+            <h2 id="order-number"></h2>
+        </div>
+
+        <div class="buttons">
+            <a href="orders.html">
+                <button class="normal">
+                    View My Orders
+                </button>
+            </a>
+
+            <a href="shop.html">
+                <button class="shopping-btn">
+                    Continue Shopping
+                </button>
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+let lastOrder =
+JSON.parse(localStorage.getItem("lastOrder"));
+
+if(lastOrder){
+    document.getElementById("order-number")
+        .innerHTML = lastOrder.orderId;
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+    let latest = orders[orders.length - 1];
+
+    document.getElementById("order-id").textContent = latest.id;
+});
+</script>
+
+</body>
+</html>

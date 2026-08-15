@@ -1,0 +1,642 @@
+/* =========================
+   GLOBAL CONTACT PAGE STYLE
+========================= */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #f6f7fb;
+    color: #222;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+body::before {
+    width: 400px;
+    height: 400px;
+    background: rgba(8,129,120,.08);
+    top: -100px;
+    left: -100px;
+}
+
+body::after {
+    width: 300px;
+    height: 300px;
+    background: rgba(255,150,0,.08);
+    bottom: -100px;
+    right: -100px;
+}
+
+/* SECTION WRAPPER */
+
+footer {
+    background: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 15px;
+}
+.section-p1 {
+    padding: 60px 8%;
+}
+
+/* =========================
+   PAGE HEADER (MODERN HERO)
+========================= */
+
+#page-header{
+    min-height:70vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    overflow:hidden;
+    position:relative;
+
+    background:
+        radial-gradient(circle at top left,
+        rgba(8,129,120,.6),
+        transparent 45%),
+
+        radial-gradient(circle at bottom right,
+        rgba(255,255,255,.08),
+        transparent 40%),
+
+        linear-gradient(
+            135deg,
+            #050505,
+            #0f0f0f,
+            #111
+        );
+}
+
+#page-header::before{
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    background:rgba(8,129,120,.25);
+    border-radius:50%;
+    top:-150px;
+    left:-100px;
+    filter:blur(100px);
+}
+
+#page-header::after{
+    content:"";
+    position:absolute;
+    width:400px;
+    height:400px;
+    background:rgba(255,255,255,.15);
+    border-radius:50%;
+    bottom:-100px;
+    right:-100px;
+    filter:blur(120px);
+}
+
+#page-header h2{
+    font-size:65px;
+    color:white;
+    margin-bottom:15px;
+    z-index:2;
+}
+
+#page-header p{
+    font-size:20px;
+    color:#f1f1f1;
+    z-index:2;
+    max-width: 560px;
+}
+
+/* =========================
+   CONTACT DETAILS (CARD STYLE)
+========================= */
+
+#contact-details {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: -40px;
+}
+
+/* LEFT CARD */
+#contact-details .details{
+    flex:1;
+    min-width:320px;
+    padding:45px;
+    border-radius:35px;
+
+    background:rgba(255,255,255,.65);
+    backdrop-filter:blur(25px);
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,.08);
+
+    border:1px solid rgba(255,255,255,.6);
+
+    transition:.4s;
+}
+
+#contact-details .details:hover,
+#contact-details .map:hover{
+    transform:translateY(-10px);
+}
+
+#contact-details .details:hover{
+    transform:translateY(-10px);
+}
+
+#contact-details .details span {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #777;
+}
+
+#contact-details .details h2 {
+    font-size: 26px;
+    margin: 10px 0 20px;
+}
+
+#contact-details .details h3 {
+    margin-bottom: 15px;
+    color: #444;
+}
+
+#contact-details .details,
+#contact-details .map,
+#form-details form,
+.person {
+    animation: fadeUp .8s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* LIST STYLE */
+#contact-details ul {
+    list-style: none;
+    padding: 0;
+}
+
+#contact-details li{
+    padding: 0;
+    margin-bottom:15px;
+    border-radius:18px;
+    background:white;
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+    transition:.3s;
+    overflow: hidden;
+}
+
+#contact-details li:hover{
+    transform:translateX(10px);
+}
+
+/* Contact rows are now real links (mailto / tel / maps) — this wraps
+   them so the whole row is clickable instead of just the text. */
+#contact-details li a,
+#contact-details li .static-row{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:20px;
+    color:inherit;
+    text-decoration:none;
+}
+
+#contact-details li a{
+    cursor:pointer;
+}
+
+#contact-details li i{
+    width:45px;
+    height:45px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    background:#088178;
+    color:white;
+    flex-shrink: 0;
+}
+
+/* MAP CARD */
+#contact-details .map{
+    flex:1;
+    min-width:320px;
+    height:500px;
+    border-radius:35px;
+    overflow:hidden;
+
+    box-shadow:
+        0 30px 60px rgba(0,0,0,.12);
+
+    transition:.4s;
+}
+
+#contact-details .map:hover{
+    transform:translateY(-10px);
+}
+
+#contact-details iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.hero-btn{
+    margin-top:35px;
+    padding:16px 40px;
+    border-radius:50px;
+    background:#088178;
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+    transition:.4s;
+}
+
+.hero-btn:hover{
+    transform:translateY(-5px);
+    box-shadow:0 20px 40px rgba(8,129,120,.35);
+}
+
+@keyframes float{
+    0%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-20px);
+    }
+    100%{
+        transform:translateY(0);
+    }
+}
+
+#contact-details .details{
+    animation:float 7s ease-in-out infinite;
+}
+
+/* =========================
+   FORM + TEAM SECTION
+========================= */
+
+#form-details {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    scroll-margin-top: 100px;
+}
+
+/* FORM CARD */
+#form-details form{
+    flex:2;
+    padding:50px;
+    border-radius:35px;
+
+    background:rgba(255,255,255,.7);
+    backdrop-filter:blur(25px);
+
+    border:1px solid rgba(255,255,255,.6);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.08);
+}
+
+#form-details form span {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #777;
+}
+
+#form-details form h2 {
+    margin: 10px 0 20px;
+    font-size: 24px;
+}
+
+/* INPUTS */
+
+.field-group{
+    margin-bottom: 20px;
+}
+
+#form-details input,
+#form-details textarea{
+    width:100%;
+    padding:18px 25px;
+
+    border:none;
+    border-radius:18px;
+
+    background:white;
+
+    box-shadow:
+        inset 0 0 0 2px #f2f2f2;
+
+    font-size:15px;
+
+    transition:.4s;
+}
+
+#form-details textarea{
+    min-height:180px;
+    resize:none;
+}
+
+#form-details input:focus,
+#form-details textarea:focus{
+    box-shadow:
+        inset 0 0 0 2px #088178,
+        0 10px 30px rgba(8,129,120,.2);
+
+    transform:translateY(-3px);
+    outline: none;
+}
+
+#form-details input.has-error,
+#form-details textarea.has-error{
+    box-shadow: inset 0 0 0 2px #e63946 !important;
+    transform: none;
+}
+
+.field-error{
+    display: block;
+    min-height: 16px;
+    margin-top: 6px;
+    padding-left: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #e63946;
+}
+
+/* BUTTON */
+#form-details button{
+    position: relative;
+    padding:18px 40px;
+    border:none;
+    border-radius:50px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #088178,
+        #0ab6a7
+    );
+
+    color:white;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:.4s;
+}
+
+#form-details button:hover:not(:disabled){
+    transform:
+        translateY(-5px)
+        scale(1.05);
+
+    box-shadow:
+        0 20px 40px rgba(8,129,120,.35);
+}
+
+#form-details button:disabled{
+    cursor: not-allowed;
+    opacity: .8;
+    transform: none;
+}
+
+.btn-content{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-spinner{
+    display: none;
+    width: 16px;
+    height: 16px;
+    margin-left: 10px;
+    border: 2px solid rgba(255,255,255,.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+}
+
+#contact-submit-btn.is-loading .btn-content{
+    opacity: .6;
+}
+
+#contact-submit-btn.is-loading .btn-spinner{
+    display: inline-block;
+    animation: spin .7s linear infinite;
+}
+
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+/* =========================
+   TEAM / PEOPLE CARD
+========================= */
+
+.people {
+    flex: 1;
+    min-width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.person{
+    display:flex;
+    align-items:center;
+    gap:20px;
+
+    background:rgba(255,255,255,.7);
+    backdrop-filter:blur(20px);
+
+    border-radius:25px;
+    padding:25px;
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.08);
+
+    transition:.4s;
+}
+
+.person:hover{
+    transform:
+        translateY(-12px)
+        scale(1.03);
+
+    box-shadow:
+        0 30px 60px rgba(0,0,0,.12);
+}
+
+.person img{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:50%;
+    border:5px solid #088178;
+    flex-shrink: 0;
+}
+
+.person p {
+    font-size: 13px;
+    color: #555;
+    line-height: 20px;
+}
+
+.person p a{
+    color: #088178;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.person p a:hover{
+    text-decoration: underline;
+}
+
+.person span {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    color: #111;
+}
+
+/* =========================
+   NEWSLETTER (MODERN)
+========================= */
+
+#newsletter{
+    margin:80px 8%;
+    padding:60px;
+    border-radius:35px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #088178,
+            #0ab6a7
+        );
+
+    box-shadow:
+        0 30px 60px rgba(8,129,120,.3);
+}
+
+#newsletter .form{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#newsletter input {
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    margin-right: 10px;
+}
+
+#newsletter button:disabled{
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+/* =========================
+   TOASTS
+========================= */
+
+.toast-stack{
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.toast{
+    font-size: 14px;
+    font-weight: 600;
+    padding: 13px 18px;
+    border-radius: 10px;
+    background: #088178;
+    color: #fff;
+    box-shadow: 0 14px 28px rgba(0,0,0,.22);
+    animation: toastIn .3s ease;
+    max-width: 300px;
+}
+
+.toast.toast--error{
+    background: #e63946;
+}
+
+.toast.is-leaving{
+    animation: toastOut .25s ease forwards;
+}
+
+@keyframes toastIn{
+    from{ transform: translateX(100%); opacity: 0; }
+    to{ transform: translateX(0); opacity: 1; }
+}
+
+@keyframes toastOut{
+    from{ transform: translateX(0); opacity: 1; }
+    to{ transform: translateX(100%); opacity: 0; }
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 768px) {
+    #contact-details,
+    #form-details {
+        flex-direction: column;
+    }
+
+    #page-header h2 {
+        font-size: 28px;
+    }
+
+    #newsletter {
+        text-align: center;
+        justify-content: center;
+    }
+
+    #newsletter .form{
+        justify-content: center;
+    }
+
+    .toast-stack{
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+    }
+
+    .toast{
+        max-width: none;
+    }
+}
