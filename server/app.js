@@ -50,13 +50,35 @@ app.use(express.static(path.join(__dirname, "../client")));
 
 const fs = require("fs");
 
+console.log("=== RAILWAY FILE DEBUG ===");
+console.log("__dirname:", __dirname);
+console.log("process.cwd():", process.cwd());
+
+const clientPath = path.join(__dirname, "../client");
+const productsPath = path.join(clientPath, "images/products");
+
+console.log("Client path:", clientPath);
+console.log("Client exists:", fs.existsSync(clientPath));
+
+console.log("Products path:", productsPath);
+console.log("Products folder exists:", fs.existsSync(productsPath));
+
+if (fs.existsSync(productsPath)) {
+    console.log(
+        "Product images:",
+        fs.readdirSync(productsPath).slice(0, 20)
+    );
+}
+
 const imagePath = path.join(
-    __dirname,
-    "../client/images/products/1786721110721.jpg"
+    productsPath,
+    "1786721110721.jpg"
 );
 
-console.log("Image exists:", fs.existsSync(imagePath));
 console.log("Image path:", imagePath);
+console.log("Image exists:", fs.existsSync(imagePath));
+
+console.log("==========================");
 
 // Start server
 app.listen(PORT, () => {
