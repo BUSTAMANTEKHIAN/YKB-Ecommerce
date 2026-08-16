@@ -6,6 +6,7 @@ console.log("DB_NAME:", process.env.DB_NAME);
 
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const db = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
@@ -22,6 +23,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
@@ -43,10 +45,21 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 
 // Serve client folder
-const path = require("path");
+
 app.use(express.static(path.join(__dirname, "../client")));
+
+const fs = require("fs");
+
+const imagePath = path.join(
+    __dirname,
+    "../client/images/products/1786721110721.jpg"
+);
+
+console.log("Image exists:", fs.existsSync(imagePath));
+console.log("Image path:", imagePath);
 
 // Start server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
+
