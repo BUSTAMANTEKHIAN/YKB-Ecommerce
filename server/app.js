@@ -42,10 +42,11 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 
+// Serve client folder
 const path = require("path");
-
 app.use(express.static(path.join(__dirname, "../client")));
 
+// Start server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
