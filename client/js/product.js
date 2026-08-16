@@ -34,7 +34,7 @@ async function saveProductToCart() {
         user_id: user.id
     };
 
-    const response = await fetch("http://localhost:3000/api/cart/add", {
+    const response = await fetch(`${API_BASE_URL}/api/cart/add`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -95,7 +95,7 @@ wishlistBtn.addEventListener("click", async () => {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/wishlist/add",
+            `${API_BASE_URL}/api/wishlist/add`,
             {
                 method: "POST",
                 headers: {
@@ -159,13 +159,14 @@ function updateWishlistButton() {
 window.addEventListener("DOMContentLoaded", updateWishlistButton);
 
 async function loadProduct() {
-
     try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/products/${productId}`
+        );
 
-        const response = await fetch(`/api/products/${productId}`);
+        console.log("Product API status:", response.status);
 
         if (!response.ok) {
-
             document.querySelector("#prodetails").innerHTML = `
                 <div style="text-align:center;width:100%;padding:50px;">
                     <h2>Product Not Found</h2>
@@ -176,12 +177,14 @@ async function loadProduct() {
                     </a>
                 </div>
             `;
-
             return;
-
         }
 
         const product = await response.json();
+
+        console.log("Product loaded:", product);
+
+        // Continue with your existing code here
 
         window.currentProduct = product;
 
@@ -189,13 +192,14 @@ async function loadProduct() {
 
         document.getElementById("product-id").value = product.id;
 
-        document.getElementById("MainImg").src = product.image;
+        document.getElementById("MainImg").src =
+            `${API_BASE_URL}/${product.image}`;
 
         const thumbs = document.querySelectorAll(".small-img");
 
         thumbs.forEach(img => {
-            img.src = product.image;
-        
+            img.src = `${API_BASE_URL}/${product.image}`;
+
             img.onclick = () => {
                 document.getElementById("MainImg").src = img.src;
             };
@@ -288,7 +292,7 @@ async function loadRelatedProducts() {
 
     try {
 
-        const response = await fetch("/api/products");
+        const response = await fetch(`${API_BASE_URL}/api/products`);
         const products = await response.json();
 
         const container = document.getElementById("related-products");
@@ -322,7 +326,7 @@ async function loadRelatedProducts() {
                 <div class="pro"
                      onclick="window.location.href='product.html?id=${product.id}'">
 
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="${API_BASE_URL}/${product.image}" alt="${product.name}">
 
                     <div class="des">
 
@@ -355,7 +359,7 @@ async function loadReviews() {
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/reviews/${productId}`
+            `${API_BASE_URL}/api/reviews/${productId}`
         );
 
         const data = await response.json();
@@ -421,7 +425,7 @@ document.getElementById("review-form").addEventListener("submit", async (e) => {
     const review = document.getElementById("review-text").value;
 
     const response = await fetch(
-        "http://localhost:3000/api/reviews/add",
+        `${API_BASE_URL}/api/reviews/add`,
         {
             method: "POST",
             headers: {
