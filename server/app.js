@@ -1,14 +1,12 @@
 require("dotenv").config();
 
-console.log("DB_HOST:", process.env.DB_HOST);
-console.log("DB_USER:", process.env.DB_USER);
-console.log("DB_NAME:", process.env.DB_NAME);
-
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 
 const db = require("./config/db");
+
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
@@ -24,6 +22,52 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+// ==========================================
+// PATHS
+// ==========================================
+
+const clientPath = path.resolve(__dirname, "../client");
+const imagesPath = path.join(clientPath, "images");
+
+console.log("=================================");
+console.log("RAILWAY PATH DEBUG");
+console.log("__dirname:", __dirname);
+console.log("process.cwd():", process.cwd());
+console.log("clientPath:", clientPath);
+console.log("client exists:", fs.existsSync(clientPath));
+console.log("imagesPath:", imagesPath);
+console.log("images exists:", fs.existsSync(imagesPath));
+
+const testImage = path.join(
+    imagesPath,
+    "products",
+    "1786721110721.jpg"
+);
+
+console.log("test image:", testImage);
+console.log("test image exists:", fs.existsSync(testImage));
+console.log("=================================");
+
+
+// ==========================================
+// STATIC FILES
+// ==========================================
+
+// Serve the entire client folder
+app.use(express.static(clientPath));
+
+// Explicitly serve images
+app.use(
+    "/images",
+    express.static(imagesPath)
+);
+
+
+// ==========================================
+// API ROUTES
+// ==========================================
+
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
@@ -32,8 +76,13 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/contact", contactRoutes);
 
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 
-const PORT = process.env.PORT || 3000;
+
+// ==========================================
+// ROOT
+// ==========================================
 
 app.get("/", (req, res) => {
     res.json({
@@ -41,47 +90,14 @@ app.get("/", (req, res) => {
         database: "Connected"
     });
 });
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
 
-// Serve client folder
 
-app.use(express.static(path.join(__dirname, "../client")));
+// ==========================================
+// START SERVER
+// ==========================================
 
-const fs = require("fs");
+const PORT = process.env.PORT || 3000;
 
-console.log("=== RAILWAY FILE DEBUG ===");
-console.log("__dirname:", __dirname);
-console.log("process.cwd():", process.cwd());
-
-const clientPath = path.join(__dirname, "../client");
-const productsPath = path.join(clientPath, "images/products");
-
-console.log("Client path:", clientPath);
-console.log("Client exists:", fs.existsSync(clientPath));
-
-console.log("Products path:", productsPath);
-console.log("Products folder exists:", fs.existsSync(productsPath));
-
-if (fs.existsSync(productsPath)) {
-    console.log(
-        "Product images:",
-        fs.readdirSync(productsPath).slice(0, 20)
-    );
-}
-
-const imagePath = path.join(
-    productsPath,
-    "1786721110721.jpg"
-);
-
-console.log("Image path:", imagePath);
-console.log("Image exists:", fs.existsSync(imagePath));
-
-console.log("==========================");
-
-// Start server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
-
