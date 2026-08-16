@@ -239,7 +239,7 @@ async function loadProducts(){
 
     try{
 
-        const response = await fetch("/api/products");
+        const response = await fetch(`${API_BASE_URL}/api/products`);
 
         allProducts = await response.json();
 
