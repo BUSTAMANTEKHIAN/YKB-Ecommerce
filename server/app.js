@@ -23,38 +23,27 @@ app.use(cors());
 app.use(express.json());
 
 
-// ==========================================
-// PATHS
-// ==========================================
+// ================================
+// SERVE CLIENT FILES
+// ================================
 
-const clientPath = path.resolve(__dirname, "../client");
-const imagesPath = path.join(clientPath, "images");
+const clientPath = path.join(__dirname, "../client");
 
 console.log("=================================");
-console.log("RAILWAY PATH DEBUG");
+console.log("CLIENT FILE DEBUG");
 console.log("__dirname:", __dirname);
-console.log("process.cwd():", process.cwd());
 console.log("clientPath:", clientPath);
 console.log("client exists:", fs.existsSync(clientPath));
-console.log("imagesPath:", imagesPath);
-console.log("images exists:", fs.existsSync(imagesPath));
 
-const testImage = path.join(
-    imagesPath,
-    "products",
-    "1786721110721.jpg"
+const imagePath = path.join(
+    clientPath,
+    "images/products/1786721110721.jpg"
 );
 
-console.log("test image:", testImage);
-console.log("test image exists:", fs.existsSync(testImage));
+console.log("imagePath:", imagePath);
+console.log("image exists:", fs.existsSync(imagePath));
 console.log("=================================");
 
-
-// ==========================================
-// STATIC FILES
-// ==========================================
-
-// Serve the entire client folder
 app.use(express.static(clientPath));
 
 // Explicitly serve images
