@@ -46,12 +46,6 @@ console.log("=================================");
 
 app.use(express.static(clientPath));
 
-// Explicitly serve images
-app.use(
-    "/images",
-    express.static(imagesPath)
-);
-
 
 // ==========================================
 // API ROUTES
