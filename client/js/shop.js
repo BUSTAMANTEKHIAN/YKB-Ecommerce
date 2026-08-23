@@ -9,6 +9,19 @@ const drawerTotal = document.getElementById("drawer-total");
 const closeDrawerBtn = document.getElementById("close-drawer");
 const viewCartBtn = document.getElementById("view-cart-btn");
 
+
+function getProductImage(image) {
+    if (!image) {
+        return `${API_BASE_URL}/images/products/no-image.png`;
+    }
+
+    if (image.startsWith("http://") || image.startsWith("https://")) {
+        return image;
+    }
+
+    return `${API_BASE_URL}/${image.replace(/^\/+/, "")}`;
+}
+
 function getCart() {
     return JSON.parse(localStorage.getItem(CART_KEY)) || [];
 }
@@ -197,7 +210,7 @@ function renderProducts(products){
 
         <div class="pro">
 
-            <img src="${product.image || 'images/no-image.png'}"
+            <img src="${getProductImage(product.image)}"
                  alt="${product.name}"
                  loading="lazy">
 
