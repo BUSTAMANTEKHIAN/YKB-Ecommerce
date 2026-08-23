@@ -34,7 +34,7 @@ function loadCart() {
 
     setLoading(true);
 
-    fetch(`http://localhost:3000/api/cart/${user.id}`)
+    fetch(`${API_BASE_URL}/api/cart/${user.id}`)
         .then(res => {
             if (!res.ok) throw new Error(`Server responded ${res.status}`);
             return res.json();
@@ -133,7 +133,7 @@ function updateQty(id, qty, triggerBtn) {
 
     setRowBusy(triggerBtn, true);
 
-    fetch(`http://localhost:3000/api/cart/update/${id}`, {
+    fetch(`${API_BASE_URL}/api/cart/update/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: qty })
@@ -153,7 +153,7 @@ function removeItem(id, triggerBtn) {
 
     setRowBusy(triggerBtn, true);
 
-    fetch(`http://localhost:3000/api/cart/remove/${id}`, {
+    fetch(`${API_BASE_URL}/api/cart/remove/${id}`, {
         method: "DELETE"
     })
         .then(res => {

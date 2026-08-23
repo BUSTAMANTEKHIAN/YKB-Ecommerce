@@ -1,4 +1,5 @@
-fetch("http://localhost:3000/api/admin/dashboard")
+fetch(`${API_BASE_URL}/api/admin/dashboard`)
+
 .then(res => res.json())
 .then(data => {
 
@@ -30,7 +31,7 @@ fetch("http://localhost:3000/api/admin/dashboard")
 
 function updateStatus(order_id, status) {
 
-    fetch(`http://localhost:3000/api/admin/order-status/${order_id}`, {
+    fetch(`${API_BASE_URL}/api/admin/order-status/${order_id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

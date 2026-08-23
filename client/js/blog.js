@@ -116,16 +116,39 @@ let currentPage = 1;
 const postsPerPage = 2;
 let filteredPosts = [...blogPosts];
 
-function displayBlogs() {
-    blogContainer.innerHTML = "";
+// =========================
+// TOASTS (shared pattern with about/contact pages)
+// =========================
+function showToast(message, type = "default") {
+    const stack = document.getElementById("toast-stack");
+    if (!stack) return;
 
+    const toast = document.createElement("div");
+    toast.className = `toast toast--${type}`;
+    toast.textContent = message;
+    stack.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add("is-leaving");
+        toast.addEventListener("animationend", () => toast.remove());
+    }, 2800);
+}
+
+// =========================
+// BLOG RENDERING
+// =========================
+// NOTE: previously built via `blogContainer.innerHTML += ...` inside the
+// forEach loop below. Each += re-parses the *entire* accumulated HTML
+// string and re-creates every prior card as a new DOM node, which is
+// wasteful and would silently drop any listeners attached to earlier
+// cards. Now the markup is assembled into an array and written to the
+// DOM once per render.
+function displayBlogs() {
     const start = (currentPage - 1) * postsPerPage;
     const end = start + postsPerPage;
-
     const posts = filteredPosts.slice(start, end);
 
-    posts.forEach((post, index) => {
-        blogContainer.innerHTML += `
+    const cardsHtml = posts.map((post, index) => `
         <div class="blog-box fade-in"
              style="animation-delay:${index * 0.2}s">
 
@@ -159,47 +182,37 @@ function displayBlogs() {
             <h1>${post.date}</h1>
 
         </div>
-        `;
-    });
+    `);
+
+    blogContainer.innerHTML = cardsHtml.join("");
 
     addReadMoreEvents();
     displayPagination();
 }
+
 function displayPagination() {
-    pagination.innerHTML = "";
+    const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 
-    const totalPages =
-        Math.ceil(filteredPosts.length / postsPerPage);
-
+    const buttonsHtml = [];
     for (let i = 1; i <= totalPages; i++) {
-
-        pagination.innerHTML += `
-        <a href="#"
-           class="page-btn ${
-               i === currentPage
-                   ? "active-page"
-                   : ""
-           }"
-           data-page="${i}">
-           ${i}
-        </a>
-        `;
+        buttonsHtml.push(`
+            <a href="#"
+               class="page-btn ${i === currentPage ? "active-page" : ""}"
+               data-page="${i}">
+               ${i}
+            </a>
+        `);
     }
 
-    document
-        .querySelectorAll(".page-btn")
-        .forEach(btn => {
+    pagination.innerHTML = buttonsHtml.join("");
 
-            btn.addEventListener("click", e => {
-                e.preventDefault();
-
-                currentPage =
-                    Number(btn.dataset.page);
-
-                displayBlogs();
-            });
-
+    document.querySelectorAll(".page-btn").forEach(btn => {
+        btn.addEventListener("click", e => {
+            e.preventDefault();
+            currentPage = Number(btn.dataset.page);
+            displayBlogs();
         });
+    });
 }
 
 const searchInput = document.getElementById("search-input");
@@ -209,7 +222,6 @@ searchInput.addEventListener("input", function () {
 
     const value = this.value.toLowerCase().trim();
 
-    // filter blogs
     filteredPosts = blogPosts.filter(post =>
         post.title.toLowerCase().includes(value) ||
         post.category.toLowerCase().includes(value)
@@ -217,7 +229,6 @@ searchInput.addEventListener("input", function () {
 
     currentPage = 1;
 
-    // display blog results
     if (filteredPosts.length === 0) {
         blogContainer.innerHTML = `
             <div class="empty-blog">
@@ -231,7 +242,6 @@ searchInput.addEventListener("input", function () {
         displayBlogs();
     }
 
-    // search suggestions
     if (value === "") {
         suggestionsBox.style.display = "none";
         return;
@@ -242,45 +252,31 @@ searchInput.addEventListener("input", function () {
         post.category.toLowerCase().includes(value)
     );
 
-    suggestionsBox.innerHTML = "";
+    const suggestionsHtml = suggestions.slice(0, 5).map(post => `
+        <div class="suggestion-item" data-title="${post.title}">
+            <span class="suggestion-title">${post.title}</span>
+            <span class="suggestion-category">${post.category}</span>
+        </div>
+    `);
 
-    suggestions.slice(0, 5).forEach(post => {
-        suggestionsBox.innerHTML += `
-            <div class="suggestion-item" data-title="${post.title}">
-                <span class="suggestion-title">${post.title}</span>
-                <span class="suggestion-category">${post.category}</span>
-            </div>
-        `;
-    });
+    suggestionsBox.innerHTML = suggestionsHtml.join("");
+    suggestionsBox.style.display = suggestions.length > 0 ? "block" : "none";
 
-    if (suggestions.length > 0) {
-        suggestionsBox.style.display = "block";
-    } else {
-        suggestionsBox.style.display = "none";
-    }
-
-    // click suggestion
     document.querySelectorAll(".suggestion-item").forEach(item => {
-    item.addEventListener("click", () => {
-        const title = item.dataset.title;
-        const post = blogPosts.find(p => p.title === title);
+        item.addEventListener("click", () => {
+            const title = item.dataset.title;
+            const post = blogPosts.find(p => p.title === title);
 
-        searchInput.value = title;
-        suggestionsBox.style.display = "none";
+            searchInput.value = title;
+            suggestionsBox.style.display = "none";
 
-        // Show only the selected blog
-        filteredPosts = [post];
-        currentPage = 1;
-        displayBlogs();
+            filteredPosts = [post];
+            currentPage = 1;
+            displayBlogs();
 
-        // Open the modal immediately
-        modalTitle.textContent = post.title;
-        modalDate.textContent = "Published: " + post.date;
-        modalText.textContent = post.full;
-        modalImage.src = post.image;
-        modal.style.display = "block";
+            openModal(post);
+        });
     });
-});
 
 });
 
@@ -291,57 +287,33 @@ document.addEventListener("click", e => {
     }
 });
 
-const modal =
-    document.getElementById("blog-modal");
+const modal = document.getElementById("blog-modal");
+const modalTitle = document.getElementById("modal-title");
+const modalText = document.getElementById("modal-text");
+const modalImage = document.getElementById("modal-image");
+const modalDate = document.getElementById("modal-date");
 
-const modalTitle =
-    document.getElementById("modal-title");
-
-const modalText =
-    document.getElementById("modal-text");
-
-const modalImage =
-    document.getElementById("modal-image");
-
-const modalDate =
-    document.getElementById("modal-date");
+function openModal(post) {
+    modalTitle.textContent = post.title;
+    modalDate.textContent = "Published: " + post.date;
+    modalText.textContent = post.full;
+    modalImage.src = post.image;
+    modalImage.alt = post.title;
+    modal.style.display = "block";
+}
 
 function addReadMoreEvents() {
-    document
-    .querySelectorAll(".read-more")
-    .forEach(button => {
-
+    document.querySelectorAll(".read-more").forEach(button => {
         button.addEventListener("click", e => {
             e.preventDefault();
-
-            const title =
-                button.dataset.title;
-
-            const post =
-                blogPosts.find(
-                    p => p.title === title
-                );
-
-            modalTitle.textContent =
-                post.title;
-
-            modalDate.textContent =
-            "Published: " + post.date;
-
-            modalText.textContent =
-                post.full;
-
-            modalImage.src =
-                post.image;
-
-            modal.style.display = "block";
+            const title = button.dataset.title;
+            const post = blogPosts.find(p => p.title === title);
+            openModal(post);
         });
     });
 }
 
-document
-.getElementById("close-modal")
-.addEventListener("click", () => {
+document.getElementById("close-modal").addEventListener("click", () => {
     modal.style.display = "none";
 });
 
@@ -351,11 +323,91 @@ window.addEventListener("click", e => {
     }
 });
 
-displayBlogs();
-
-document.addEventListener("keydown", e=>{
-    if(e.key==="Escape"){
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
         modal.style.display = "none";
     }
 });
 
+displayBlogs();
+
+// =========================
+// NEWSLETTER
+// (Previously the newsletter section was static markup with no <form>,
+// no ids, and no JS at all — the button was decorative.)
+// =========================
+const newsletterForm = document.getElementById("newsletter-form");
+
+if (newsletterForm) {
+
+    const newsletterInput = document.getElementById("newsletter-email");
+    const newsletterError = document.getElementById("newsletter-error");
+    const newsletterBtn = document.getElementById("newsletter-submit");
+    const newsletterLabel = newsletterBtn.querySelector(".btn-label");
+
+    function isValidEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    function showFieldError(message) {
+        newsletterError.textContent = message;
+        newsletterError.classList.add("show");
+        newsletterInput.classList.add("invalid");
+        newsletterInput.setAttribute("aria-invalid", "true");
+    }
+
+    function clearFieldError() {
+        newsletterError.textContent = "";
+        newsletterError.classList.remove("show");
+        newsletterInput.classList.remove("invalid");
+        newsletterInput.removeAttribute("aria-invalid");
+    }
+
+    newsletterInput.addEventListener("input", () => {
+        if (newsletterInput.value.trim() === "" || isValidEmail(newsletterInput.value.trim())) {
+            clearFieldError();
+        }
+    });
+
+    newsletterForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const value = newsletterInput.value.trim();
+
+        if (value === "") {
+            showFieldError("Enter your email address.");
+            newsletterInput.focus();
+            return;
+        }
+
+        if (!isValidEmail(value)) {
+            showFieldError("Enter a valid email address.");
+            newsletterInput.focus();
+            return;
+        }
+
+        clearFieldError();
+        newsletterBtn.disabled = true;
+        const originalLabel = newsletterLabel.textContent;
+        newsletterLabel.textContent = "Signing up...";
+
+        try {
+            let subscribers = JSON.parse(localStorage.getItem("newsletterSubscribers")) || [];
+
+            if (subscribers.includes(value)) {
+                showToast("You're already signed up!", "default");
+            } else {
+                subscribers.push(value);
+                localStorage.setItem("newsletterSubscribers", JSON.stringify(subscribers));
+                showToast("You're subscribed! Watch your inbox for offers.", "default");
+                newsletterForm.reset();
+            }
+        } catch (err) {
+            showToast("Something went wrong. Try again in a moment.", "error");
+        } finally {
+            newsletterBtn.disabled = false;
+            newsletterLabel.textContent = originalLabel;
+        }
+    });
+
+}

@@ -95,7 +95,7 @@ form.addEventListener("submit", async function (e) {
 
     try {
 
-        const response = await fetch("http://localhost:3000/api/contact/send", {
+        const response = await fetch(`${API_BASE_URL}/api/contact/send`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -108,13 +108,23 @@ form.addEventListener("submit", async function (e) {
             })
         });
 
+        // Previously missing: without this check, a 4xx/5xx response with a
+        // non-JSON body (e.g. an HTML error page from a proxy or a dead
+        // route) would throw inside response.json() and get reported as a
+        // generic "Server error" instead of the real cause, or in some
+        // cases silently pass a malformed `data` object through to the
+        // success branch below.
+        if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
+
         const data = await response.json();
 
         if (data.success) {
             showToast("Message sent successfully!");
             form.reset();
         } else {
-            showToast("Failed to send message.", "error");
+            showToast(data.message || "Failed to send message.", "error");
         }
 
     } catch (err) {
@@ -133,7 +143,6 @@ form.addEventListener("submit", async function (e) {
 
 // =========================
 // NEWSLETTER SIGNUP
-// (Previously had no JS at all — the button did nothing.)
 // =========================
 const newsletterForm = document.getElementById("newsletter-form");
 
@@ -141,6 +150,30 @@ if (newsletterForm) {
 
     const newsletterInput = document.getElementById("newsletter-email");
     const newsletterBtn = document.getElementById("newsletter-submit-btn");
+    const newsletterError = document.getElementById("newsletter-error");
+    const newsletterLabel = newsletterBtn.querySelector(".btn-label");
+
+    function showNewsletterError(message) {
+        if (newsletterError) {
+            newsletterError.textContent = message;
+            newsletterError.classList.add("show");
+        }
+        newsletterInput.classList.add("has-error");
+    }
+
+    function clearNewsletterError() {
+        if (newsletterError) {
+            newsletterError.textContent = "";
+            newsletterError.classList.remove("show");
+        }
+        newsletterInput.classList.remove("has-error");
+    }
+
+    newsletterInput.addEventListener("input", () => {
+        if (newsletterInput.value.trim() === "" || newsletterInput.checkValidity()) {
+            clearNewsletterError();
+        }
+    });
 
     newsletterForm.addEventListener("submit", function (e) {
 
@@ -148,12 +181,24 @@ if (newsletterForm) {
 
         const email = newsletterInput.value.trim();
 
-        if (!email || !newsletterInput.checkValidity()) {
+        if (!email) {
+            showNewsletterError("Enter your email address.");
             showToast("Please enter a valid email address.", "error");
+            newsletterInput.focus();
             return;
         }
 
+        if (!newsletterInput.checkValidity()) {
+            showNewsletterError("Enter a valid email address.");
+            showToast("Please enter a valid email address.", "error");
+            newsletterInput.focus();
+            return;
+        }
+
+        clearNewsletterError();
         newsletterBtn.disabled = true;
+        const originalLabel = newsletterLabel ? newsletterLabel.textContent : null;
+        if (newsletterLabel) newsletterLabel.textContent = "Signing up...";
 
         let subscribers =
             JSON.parse(localStorage.getItem("newsletterSubscribers")) || [];
@@ -162,6 +207,7 @@ if (newsletterForm) {
 
             showToast("You're already signed up!", "default");
             newsletterBtn.disabled = false;
+            if (newsletterLabel) newsletterLabel.textContent = originalLabel;
             return;
 
         }
@@ -172,6 +218,7 @@ if (newsletterForm) {
         showToast("You're subscribed! Watch your inbox for offers.", "default");
         newsletterForm.reset();
         newsletterBtn.disabled = false;
+        if (newsletterLabel) newsletterLabel.textContent = originalLabel;
 
     });
 

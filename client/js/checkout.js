@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:3000/api";
+const API_BASE = `${API_BASE_URL}/api`;
 
 const user = JSON.parse(localStorage.getItem("currentUser"));
 

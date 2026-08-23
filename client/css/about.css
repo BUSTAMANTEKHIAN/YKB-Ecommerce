@@ -1,0 +1,425 @@
+/* =========================================================
+   ABOUT.CSS — YKB Clothing
+   Theme: teal (#088178) + white, built for a Gen Z audience.
+   Signature elements: infinite scrolling ticker band, a
+   bento-grid "vibe check" section, and the brand history
+   told as a text-message thread instead of a formal timeline.
+   ========================================================= */
+
+.about-page {
+    --teal: #088178;
+    --teal-dark: #066a62;
+    --teal-deep: #04524c;
+    --mint: #e6f6f4;
+    --ink: #072421;
+    --white: #ffffff;
+
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+.about-page .section-kicker {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 10px;
+}
+
+.about-page .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 4vw, 38px);
+    line-height: 1.15;
+    margin: 0 0 36px;
+    max-width: 22ch;
+    color: var(--ink);
+}
+
+/* -------------------- HERO -------------------- */
+
+.teal-hero {
+    position: relative;
+    background: var(--teal);
+    border-radius: 28px;
+    padding: 64px 40px;
+    overflow: hidden;
+    color: var(--white);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: var(--white);
+    color: var(--teal-dark);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    padding: 7px 14px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+}
+
+.teal-hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(32px, 6vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 20px;
+}
+
+.teal-hero h1 .highlight {
+    color: var(--ink);
+    background: var(--white);
+    padding: 0 10px;
+    border-radius: 8px;
+    display: inline-block;
+    transform: rotate(-1deg);
+}
+
+.teal-hero p {
+    font-size: 16px;
+    line-height: 1.65;
+    max-width: 46ch;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-blob {
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 320px;
+    height: 320px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 44% 56% 62% 38% / 45% 40% 60% 55%;
+    z-index: 1;
+}
+
+.hero-blob::after {
+    content: "";
+    position: absolute;
+    inset: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50% 46% 60% 40% / 40% 55% 45% 60%;
+}
+
+/* -------------------- TICKER BAND -------------------- */
+
+.ticker-band {
+    background: var(--ink);
+    overflow: hidden;
+    padding: 14px 0;
+    margin: 32px 0;
+}
+
+.ticker-track {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: max-content;
+    white-space: nowrap;
+    animation: ticker-scroll 22s linear infinite;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    text-transform: uppercase;
+}
+
+.ticker-track .dot {
+    color: var(--teal);
+    font-size: 8px;
+}
+
+@keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+        animation: none;
+    }
+}
+
+/* -------------------- VIBE CHECK: BENTO GRID -------------------- */
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(160px, auto);
+    gap: 18px;
+}
+
+.bento-card {
+    background: var(--mint);
+    border: 1px solid rgba(8, 129, 120, 0.15);
+    border-radius: 20px;
+    padding: 26px;
+    grid-column: span 2;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.bento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px -20px rgba(8, 129, 120, 0.4);
+    background: var(--white);
+}
+
+.bento-large {
+    grid-column: span 4;
+    background: var(--teal);
+    color: var(--white);
+}
+
+.bento-large:hover {
+    background: var(--teal-dark);
+}
+
+.bento-wide {
+    grid-column: span 4;
+}
+
+.bento-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--teal);
+    color: var(--white);
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+.bento-large .bento-icon {
+    background: var(--white);
+    color: var(--teal);
+}
+
+.bento-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0 0 8px;
+}
+
+.bento-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.85;
+    margin: 0;
+    max-width: 56ch;
+}
+
+/* -------------------- DM THREAD -------------------- */
+
+.thread {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 560px;
+}
+
+.bubble {
+    position: relative;
+    padding: 14px 18px;
+    border-radius: 20px;
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 80%;
+}
+
+.bubble p {
+    margin: 0 0 6px;
+}
+
+.bubble-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.65;
+}
+
+.bubble-left {
+    align-self: flex-start;
+    background: var(--mint);
+    color: var(--ink);
+    border-bottom-left-radius: 4px;
+}
+
+.bubble-right {
+    align-self: flex-end;
+    background: var(--teal);
+    color: var(--white);
+    border-bottom-right-radius: 4px;
+}
+
+.bubble-right .bubble-time {
+    opacity: 0.75;
+}
+
+/* -------------------- NEWSLETTER -------------------- */
+
+.about-page #newsletter {
+    background: var(--teal);
+    border-radius: 24px;
+    padding: 40px;
+    color: var(--white);
+}
+
+.about-page #newsletter .newstext h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--white);
+}
+
+.about-page #newsletter .newstext p {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.about-page #newsletter .newstext p span {
+    color: var(--white);
+    font-weight: 700;
+}
+
+.about-page #newsletter .form {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.newsletter-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.newsletter-field input {
+    width: 100%;
+    border-radius: 999px;
+    border: none;
+    padding: 14px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+}
+
+.newsletter-field input.invalid {
+    outline: 2px solid var(--ink);
+}
+
+.field-error {
+    display: none;
+    font-size: 12.5px;
+    color: var(--white);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-top: 8px;
+    font-family: 'Space Mono', monospace;
+    width: fit-content;
+}
+
+.field-error.show {
+    display: block;
+}
+
+.about-page #newsletter .normal,
+#newsletter-submit {
+    background: var(--white);
+    color: var(--teal-dark);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+#newsletter-submit:hover:not([disabled]) {
+    transform: translateY(-2px);
+}
+
+#newsletter-submit[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+
+@media (max-width: 900px) {
+    .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bento-card,
+    .bento-large,
+    .bento-wide {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 599px) {
+    .teal-hero {
+        padding: 44px 24px;
+        border-radius: 20px;
+    }
+
+    .bubble {
+        max-width: 92%;
+    }
+
+    .about-page #newsletter .form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .about-page #newsletter {
+        padding: 28px 22px;
+    }
+}
+
+/* -------------------- DARK MODE -------------------- */
+
+body.dark-mode .about-page {
+    --mint: rgba(8, 129, 120, 0.12);
+    --ink: #eafaf8;
+}
+
+body.dark-mode .bento-card {
+    background: rgba(8, 129, 120, 0.1);
+    border-color: rgba(8, 129, 120, 0.3);
+}
+
+body.dark-mode .bento-card:hover {
+    background: rgba(8, 129, 120, 0.18);
+}
+
+body.dark-mode .bubble-left {
+    background: rgba(8, 129, 120, 0.15);
+}

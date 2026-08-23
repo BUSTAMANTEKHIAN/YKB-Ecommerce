@@ -43,7 +43,7 @@ exports.forgotPassword = async (req, res) => {
             [email, token, expires]
         );
 
-        const resetLink = `http://localhost:3000/reset-password.html?token=${token}`;
+        const resetLink = `${process.env.FRONTEND_URL}/reset-password.html?token=${token}`;
 
         // Development: print link in terminal
         console.log("====================================");

@@ -20,32 +20,77 @@
         </a>
 
         <div>
-            <ul id="navbar">
-                <li><a href="index.html">Home</a></li>
-                <li><a class="active" href="shop.html">Shop</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li class="wishlist-icon">
-                    <a href="wishlist.html">
-                        <i class="fas fa-heart"></i>
-                        <span id="wishlist-count">0</span>
-                    </a>
-                </li>
-                <li id="lg-bag">
-                    <a class="active" href="cart.html" style="position: relative;">
-                        <i class="fas fa-shopping-bag"></i>
-                    
-                        <!-- CART BADGE -->
-                        <span id="cart-count">0</span>
-                    </a>
-                </li>
-                <a href="#" id="close"><i class="far fa-times"></i></a>
+                        <ul id="navbar">
 
-                <button id="dark-mode-btn">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </ul>
+    <li>
+        <a href="index.html">Home</a>
+    </li>
+
+    <li>
+        <a href="shop.html">Shop</a>
+    </li>
+
+    <li>
+        <a href="blog.html">Blog</a>
+    </li>
+
+    <li>
+        <a href="about.html">About</a>
+    </li>
+
+    <li>
+        <a href="contact.html">Contact</a>
+    </li>
+
+    <li id="auth-area">
+
+    <div id="guest-links">
+        <a href="login.html" class="nav-login">Login</a>
+        <a href="register.html" class="nav-register">Register</a>
+    </div>
+
+    <div id="user-menu" class="user-menu hidden">
+        <a href="#" id="user-btn">
+            <i class="fas fa-user-circle"></i>
+            <span id="nav-username"></span>
+        </a>
+
+        <div class="dropdown" id="user-dropdown">
+            <a href="profile.html" id="profile-link">My Profile</a>
+            <a href="orders.html">My Orders</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
+
+</li>
+
+    <li class="wishlist-icon">
+        <a href="wishlist.html">
+            <i class="fas fa-heart"></i>
+            <span id="wishlist-count">0</span>
+        </a>
+    </li>
+
+    <li id="lg-bag">
+        <a href="cart.html">
+            <i class="fas fa-shopping-bag"></i>
+            <span id="cart-count">0</span>
+        </a>
+    </li>
+
+    <li>
+        <button id="dark-mode-btn">
+            <i class="fas fa-moon"></i>
+        </button>
+    </li>
+
+    <!-- Mobile close button -->
+    <li id="close-item">
+        <a href="#" id="close"><i class="fas fa-times"></i></a>
+    </li>
+
+</ul>
         </div>
         <div id="mobile">
             <a href="cart.html"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
@@ -206,9 +251,8 @@
 <div id="drawer-overlay"></div>
     </footer>
 
-
+    <script src="js/config.js"></script>
     <script src="js/script.js"></script>   
-    <script src="js/shop-ui.js"></script> 
     <script src="js/shop.js"></script> 
     <script src="js/darkmode.js"></script>
 </body>

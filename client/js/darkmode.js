@@ -1,21 +1,32 @@
 const darkModeBtn = document.getElementById("dark-mode-btn");
 
-if (darkModeBtn) {
+const savedMode = localStorage.getItem("darkMode");
+
+if (savedMode === "enabled") {
+    document.body.classList.add("dark-mode");
+}
+
+function updateDarkModeIcon() {
+    if (!darkModeBtn) return;
+
     const icon = darkModeBtn.querySelector("i");
 
-    // Load saved preference
-    const darkMode = localStorage.getItem("darkMode");
+    if (!icon) return;
 
-    if (darkMode === "enabled") {
-        document.body.classList.add("dark-mode");
-
-        if (icon) {
-            icon.classList.remove("fa-moon");
-            icon.classList.add("fa-sun");
-        }
+    if (document.body.classList.contains("dark-mode")) {
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+    } else {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
     }
+}
 
+updateDarkModeIcon();
+
+if (darkModeBtn) {
     darkModeBtn.addEventListener("click", () => {
+
         document.body.classList.toggle("dark-mode");
 
         const enabled =
@@ -26,9 +37,6 @@ if (darkModeBtn) {
             enabled ? "enabled" : "disabled"
         );
 
-        if (icon) {
-            icon.classList.toggle("fa-moon", !enabled);
-            icon.classList.toggle("fa-sun", enabled);
-        }
+        updateDarkModeIcon();
     });
 }

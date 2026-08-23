@@ -59,7 +59,7 @@ const tableBody = document.getElementById("productsTableBody");
 // Load products from database
 async function loadProducts() {
     try {
-        const response = await fetch("http://localhost:3000/api/products");
+        const response = await fetch(`${API_BASE_URL}/api/products`);
         const products = await response.json();
 
         // Update dashboard stats
@@ -143,7 +143,7 @@ function renderProducts(products) {
 
 window.editProduct = async function(id) {
     try {
-        const response = await fetch(`http://localhost:3000/api/products`);
+        const response = await fetch(`${API_BASE_URL}/api/products`);
         const products = await response.json();
 
         const product = products.find(p => p.id == id);
@@ -186,8 +186,7 @@ window.deleteProduct = async function(id) {
 
     try {
 
-        const response = await fetch(
-            `http://localhost:3000/api/products/${id}`,
+        const response = await fetch(`${API_BASE_URL}/api/products/${id}`,
             {
                 method: "DELETE"
             }
@@ -279,8 +278,7 @@ if (imageFile) {
 
         try {
 
-            const response = await fetch(
-                "http://localhost:3000/api/products/upload",
+            const response = await fetch(`${API_BASE_URL}/api/products/upload`,
                 {
                     method: "POST",
                     body: formData
@@ -333,8 +331,8 @@ if (productForm) {
 
             const response = await fetch(
                 productId
-                    ? `http://localhost:3000/api/products/${productId}`
-                    : "http://localhost:3000/api/products",
+                    ? `${API_BASE_URL}/api/products/${productId}`
+                    : `${API_BASE_URL}/api/products`,
                 {
                     method: productId ? "PUT" : "POST",
                     headers: {
@@ -380,8 +378,7 @@ async function loadOrders() {
 
     try {
 
-        const response = await fetch(
-            "http://localhost:3000/api/orders/admin/all"
+        const response = await fetch(`${API_BASE_URL}/api/orders/admin/all`
         );
 
         const orders = await response.json();
@@ -515,8 +512,7 @@ window.updateOrderStatus = async function(orderId, status) {
 
     try {
 
-        await fetch(
-            `http://localhost:3000/api/orders/admin/${orderId}/status`,
+        await fetch(`${API_BASE_URL}/api/orders/admin/${orderId}/status`,
             {
                 method: "PUT",
                 headers: {
@@ -555,8 +551,7 @@ window.viewOrder = async function(orderId) {
         orderModal.classList.add("active");
         orderDetails.innerHTML = "<p>Loading order...</p>";
 
-        const response = await fetch(
-            `http://localhost:3000/api/orders/admin/${orderId}`
+        const response = await fetch(`${API_BASE_URL}/api/orders/admin/${orderId}`
         );
 
         const data = await response.json();
@@ -641,8 +636,7 @@ async function loadUsers() {
 
     try {
 
-        const response = await fetch(
-            "http://localhost:3000/api/admin/users"
+        const response = await fetch(`${API_BASE_URL}/api/admin/users`
         );
 
         const users = await response.json();
@@ -764,8 +758,7 @@ window.toggleRole = async function(userId, currentRole) {
 
     try {
 
-        const response = await fetch(
-            `http://localhost:3000/api/admin/users/${userId}/role`,
+        const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/role`,
             {
                 method: "PUT",
                 headers: {
@@ -814,8 +807,7 @@ window.suspendUser = async function(userId, days) {
         // Get the currently logged-in admin/owner
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-        const response = await fetch(
-            `http://localhost:3000/api/admin/users/${userId}/suspend`,
+        const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/suspend`,
             {
                 method: "PUT",
                 headers: {
@@ -854,8 +846,7 @@ window.unbanUser = async function(userId) {
 
     try {
 
-        await fetch(
-            `http://localhost:3000/api/admin/users/${userId}/unsuspend`,
+        await fetch(`${API_BASE_URL}/api/admin/users/${userId}/unsuspend`,
             {
                 method: "PUT"
             }
@@ -897,8 +888,7 @@ async function loadReviews() {
 
     try {
 
-        const response = await fetch(
-            "http://localhost:3000/api/reviews/admin/all"
+        const response = await fetch(`${API_BASE_URL}/api/reviews/admin/all`
         );
 
         const reviews = await response.json();
@@ -956,8 +946,7 @@ async function loadMessages() {
 
     try {
 
-        const response = await fetch(
-            "http://localhost:3000/api/contact/admin"
+        const response = await fetch(`${API_BASE_URL}/api/contact/admin`
         );
 
         const messages = await response.json();
@@ -1037,8 +1026,7 @@ window.deleteMessage = async function(id) {
 
     try {
 
-        const response = await fetch(
-            `http://localhost:3000/api/contact/admin/${id}`,
+        const response = await fetch(`${API_BASE_URL}/api/contact/admin/${id}`,
             {
                 method: "DELETE"
             }
@@ -1073,8 +1061,7 @@ async function deleteReview(id) {
 
     if (!confirm("Delete this review?")) return;
 
-    const response = await fetch(
-        `http://localhost:3000/api/reviews/admin/${id}`,
+    const response = await fetch(`${API_BASE_URL}/api/reviews/admin/${id}`,
         {
             method: "DELETE"
         }

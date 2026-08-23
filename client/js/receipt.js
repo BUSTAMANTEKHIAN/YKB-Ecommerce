@@ -10,7 +10,7 @@ if (!order_id) {
     window.location.href = "orders.html";
 }
 
-fetch(`http://localhost:3000/api/orders/receipt/${order_id}`)
+fetch(`${API_BASE_URL}/api/orders/receipt/${order_id}`)
 .then(res => res.json())
 .then(data => {
 

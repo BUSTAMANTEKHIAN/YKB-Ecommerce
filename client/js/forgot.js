@@ -18,7 +18,7 @@ forgotForm.addEventListener("submit", async (e) => {
 
     try {
 
-        const response = await fetch("http://localhost:3000/api/auth/forgot-password", {
+        const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
 
             method: "POST",
 

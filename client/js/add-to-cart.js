@@ -17,7 +17,7 @@ if (addCartBtn) {
             quantity: Number(document.getElementById("quantity").value || 1)
         };
 
-        fetch("http://localhost:3000/api/cart/add", {
+        fetch(`${API_BASE_URL}/api/cart/add`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

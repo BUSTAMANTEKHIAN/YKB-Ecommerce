@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", loadOrders);
 // =========================
 function loadOrders() {
 
-    fetch(`http://localhost:3000/api/orders/${user.id}`)
+    fetch(`${API_BASE_URL}/api/orders/${user.id}`)
     .then(res => res.json())
     .then(data => {
 

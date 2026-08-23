@@ -4,47 +4,97 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YKB CLOTHING</title> 
-    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+    <title>About — YKB CLOTHING</title>
+    <meta name="description" content="The story, materials, and people behind YKB Clothing.">
+    <link rel="icon" href="images/banner/favicon.jpg" type="image/png">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/about.css">
 </head>
 <body>
 
     <section id="header">
 
         <a href="#">
-            <img src= "images/banner/b1.png" class="logo" alt="YKB Clothing">
+            <img src="images/banner/b1.png" class="logo" alt="YKB Clothing">
         </a>
 
         <div>
-            <ul id="navbar">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="shop.html">Shop</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a class="active" href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li class="wishlist-icon">
-                    <a href="wishlist.html">
-                        <i class="fas fa-heart"></i>
-                        <span id="wishlist-count">0</span>
-                    </a>
-                </li>
-                <li id="lg-bag">
-                    <a class="active" href="cart.html" style="position: relative;">
-                        <i class="fas fa-shopping-bag"></i>
-                    
-                        <!-- CART BADGE -->
-                        <span id="cart-count">0</span>
-                    </a>
-                </li>
-                <a href="#" id="close"><i class="far fa-times"></i></a>
+<ul id="navbar">
 
-                <button id="dark-mode-btn">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </ul>
+    <li>
+        <a href="index.html">Home</a>
+    </li>
+
+    <li>
+        <a href="shop.html">Shop</a>
+    </li>
+
+    <li>
+        <a href="blog.html">Blog</a>
+    </li>
+
+    <li>
+        <a href="about.html" class="active">About</a>
+    </li>
+
+    <li>
+        <a href="contact.html">Contact</a>
+    </li>
+
+    <li id="auth-area">
+
+    <div id="guest-links">
+        <a href="login.html" class="nav-login">Login</a>
+        <a href="register.html" class="nav-register">Register</a>
+    </div>
+
+    <div id="user-menu" class="user-menu hidden">
+        <a href="#" id="user-btn">
+            <i class="fas fa-user-circle"></i>
+            <span id="nav-username"></span>
+        </a>
+
+        <div class="dropdown" id="user-dropdown">
+            <a href="profile.html" id="profile-link">My Profile</a>
+            <a href="orders.html">My Orders</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
+
+</li>
+
+    <li class="wishlist-icon">
+        <a href="wishlist.html">
+            <i class="fas fa-heart"></i>
+            <span id="wishlist-count">0</span>
+        </a>
+    </li>
+
+    <li id="lg-bag">
+        <a href="cart.html">
+            <i class="fas fa-shopping-bag"></i>
+            <span id="cart-count">0</span>
+        </a>
+    </li>
+
+    <li>
+        <button id="dark-mode-btn" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </li>
+
+    <!-- Mobile close button -->
+    <li id="close-item">
+        <a href="#" id="close"><i class="fas fa-times"></i></a>
+    </li>
+
+</ul>
         </div>
         <div id="mobile">
             <a href="cart.html"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
@@ -52,73 +102,155 @@
         </div>
     </section>
 
-    <section id="page-header" class="about-header">
-        <h2>#KnowUs</h2>
-        <p>Make sure read down below!</p>
-    </section>
+    <!-- ============================================================
+         ABOUT PAGE — teal + white, built for a Gen Z audience.
+         Signature elements: an infinite scrolling ticker band,
+         a bento-grid "vibe check" instead of a formal values list,
+         and the brand history told as a text-message thread.
+         ============================================================ -->
 
-    <section id="about-head" class="section-p1">
-        <img src="images/about/a2.jpg" alt="">
-        <div>
-            <h2>Who We Are?</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum molestias ut necessitatibus? Perspiciatis qui saepe eligendi praesentium ratione blanditiis harum laborum reiciendis doloribus pariatur accusamus exercitationem, recusandae, quo laboriosam nulla.</p>
-           
-            <abbr title="">Create stunning images with as much or as little control as you like thanks to a choice of basic and Creative modes.</abbr>
-            
-            <br><br>
+    <main class="about-page">
 
-            <marquee bgcolor="#ccc" loop="-1" scrollamount="5" width="100%">Create stunning images with as much or as little control as you like thanks to a choice of basic and Creative modes.</marquee>
+        <!-- HERO -->
+        <section class="teal-hero section-p1">
+            <div class="hero-content">
+                <span class="hero-badge">EST. FOR THE REAL ONES</span>
+                <h1>WE MAKE CLOTHES THAT<br><span class="highlight">ACTUALLY HIT DIFFERENT</span></h1>
+                <p>Not another brand selling you a "lifestyle." Just fits that fit, prices that make sense, and people who actually read your emails.</p>
+            </div>
+            <div class="hero-blob" aria-hidden="true"></div>
+        </section>
 
+        <!-- SCROLLING TICKER -->
+        <div class="ticker-band" aria-hidden="true">
+            <div class="ticker-track">
+                <span>NO CAP QUALITY</span><span class="dot">●</span>
+                <span>SIZED FOR REAL BODIES</span><span class="dot">●</span>
+                <span>SHIPPED FAST</span><span class="dot">●</span>
+                <span>ZERO INTERROGATION RETURNS</span><span class="dot">●</span>
+                <span>NO CAP QUALITY</span><span class="dot">●</span>
+                <span>SIZED FOR REAL BODIES</span><span class="dot">●</span>
+                <span>SHIPPED FAST</span><span class="dot">●</span>
+                <span>ZERO INTERROGATION RETURNS</span><span class="dot">●</span>
+            </div>
         </div>
-    </section>
 
-    <section id="about-app" class="section-p1">
-        <h1>Download Our <a href="#">App</a></h1>
-        <div class="video">
-            <video autoplay muted loop src="images/about/1.mp4"></video>
-        </div>
-    </section>
+        <!-- VIBE CHECK: bento grid -->
+        <section class="vibe-check section-p1">
+            <p class="section-kicker">THE VIBE CHECK</p>
+            <h2 class="section-title">What we're actually about</h2>
+            <div class="bento-grid">
+                <div class="bento-card bento-large">
+                    <span class="bento-icon"><i class="fas fa-tshirt"></i></span>
+                    <h3>Materials that survive real life</h3>
+                    <p>If it can't handle a normal wash and a normal Tuesday, it doesn't make the cut — no matter how good it looks in a flat lay.</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-icon"><i class="fas fa-tags"></i></span>
+                    <h3>Prices we'd defend</h3>
+                    <p>No fake "50% off" tags. What you see is what it actually costs to make it right.</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-icon"><i class="fas fa-ruler-combined"></i></span>
+                    <h3>Sizing tested on real bodies</h3>
+                    <p>Not just graded up from one sample size and hoped for the best.</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-icon"><i class="fas fa-comment-dots"></i></span>
+                    <h3>DMs get answered</h3>
+                    <p>By an actual person. Try it — hit up the Contact page.</p>
+                </div>
+                <div class="bento-card bento-wide">
+                    <span class="bento-icon"><i class="fas fa-redo"></i></span>
+                    <h3>Returns without the guilt trip</h3>
+                    <p>30 days, no interrogation. Wrong fit isn't a personal failing, it's just sizing — we'll fix it.</p>
+                </div>
+            </div>
+        </section>
 
+        <!-- STORY AS A TEXT THREAD -->
+        <section class="dm-thread section-p1">
+            <p class="section-kicker">THE STORY, AS TEXTED</p>
+            <h2 class="section-title">How we actually got here</h2>
+            <div class="thread">
+                <div class="bubble bubble-left">
+                    <p>okay remember when we sold out 12 shirts off one Instagram post before the site even worked 💀</p>
+                    <span class="bubble-time">day one</span>
+                </div>
+                <div class="bubble bubble-right">
+                    <p>we did NOT expect that. also we definitely did not expect the size complaints lol</p>
+                    <span class="bubble-time">week two</span>
+                </div>
+                <div class="bubble bubble-left">
+                    <p>yeah so we scrapped the whole size chart and rebuilt it off real customer measurements. worth it</p>
+                    <span class="bubble-time">month three</span>
+                </div>
+                <div class="bubble bubble-right">
+                    <p>now we've got a catalog we're actually proud to wear ourselves. growing one drop at a time 🌿</p>
+                    <span class="bubble-time">today</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Existing feature strip, restyled to teal/white -->
         <section id="feature" class="section-p1">
-        <div class="fe-box">
-            <img src= "images/banner/f1.png">
-            <h6>Free Shipping</h6>
-        </div>
-        <div class="fe-box">
-            <img src= "images/banner/f2.png">
-            <h6>Online Order</h6>
-        </div>
-        <div class="fe-box">
-            <img src= "images/banner/f3.png">
-            <h6>Save Money</h6>
-        </div>
-        <div class="fe-box">
-            <img src= "images/banner/f4.png">
-            <h6>Promotions</h6>
-        </div>
-        <div class="fe-box">
-            <img src= "images/banner/f5.png">
-            <h6>Happy Sell</h6>
-        </div>
-        <div class="fe-box">
-            <img src= "images/banner/f6.png">
-            <h6>F24/7 Support</h6>
-        </div>
-    </section>
+            <div class="fe-box">
+                <img src="images/banner/f1.png" alt="">
+                <h6>Free Shipping</h6>
+            </div>
+            <div class="fe-box">
+                <img src="images/banner/f2.png" alt="">
+                <h6>Online Order</h6>
+            </div>
+            <div class="fe-box">
+                <img src="images/banner/f3.png" alt="">
+                <h6>Save Money</h6>
+            </div>
+            <div class="fe-box">
+                <img src="images/banner/f4.png" alt="">
+                <h6>Promotions</h6>
+            </div>
+            <div class="fe-box">
+                <img src="images/banner/f5.png" alt="">
+                <h6>Happy Sell</h6>
+            </div>
+            <div class="fe-box">
+                <img src="images/banner/f6.png" alt="">
+                <h6>24/7 Support</h6>
+            </div>
+        </section>
 
+        <!-- Newsletter — validated + teal pill styling -->
         <section id="newsletter" class="section-p1 section-m1">
-        <div class="newstext">
-            <h4>Sign Up For Newsletter</h4>
-            <p>Get E-mail updates about our latest shop and <span>special offers.</span> 
-            </p>
-        </div>
-        <div class="form">
-            <input type="text" placeholder="Your Email Address">
-            <button class="normal">Sign Up</button>
-        </div>
-    </section>
+            <div class="newstext">
+                <h4>Get the drops first</h4>
+                <p>New arrivals, restocks, and <span>actual discounts</span> — straight to your inbox.</p>
+            </div>
+            <form class="form" id="newsletter-form" novalidate>
+                <div class="newsletter-field">
+                    <label for="newsletter-email" class="sr-only">Email address</label>
+                    <input
+                        type="email"
+                        id="newsletter-email"
+                        name="email"
+                        placeholder="Your Email Address"
+                        autocomplete="email"
+                        aria-describedby="newsletter-error"
+                        required
+                    >
+                    <span class="field-error" id="newsletter-error" role="alert"></span>
+                </div>
+                <button type="submit" class="normal" id="newsletter-submit">
+                    <span class="btn-label">Sign Up</span>
+                </button>
+            </form>
+        </section>
 
-    <script src="js/script.js"></script>   
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
     <script src="js/darkmode.js"></script>
+    <script src="js/about.js"></script>
 </body>
 </html>

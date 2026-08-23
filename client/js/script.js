@@ -99,14 +99,57 @@ function updateWishlistCount() {
   badge.style.display = wishlist.length > 0 ? "flex" : "none";
 }
 
+// -----------------------------------------------------------------------
+// AUTH NAV STATE
+// -----------------------------------------------------------------------
+// Fixes: "Login/Register" showing in the navbar even when a user is
+// already logged in. Every page's <header> markup has two sibling blocks:
+//   #guest-links  -> Login / Register links (visible by default)
+//   #user-menu    -> account dropdown, has class="hidden" by default
+// Nothing was ever toggling between them on page load unless a page
+// separately included an auth.js that did this. This function makes that
+// toggle a guaranteed part of script.js, so it runs on every page that
+// already includes this file — no extra script tag required.
+//
+// If you have a separate auth.js elsewhere ALSO toggling #guest-links /
+// #user-menu on DOMContentLoaded, remove that duplicate logic — running
+// both is the same "two toggles cancel each other out" bug that broke
+// dark mode before.
+// -----------------------------------------------------------------------
+function updateAuthUI() {
+  const guestLinks = document.getElementById("guest-links");
+  const userMenu = document.getElementById("user-menu");
+  const usernameEl = document.getElementById("nav-username");
+
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem("currentUser"));
+  } catch (err) {
+    user = null;
+  }
+
+  if (user) {
+    if (guestLinks) guestLinks.classList.add("hidden");
+    if (userMenu) userMenu.classList.remove("hidden");
+    if (usernameEl) usernameEl.textContent = user.fullname || user.name || user.email || "Account";
+  } else {
+    if (guestLinks) guestLinks.classList.remove("hidden");
+    if (userMenu) userMenu.classList.add("hidden");
+  }
+}
+
+function logout() {
+  localStorage.removeItem("currentUser");
+  updateAuthUI();
+  updateCartCount();
+  updateWishlistCount();
+  window.location.href = "index.html";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   updateWishlistCount();
-
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (user) {
-    console.log("Logged in as:", user.fullname);
-  }
+  updateAuthUI();
 });
 
 const userBtn = document.getElementById("user-btn");
