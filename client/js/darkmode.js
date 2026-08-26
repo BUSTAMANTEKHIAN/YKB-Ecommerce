@@ -1,42 +1,142 @@
-const darkModeBtn = document.getElementById("dark-mode-btn");
+// ==========================================
+// YKB CLOTHING - DARK MODE
+// ==========================================
 
-const savedMode = localStorage.getItem("darkMode");
+(function () {
 
-if (savedMode === "enabled") {
-    document.body.classList.add("dark-mode");
-}
+    // ------------------------------------------
+    // APPLY SAVED THEME IMMEDIATELY
+    // ------------------------------------------
 
-function updateDarkModeIcon() {
-    if (!darkModeBtn) return;
+    const savedMode = localStorage.getItem("darkMode");
 
-    const icon = darkModeBtn.querySelector("i");
-
-    if (!icon) return;
-
-    if (document.body.classList.contains("dark-mode")) {
-        icon.classList.remove("fa-moon");
-        icon.classList.add("fa-sun");
+    if (savedMode === "enabled") {
+        document.body.classList.add("dark-mode");
     } else {
-        icon.classList.remove("fa-sun");
-        icon.classList.add("fa-moon");
+        document.body.classList.remove("dark-mode");
     }
-}
 
-updateDarkModeIcon();
+    // ------------------------------------------
+    // INITIALIZE BUTTON
+    // ------------------------------------------
 
-if (darkModeBtn) {
-    darkModeBtn.addEventListener("click", () => {
+    function initializeDarkMode() {
 
-        document.body.classList.toggle("dark-mode");
+        const darkModeBtn =
+            document.getElementById("dark-mode-btn");
 
-        const enabled =
-            document.body.classList.contains("dark-mode");
+        if (!darkModeBtn) {
+            console.warn("Dark mode button not found on this page.");
+            return;
+        }
 
-        localStorage.setItem(
-            "darkMode",
-            enabled ? "enabled" : "disabled"
-        );
+        // Prevent duplicate initialization
+        if (darkModeBtn.dataset.darkModeReady === "true") {
+            return;
+        }
+
+        darkModeBtn.dataset.darkModeReady = "true";
+
+        // ------------------------------------------
+        // UPDATE ICON
+        // ------------------------------------------
+
+        function updateDarkModeIcon() {
+
+            const icon = darkModeBtn.querySelector("i");
+
+            if (!icon) return;
+
+            const isDark =
+                document.body.classList.contains("dark-mode");
+
+            if (isDark) {
+
+                icon.classList.remove("fa-moon");
+                icon.classList.add("fa-sun");
+
+                darkModeBtn.setAttribute(
+                    "aria-label",
+                    "Switch to light mode"
+                );
+
+                darkModeBtn.setAttribute(
+                    "title",
+                    "Switch to light mode"
+                );
+
+            } else {
+
+                icon.classList.remove("fa-sun");
+                icon.classList.add("fa-moon");
+
+                darkModeBtn.setAttribute(
+                    "aria-label",
+                    "Switch to dark mode"
+                );
+
+                darkModeBtn.setAttribute(
+                    "title",
+                    "Switch to dark mode"
+                );
+            }
+        }
+
+        // ------------------------------------------
+        // INITIAL ICON
+        // ------------------------------------------
 
         updateDarkModeIcon();
-    });
-}
+
+        // ------------------------------------------
+        // BUTTON CLICK
+        // ------------------------------------------
+
+        darkModeBtn.addEventListener("click", function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isDark =
+                document.body.classList.toggle("dark-mode");
+
+            localStorage.setItem(
+                "darkMode",
+                isDark ? "enabled" : "disabled"
+            );
+
+            updateDarkModeIcon();
+
+            console.log(
+                "Dark mode:",
+                isDark ? "ENABLED" : "DISABLED"
+            );
+
+        });
+
+        console.log(
+            "Dark mode initialized:",
+            document.body.classList.contains("dark-mode")
+                ? "ENABLED"
+                : "DISABLED"
+        );
+    }
+
+    // ------------------------------------------
+    // INITIALIZE AFTER HTML LOAD
+    // ------------------------------------------
+
+    if (document.readyState === "loading") {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initializeDarkMode
+        );
+
+    } else {
+
+        initializeDarkMode();
+
+    }
+
+})();
