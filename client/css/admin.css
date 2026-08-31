@@ -22,14 +22,14 @@ body{
     color:var(--text);
 }
 
+/* after */
 .admin-layout{
-    display:grid;
-    grid-template-columns:260px 1fr;
     min-height:100vh;
 }
 
 /* SIDEBAR */
 
+/* after */
 .sidebar{
     background:#0f172a;
     color:#fff;
@@ -37,6 +37,15 @@ body{
     display:flex;
     flex-direction:column;
     justify-content:space-between;
+
+    /* Fixed so it stays in view while .main-content scrolls */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
 }
 
 .sidebar-header h2{
@@ -92,10 +101,9 @@ body{
     background:#dc2626;
 }
 
-/* MAIN */
-
 .main-content{
     padding:32px;
+    margin-left: 260px; /* matches sidebar width, since it's no longer in grid flow */
 }
 
 .topbar{
@@ -258,12 +266,12 @@ body{
 
 /* RESPONSIVE */
 
+/* after */
 @media(max-width:900px){
-    .admin-layout{
-        grid-template-columns:1fr;
-    }
-
     .sidebar{
+        position: static;
+        width: auto;
+        height: auto;
         flex-direction:row;
         align-items:center;
         gap:20px;
@@ -277,6 +285,7 @@ body{
     }
 
     .main-content{
+        margin-left: 0;
         padding:22px;
     }
 
@@ -288,6 +297,14 @@ body{
 }
 
 /* TABLE ACTION BUTTONS */
+.delete-btn{
+    background:#ef4444;
+    color:#fff;
+}
+
+.delete-btn:hover{
+    background:#dc2626;
+}
 
 .edit-btn,
 .delete-btn{
@@ -308,15 +325,6 @@ body{
 
 .edit-btn:hover{
     background:#1d4ed8;
-}
-
-.delete-btn{
-    background:#ef4444;
-    color:#fff;
-}
-
-.delete-btn:hover{
-    background:#dc2626;
 }
 
 /* =========================
@@ -512,20 +520,6 @@ textarea{
     background:#64748b;
 }
 
-.delete-btn{
-    background:#dc2626;
-    color:#fff;
-    border:none;
-    padding:8px 14px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:600;
-}
-
-.delete-btn:hover{
-    background:#b91c1c;
-}
-
 /* =========================
    STOCK BADGES
 ========================= */
@@ -577,4 +571,53 @@ textarea{
     background:#fef3c7;
     color:#92400e;
     font-weight:700;
+}
+
+/* =========================
+   TOASTS
+========================= */
+
+.toast-stack{
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.toast{
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 14px 20px;
+    border-radius: 12px;
+    background: #0f172a;
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+    animation: toastIn .25s ease;
+    max-width: 320px;
+}
+
+.toast.toast--success{ background: #16a34a; }
+.toast.toast--error{ background: #dc2626; }
+
+.toast.is-leaving{
+    animation: toastOut .25s ease forwards;
+}
+
+@keyframes toastIn{
+    from{ opacity: 0; transform: translateY(12px); }
+    to  { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastOut{
+    from{ opacity: 1; transform: translateY(0); }
+    to  { opacity: 0; transform: translateY(12px); }
+}
+
+@media (max-width: 600px){
+    .toast-stack{ left: 16px; right: 16px; bottom: 16px; }
+    .toast{ max-width: none; }
 }

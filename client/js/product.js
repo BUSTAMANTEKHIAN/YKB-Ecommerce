@@ -282,32 +282,17 @@ function updateWishlistButton() {
 async function loadProduct() {
 
     if (!productId) {
-
-        console.error("No product ID found.");
-
+        console.error("No product ID found in URL.");
         return;
-
     }
 
-
     try {
-
-        console.log(
-            "Fetching product:",
-            `${API_BASE_URL}/api/products/${productId}`
-        );
-
 
         const response = await fetch(
             `${API_BASE_URL}/api/products/${productId}`
         );
 
-
-        console.log(
-            "Product API status:",
-            response.status
-        );
-
+        console.log("Product API status:", response.status);
 
         if (!response.ok) {
 
@@ -317,12 +302,16 @@ async function loadProduct() {
             );
 
             document.querySelector("#prodetails").innerHTML = `
-                <div style="text-align:center;width:100%;padding:50px;">
-
+                <div style="
+                    width:100%;
+                    text-align:center;
+                    padding:80px 20px;
+                ">
                     <h2>Product Not Found</h2>
 
                     <p>
-                        The product you are looking for doesn't exist.
+                        The product you are looking for
+                        doesn't exist.
                     </p>
 
                     <br>
@@ -330,50 +319,61 @@ async function loadProduct() {
                     <a href="shop.html" class="normal">
                         Back to Shop
                     </a>
-
                 </div>
             `;
 
             return;
-
         }
 
-
-        // IMPORTANT:
-        // Convert API response into the product object
 
         const product = await response.json();
 
         currentProduct = product;
 
+        console.log("================================");
+        console.log("PRODUCT DATA FROM DATABASE:");
+        console.log(product);
+        console.log("NAME:", product.name);
+        console.log("PRICE:", product.price);
+        console.log("CATEGORY:", product.category);
+        console.log("DESCRIPTION:", product.description);
+        console.log("STOCK:", product.stock);
+        console.log("IMAGE:", product.image);
+        console.log("================================");
 
-        console.log(
-            "Product received:",
-            product
-        );
+
+        // ==========================================
+        // PRODUCT ID
+        // ==========================================
+
+        document.getElementById("product-id").value =
+            product.id;
 
 
         // ==========================================
         // PRODUCT IMAGE
         // ==========================================
 
-        const imageUrl = getProductImage(product.image);
+        const imageUrl =
+            getProductImage(product.image);
 
-console.log("DATABASE IMAGE:", product.image);
-console.log("API BASE URL:", API_BASE_URL);
-console.log("FINAL IMAGE URL:", imageUrl);
+        const mainImg =
+            document.getElementById("MainImg");
 
-const mainImg = document.getElementById("MainImg");
+        mainImg.src = imageUrl;
 
-mainImg.src = imageUrl;
+        mainImg.alt =
+            product.name || "Product Image";
 
-mainImg.onerror = function () {
-    console.error("IMAGE FAILED:", imageUrl);
-};
 
-mainImg.onload = function () {
-    console.log("IMAGE LOADED:", imageUrl);
-};
+        mainImg.onerror = function () {
+
+            console.error(
+                "Product image failed:",
+                imageUrl
+            );
+
+        };
 
 
         // ==========================================
@@ -383,89 +383,124 @@ mainImg.onload = function () {
         const thumbnailGroup =
             document.getElementById("thumbnail-group");
 
-
         thumbnailGroup.innerHTML = `
             <div class="small-img-col">
-
                 <img
                     src="${imageUrl}"
-                    width="100%"
                     class="small-img"
-                    alt="${product.name}"
+                    width="100%"
+                    alt="${product.name || "Product"}"
                 >
-
             </div>
         `;
-
 
         const thumbnail =
             thumbnailGroup.querySelector(".small-img");
 
-
         if (thumbnail) {
 
-            thumbnail.onclick = function () {
-
+            thumbnail.addEventListener("click", () => {
                 mainImg.src = thumbnail.src;
-
-            };
+            });
 
         }
 
 
         // ==========================================
-        // PRODUCT INFORMATION
+        // PRODUCT NAME
         // ==========================================
 
-        document.getElementById("product-id").value =
-            product.id;
+        const productName =
+            product.name ||
+            product.product_name ||
+            product.title ||
+            "Unnamed Product";
+
+        document.getElementById("product-name")
+            .textContent = productName;
 
 
-        document.getElementById("product-name").textContent =
-            product.name;
+        // ==========================================
+        // PRODUCT PRICE
+        // ==========================================
 
+        const productPrice =
+            Number(product.price) || 0;
 
-        document.getElementById("product-price").textContent =
+        const priceElement =
+            document.getElementById("product-price");
+
+        priceElement.textContent =
             "₱" +
-            Number(product.price).toLocaleString();
+            productPrice.toLocaleString(
+                "en-PH",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+        priceElement.dataset.price =
+            productPrice;
 
 
-        document.getElementById("product-price")
-            .dataset.price = product.price;
-
+        // ==========================================
+        // CATEGORY
+        // ==========================================
 
         document.getElementById("product-category")
             .textContent =
-            "Home / " + product.category;
+            "Home / " +
+            (
+                product.category ||
+                "Product"
+            );
 
+
+        // ==========================================
+        // DESCRIPTION
+        // ==========================================
+
+        const productDescription =
+            product.description ||
+            product.product_description ||
+            "No product description available.";
 
         document.getElementById("product-description")
             .textContent =
-            product.description;
-
-
-        document.getElementById("product-stock")
-            .textContent =
-            product.stock > 0
-                ? `In Stock (${product.stock})`
-                : "Out of Stock";
+            productDescription;
 
 
         // ==========================================
         // STOCK
         // ==========================================
 
-        if (product.stock <= 0) {
+        const stock =
+            Math.max(
+                0,
+                Number(product.stock) || 0
+            );
 
-            addCartBtn.disabled = true;
+        const stockElement =
+            document.getElementById("product-stock");
 
-            buyNowBtn.disabled = true;
+        if (stock > 0) {
 
-            addCartBtn.textContent =
+            stockElement.textContent =
+                `In Stock (${stock})`;
+
+            stockElement.classList.remove(
+                "out-of-stock"
+            );
+
+        } else {
+
+            stockElement.textContent =
                 "Out of Stock";
 
-            buyNowBtn.style.display =
-                "none";
+            stockElement.classList.add(
+                "out-of-stock"
+            );
 
         }
 
@@ -474,56 +509,116 @@ mainImg.onload = function () {
         // QUANTITY
         // ==========================================
 
-        const qty =
+        const quantity =
             document.getElementById("quantity");
 
+        if (stock > 0) {
 
-        if (product.stock > 0) {
+            quantity.disabled = false;
+            quantity.min = 1;
+            quantity.max = stock;
 
-            qty.max = product.stock;
+            let currentQuantity =
+                Number(quantity.value) || 1;
 
-            qty.min = 1;
+            if (currentQuantity > stock) {
+                currentQuantity = stock;
+            }
+
+            if (currentQuantity < 1) {
+                currentQuantity = 1;
+            }
+
+            quantity.value =
+                currentQuantity;
 
         } else {
 
-            qty.value = 0;
-
-            qty.disabled = true;
+            quantity.value = 0;
+            quantity.min = 0;
+            quantity.max = 0;
+            quantity.disabled = true;
 
         }
 
 
-        qty.addEventListener("input", () => {
+        // Prevent invalid quantity
+
+        quantity.addEventListener("input", () => {
 
             let value =
-                Number(qty.value);
+                Number(quantity.value);
 
-
-            if (value > product.stock) {
-
-                qty.value =
-                    product.stock;
-
+            if (!Number.isFinite(value)) {
+                value = 1;
             }
 
+            value =
+                Math.floor(value);
+
+            if (stock <= 0) {
+
+                quantity.value = 0;
+                return;
+
+            }
 
             if (value < 1) {
-
-                qty.value = 1;
-
+                value = 1;
             }
+
+            if (value > stock) {
+                value = stock;
+            }
+
+            quantity.value = value;
 
         });
 
 
+        // ==========================================
+        // OUT OF STOCK BUTTONS
+        // ==========================================
+
+        if (stock <= 0) {
+
+            addCartBtn.disabled = true;
+            buyNowBtn.disabled = true;
+
+            addCartBtn.textContent =
+                "Out of Stock";
+
+            buyNowBtn.style.display =
+                "none";
+
+        } else {
+
+            addCartBtn.disabled = false;
+            buyNowBtn.disabled = false;
+
+            addCartBtn.textContent =
+                "Add To Cart";
+
+            buyNowBtn.style.display =
+                "inline-flex";
+
+        }
+
+
+        // ==========================================
+        // WISHLIST
+        // ==========================================
+
         updateWishlistButton();
 
 
-        // Load related products
+        // ==========================================
+        // RELATED PRODUCTS
+        // ==========================================
+
         loadRelatedProducts();
 
     }
-
 
     catch (error) {
 
@@ -531,6 +626,14 @@ mainImg.onload = function () {
             "Failed to load product:",
             error
         );
+
+        document.getElementById("product-name")
+            .textContent =
+            "Unable to load product";
+
+        document.getElementById("product-description")
+            .textContent =
+            "There was a problem loading this product.";
 
     }
 

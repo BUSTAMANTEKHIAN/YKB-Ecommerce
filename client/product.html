@@ -60,53 +60,135 @@
     </section>
 
     <section id="prodetails" class="section-p1 section-m1">
-        <div class="single-pro-image">
-        
-            <img src=""
-                 width="100%"
-                 id="MainImg"
-                 alt="Product Image">
-        
-            <div class="small-img-group" id="thumbnail-group">
-            </div>
-        
-            </div>
-        
-        </div>
-    
 
+    <!-- PRODUCT IMAGE -->
+    <div class="single-pro-image">
+
+        <img
+            src=""
+            width="100%"
+            id="MainImg"
+            alt="Product Image"
+        >
+
+        <div
+            class="small-img-group"
+            id="thumbnail-group"
+        ></div>
+
+    </div>
+
+
+    <!-- PRODUCT INFORMATION -->
     <div class="single-pro-details">
-        <h6 id="product-category">Loading...</h6>
-        <input type="hidden" id="product-id">
-        <h4 id="product-name">Men's Fashion T shirt</h4>
-        <h2 id="product-price">₱13,900</h2>
-        <p id="product-stock"></p>
-        <label for="size">Size</label>
-        <select id="size" name="size">
-            <option value="" selected disabled>Select Size</option>
+
+        <h6 id="product-category">
+            Loading...
+        </h6>
+
+        <input
+            type="hidden"
+            id="product-id"
+        >
+
+        <h4 id="product-name">
+            Loading product...
+        </h4>
+
+        <h2 id="product-price">
+            ₱0.00
+        </h2>
+
+        <p id="product-stock">
+            Checking stock...
+        </p>
+
+
+        <!-- SIZE -->
+
+        <label for="size">
+            Size
+        </label>
+
+        <select
+            id="size"
+            name="size"
+        >
+
+            <option
+                value=""
+                selected
+                disabled
+            >
+                Select Size
+            </option>
+
             <option value="XXL">XXL</option>
             <option value="XL">XL</option>
             <option value="Large">Large</option>
             <option value="Medium">Medium</option>
             <option value="Small">Small</option>
+
         </select>
-        <label for="quantity">Quantity</label>
-        <input type="number" value="1" id="quantity" name="quantity">
-        
+
+
+        <!-- QUANTITY -->
+
+        <label for="quantity">
+            Quantity
+        </label>
+
+        <input
+            type="number"
+            value="1"
+            min="1"
+            id="quantity"
+            name="quantity"
+        >
+
+
+        <!-- BUTTONS -->
+
         <div class="button-group">
-            <button class="normal" id="add-cart">Add To Cart</button>
-            <button class="normal buy-now" id="buy-now">Buy Now</button>
-                
-            <button id="wishlist-btn">
+
+            <button
+                class="normal"
+                id="add-cart"
+            >
+                Add To Cart
+            </button>
+
+            <button
+                class="normal buy-now"
+                id="buy-now"
+            >
+                Buy Now
+            </button>
+
+            <button
+                id="wishlist-btn"
+                type="button"
+                aria-label="Add to wishlist"
+            >
                 <i class="far fa-heart"></i>
             </button>
+
         </div>
-        <h4>Product Details</h4>
+
+
+        <!-- DESCRIPTION -->
+
+        <h4>
+            Product Details
+        </h4>
+
         <span id="product-description">
-        Loading...
+            Loading product description...
         </span>
+
     </div>
-    </section>
+
+</section>
 
     <section id="reviews" class="section-p1 section-m1">
 

@@ -423,3 +423,77 @@ body.dark-mode .bento-card:hover {
 body.dark-mode .bubble-left {
     background: rgba(8, 129, 120, 0.15);
 }
+
+/* ==========================================
+   ABOUT — DARK MODE FIX
+========================================== */
+
+body.dark-mode .about-page {
+    color: #eafaf8;
+}
+
+body.dark-mode .about-page .section-title,
+body.dark-mode .about-page h1,
+body.dark-mode .about-page h2,
+body.dark-mode .about-page h3,
+body.dark-mode .about-page h4,
+body.dark-mode .about-page p {
+    color: #eafaf8;
+}
+
+body.dark-mode .about-page .section-kicker {
+    color: #5fd6c8;
+}
+
+body.dark-mode .bento-card {
+    color: #eafaf8;
+}
+
+body.dark-mode .bento-card h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .bento-card p {
+    color: #b7cfcb;
+}
+
+body.dark-mode .bubble-left {
+    color: #eafaf8;
+}
+
+body.dark-mode .bubble-left .bubble-time {
+    color: #9fbab5;
+}
+
+/* =========================================================
+   ABOUT — DARK MODE TEXT FIX
+========================================================= */
+
+body.dark-mode .about-page,
+body.dark-mode .about-page p,
+body.dark-mode .about-page h1,
+body.dark-mode .about-page h2,
+body.dark-mode .about-page h3,
+body.dark-mode .about-page h4 {
+    color: var(--ink);
+}
+
+body.dark-mode .about-page .section-title {
+    color: #ffffff;
+}
+
+body.dark-mode .about-page .section-kicker {
+    color: #20c7b9;
+}
+
+body.dark-mode .about-page .bento-card h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .about-page .bento-card p {
+    color: #c8d8d5;
+}
+
+body.dark-mode .about-page .bubble-left {
+    color: #eafaf8;
+}

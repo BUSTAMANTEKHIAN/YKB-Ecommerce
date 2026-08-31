@@ -6,25 +6,20 @@ let salesChart;
 
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-if (
-    !currentUser ||
-    (currentUser.role !== "admin" && currentUser.role !== "owner")
-) {
-    alert("Access denied.");
-    window.location.href = "index.html";
-}
-
+// Single consolidated guard, with an actual `return`-equivalent (script
+// execution stops via the thrown error) so nothing below this block can
+// run for an unauthorized or logged-out user. Old version had 3 separate
+// checks stacked with no early exit, so a logged-out user would trigger
+// two alert()s AND then crash on `currentUser.role` being read off null.
 if (!currentUser) {
 
-    alert("Please login first.");
     window.location.href = "login.html";
+    throw new Error("Not logged in — redirecting.");
 
 }
 
-if (
-    currentUser.role !== "admin" &&
-    currentUser.role !== "owner"
-) {
+if (currentUser.role !== "admin" && currentUser.role !== "owner") {
+
     document.body.innerHTML = `
         <div style="
             height:100vh;
@@ -48,7 +43,8 @@ if (
             ">Return to Home</a>
         </div>
     `;
-    throw new Error("Unauthorized");
+    throw new Error("Unauthorized — access denied.");
+
 }
 
 document.getElementById("adminName").textContent =
@@ -56,28 +52,51 @@ document.getElementById("adminName").textContent =
 
 const tableBody = document.getElementById("productsTableBody");
 
+// =========================
+// TOASTS (replaces alert() for non-blocking feedback)
+// =========================
+function showToast(message, type = "default") {
+    const stack = document.getElementById("toast-stack");
+    if (!stack) return;
+
+    const toast = document.createElement("div");
+    toast.className = `toast toast--${type}`;
+    toast.textContent = message;
+    stack.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add("is-leaving");
+        toast.addEventListener("animationend", () => toast.remove());
+    }, 2600);
+}
+
 // Load products from database
 async function loadProducts() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/products`);
+
+        if (!response.ok) {
+            throw new Error(`Server responded ${response.status}`);
+        }
+
         const products = await response.json();
 
-        // Update dashboard stats
         document.getElementById("totalProducts").textContent = products.length;
 
         const lowStock = products.filter(p => Number(p.stock) <= 5).length;
         document.getElementById("lowStock").textContent = lowStock;
 
-        const alert = document.getElementById("lowStockAlert");
+        const alertBanner = document.getElementById("lowStockAlert");
 
-        if (alert) {
-            alert.style.display = lowStock > 0 ? "block" : "none";
+        if (alertBanner) {
+            alertBanner.style.display = lowStock > 0 ? "block" : "none";
         }
 
         renderProducts(products);
 
     } catch (error) {
         console.error(error);
+        showToast("Failed to load products.", "error");
 
         tableBody.innerHTML = `
             <tr>
@@ -144,16 +163,19 @@ function renderProducts(products) {
 window.editProduct = async function(id) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/products`);
-        const products = await response.json();
 
+        if (!response.ok) {
+            throw new Error(`Server responded ${response.status}`);
+        }
+
+        const products = await response.json();
         const product = products.find(p => p.id == id);
 
         if (!product) {
-            alert("Product not found.");
+            showToast("Product not found.", "error");
             return;
         }
 
-        // Fill the form
         document.getElementById("productId").value = product.id;
         document.getElementById("name").value = product.name;
         document.getElementById("brand").value = product.brand;
@@ -163,52 +185,40 @@ window.editProduct = async function(id) {
         document.getElementById("stock").value = product.stock;
         document.getElementById("image").value = product.image;
 
-        // Change modal title
         document.querySelector(".modal-header h2").textContent = "Edit Product";
-
-        // Open modal
         productModal.classList.add("active");
 
     } catch (error) {
         console.error(error);
-        alert("Failed to load product.");
+        showToast("Failed to load product.", "error");
     }
 };
 
 // Temporary delete function
 window.deleteProduct = async function(id) {
 
-    const confirmed = confirm(
-        "Are you sure you want to delete this product?"
-    );
-
+    const confirmed = confirm("Are you sure you want to delete this product?");
     if (!confirmed) return;
 
     try {
 
-        const response = await fetch(`${API_BASE_URL}/api/products/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
+        const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+            method: "DELETE"
+        });
 
         const data = await response.json();
 
         if (!response.ok) {
-            alert(data.message || "Failed to delete product.");
+            showToast(data.message || "Failed to delete product.", "error");
             return;
         }
 
-        alert("Product deleted successfully!");
-
+        showToast("Product deleted successfully.", "success");
         loadProducts();
 
     } catch (error) {
-
         console.error(error);
-
-        alert("Server error.");
-
+        showToast("Server error.", "error");
     }
 
 };
@@ -268,39 +278,31 @@ if (imageFile) {
         const file = imageFile.files[0];
         if (!file) return;
 
-        // Preview image
         imagePreview.src = URL.createObjectURL(file);
         imagePreview.style.display = "block";
 
-        // Upload image to server
         const formData = new FormData();
         formData.append("image", file);
 
         try {
 
-            const response = await fetch(`${API_BASE_URL}/api/products/upload`,
-                {
-                    method: "POST",
-                    body: formData
-                }
-            );
+            const response = await fetch(`${API_BASE_URL}/api/products/upload`, {
+                method: "POST",
+                body: formData
+            });
 
             const data = await response.json();
 
             if (!response.ok) {
-                alert("Image upload failed.");
+                showToast("Image upload failed.", "error");
                 return;
             }
 
-            // Save image path into hidden input
             imageInput.value = data.imagePath;
 
         } catch (error) {
-
             console.error(error);
-
-            alert("Cannot upload image.");
-
+            showToast("Cannot upload image.", "error");
         }
 
     });
@@ -335,9 +337,7 @@ if (productForm) {
                     : `${API_BASE_URL}/api/products`,
                 {
                     method: productId ? "PUT" : "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(product)
                 }
             );
@@ -345,23 +345,23 @@ if (productForm) {
             const data = await response.json();
 
             if (!response.ok) {
-                alert(data.message || "Failed to add product.");
+                showToast(data.message || "Failed to save product.", "error");
                 return;
             }
 
-            alert("Product added successfully!");
+            showToast("Product saved successfully.", "success");
 
             productForm.reset();
             document.getElementById("productId").value = "";
             document.querySelector(".modal-header h2").textContent = "Add New Product";
+            imagePreview.style.display = "none";
 
             productModal.classList.remove("active");
-
             loadProducts();
 
         } catch (error) {
             console.error(error);
-            alert("Server error.");
+            showToast("Server error.", "error");
         }
     });
 }
@@ -378,99 +378,60 @@ async function loadOrders() {
 
     try {
 
-        const response = await fetch(`${API_BASE_URL}/api/orders/admin/all`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/orders/admin/all`);
+
+        if (!response.ok) {
+            throw new Error(`Server responded ${response.status}`);
+        }
 
         const orders = await response.json();
 
         document.getElementById("totalOrders").textContent = orders.length;
 
-        const revenue = orders.reduce(
-            (sum, order) => sum + Number(order.total),
-            0
-        );
+        const revenue = orders.reduce((sum, order) => sum + Number(order.total), 0);
+        document.getElementById("totalRevenue").textContent = "₱" + revenue.toLocaleString();
 
-        document.getElementById("totalRevenue").textContent =
-            "₱" + revenue.toLocaleString();
+        const monthlySales = {};
 
-        // =========================
-// MONTHLY SALES CHART
-// =========================
+        orders.forEach(order => {
+            const date = new Date(order.created_at);
+            const month = date.toLocaleString("default", { month: "short" });
+            monthlySales[month] = (monthlySales[month] || 0) + Number(order.total);
+        });
 
-const monthlySales = {};
+        const labels = Object.keys(monthlySales);
+        const values = Object.values(monthlySales);
+        const ctx = document.getElementById("salesChart");
 
-orders.forEach(order => {
+        if (ctx) {
+            if (salesChart) salesChart.destroy();
 
-    const date = new Date(order.created_at);
-
-    const month = date.toLocaleString("default", {
-        month: "short"
-    });
-
-    monthlySales[month] =
-        (monthlySales[month] || 0) + Number(order.total);
-
-});
-
-const labels = Object.keys(monthlySales);
-const values = Object.values(monthlySales);
-
-const ctx = document.getElementById("salesChart");
-
-if (ctx) {
-
-    if (salesChart) salesChart.destroy();
-
-    salesChart = new Chart(ctx, {
-
-        type: "bar",
-
-        data: {
-
-            labels,
-
-            datasets: [{
-
-                label: "Sales (₱)",
-
-                data: values,
-
-                backgroundColor: "#088178",
-
-                borderRadius: 10
-
-            }]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            plugins: {
-                legend: {
-                    display: false
+            salesChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels,
+                    datasets: [{
+                        label: "Sales (₱)",
+                        data: values,
+                        backgroundColor: "#088178",
+                        borderRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } }
                 }
-            }
-
+            });
         }
-
-    });
-
-}
 
         ordersTableBody.innerHTML = orders.map(order => `
             <tr>
-
                 <td>${order.order_id}</td>
-
                 <td>
                     <strong>${order.fullname}</strong><br>
                     <small>${order.email}</small>
                 </td>
-
                 <td>₱${Number(order.total).toLocaleString()}</td>
-
                 <td>
                     <select onchange="updateOrderStatus('${order.order_id}', this.value)">
                         <option value="Pending" ${order.status === "Pending" ? "selected" : ""}>Pending</option>
@@ -480,30 +441,22 @@ if (ctx) {
                         <option value="Cancelled" ${order.status === "Cancelled" ? "selected" : ""}>Cancelled</option>
                     </select>
                 </td>
-
                 <td>${new Date(order.created_at).toLocaleDateString()}</td>
-
                 <td>
-                    <button class="edit-btn" onclick="viewOrder('${order.order_id}')">
-                        View
-                    </button>
+                    <button class="edit-btn" onclick="viewOrder('${order.order_id}')">View</button>
                 </td>
-
             </tr>
         `).join("");
 
     } catch (error) {
-
         console.error(error);
+        showToast("Failed to load orders.", "error");
 
         ordersTableBody.innerHTML = `
             <tr>
-                <td colspan="6" class="loading">
-                    Failed to load orders.
-                </td>
+                <td colspan="6" class="loading">Failed to load orders.</td>
             </tr>
         `;
-
     }
 
 }
@@ -512,22 +465,21 @@ window.updateOrderStatus = async function(orderId, status) {
 
     try {
 
-        await fetch(`${API_BASE_URL}/api/orders/admin/${orderId}/status`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ status })
-            }
-        );
+        const response = await fetch(`${API_BASE_URL}/api/orders/admin/${orderId}/status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server responded ${response.status}`);
+        }
+
+        showToast(`Order marked as ${status}.`, "success");
 
     } catch (error) {
-
         console.error(error);
-
-        alert("Failed to update order status.");
-
+        showToast("Failed to update order status.", "error");
     }
 
 };
@@ -551,57 +503,30 @@ window.viewOrder = async function(orderId) {
         orderModal.classList.add("active");
         orderDetails.innerHTML = "<p>Loading order...</p>";
 
-        const response = await fetch(`${API_BASE_URL}/api/orders/admin/${orderId}`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/orders/admin/${orderId}`);
+
+        if (!response.ok) {
+            throw new Error(`Server responded ${response.status}`);
+        }
 
         const data = await response.json();
-
         const order = data.order;
         const items = data.items;
 
         orderDetails.innerHTML = `
             <div class="order-info">
-                <div class="order-card">
-                    <h4>Order ID</h4>
-                    <p>${order.order_id}</p>
-                </div>
-
-                <div class="order-card">
-                    <h4>Customer</h4>
-                    <p>${order.fullname}</p>
-                </div>
-
-                <div class="order-card">
-                    <h4>Email</h4>
-                    <p>${order.email}</p>
-                </div>
-
-                <div class="order-card">
-                    <h4>Payment</h4>
-                    <p>${order.payment_method}</p>
-                </div>
-
-                <div class="order-card">
-                    <h4>Status</h4>
-                    <p>${order.status}</p>
-                </div>
-
-                <div class="order-card">
-                    <h4>Total</h4>
-                    <p>₱${Number(order.total).toLocaleString()}</p>
-                </div>
+                <div class="order-card"><h4>Order ID</h4><p>${order.order_id}</p></div>
+                <div class="order-card"><h4>Customer</h4><p>${order.fullname}</p></div>
+                <div class="order-card"><h4>Email</h4><p>${order.email}</p></div>
+                <div class="order-card"><h4>Payment</h4><p>${order.payment_method}</p></div>
+                <div class="order-card"><h4>Status</h4><p>${order.status}</p></div>
+                <div class="order-card"><h4>Total</h4><p>₱${Number(order.total).toLocaleString()}</p></div>
             </div>
 
             <table class="order-items-table">
                 <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Qty</th>
-                        <th>Subtotal</th>
-                    </tr>
+                    <tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr>
                 </thead>
-
                 <tbody>
                     ${items.map(item => `
                         <tr>
@@ -618,6 +543,7 @@ window.viewOrder = async function(orderId) {
     } catch (error) {
         console.error(error);
         orderDetails.innerHTML = "<p>Failed to load order.</p>";
+        showToast("Failed to load order.", "error");
     }
 };
 
@@ -636,27 +562,25 @@ async function loadUsers() {
 
     try {
 
-        const response = await fetch(`${API_BASE_URL}/api/admin/users`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/admin/users`);
+
+        if (!response.ok) {
+            throw new Error(`Server responded ${response.status}`);
+        }
 
         const users = await response.json();
-
         allUsers = users;
-
         renderUsers(users);
 
     } catch (error) {
-
         console.error(error);
+        showToast("Failed to load users.", "error");
 
         usersTableBody.innerHTML = `
             <tr>
-                <td colspan="6" class="loading">
-                    Failed to load users.
-                </td>
+                <td colspan="6" class="loading">Failed to load users.</td>
             </tr>
         `;
-
     }
 
 }
@@ -751,118 +675,86 @@ function renderUsers(users) {
 
 window.toggleRole = async function(userId, currentRole) {
 
-    const newRole =
-        currentRole === "admin"
-            ? "user"
-            : "admin";
+    const newRole = currentRole === "admin" ? "user" : "admin";
 
     try {
 
-        const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/role`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    role: newRole,
-                    adminRole: currentUser.role
-                })
-            }
-        );
+        const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/role`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ role: newRole, adminRole: currentUser.role })
+        });
 
         const data = await response.json();
 
         if (!data.success) {
-            alert(data.message || "Failed to update role.");
+            showToast(data.message || "Failed to update role.", "error");
             return;
         }
 
+        showToast(`Role updated to ${newRole}.`, "success");
         loadUsers();
 
     } catch (error) {
-
         console.error(error);
-
-        alert("Failed to update role.");
-
+        showToast("Failed to update role.", "error");
     }
 
 };
 
-// =========================
-// SUSPEND USER
-// =========================
 window.suspendUser = async function(userId, days) {
 
-    const label =
-        days === "permanent"
-            ? "permanently ban"
-            : `suspend for ${days} days`;
-
+    const label = days === "permanent" ? "permanently ban" : `suspend for ${days} days`;
     if (!confirm(`Are you sure you want to ${label} this user?`)) return;
 
     try {
 
-        // Get the currently logged-in admin/owner
-        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-        const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/suspend`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    days,
-                    adminRole: currentUser.role
-                })
-            }
-        );
+        const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/suspend`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ days, adminRole: currentUser.role })
+        });
 
         const data = await response.json();
 
         if (!data.success) {
-            alert(data.message || "Failed to suspend user.");
+            showToast(data.message || "Failed to suspend user.", "error");
             return;
         }
 
+        showToast("User suspended.", "success");
         loadUsers();
 
     } catch (error) {
-
         console.error(error);
-
-        alert("Failed to suspend user.");
-
+        showToast("Failed to suspend user.", "error");
     }
 
 };
 
-// =========================
-// UNSUSPEND USER
-// =========================
 window.unbanUser = async function(userId) {
 
     try {
 
-        await fetch(`${API_BASE_URL}/api/admin/users/${userId}/unsuspend`,
-            {
-                method: "PUT"
-            }
-        );
+        const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/unsuspend`, {
+            method: "PUT"
+        });
 
+        if (!response.ok) {
+            throw new Error(`Server responded ${response.status}`);
+        }
+
+        showToast("User unbanned.", "success");
         loadUsers();
 
     } catch (error) {
-
         console.error(error);
-
-        alert("Failed to unban user.");
-
+        showToast("Failed to unban user.", "error");
     }
 
 };
+
+
 
 if (userSearch) {
 
@@ -888,50 +780,66 @@ async function loadReviews() {
 
     try {
 
-        const response = await fetch(`${API_BASE_URL}/api/reviews/admin/all`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/reviews/admin/all`);
 
-        const reviews = await response.json();
-
-        const tbody = document.getElementById("reviewsTableBody");
-
-        tbody.innerHTML = "";
-
-        if (!reviews.length) {
-
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="6">No reviews found.</td>
-                </tr>
-            `;
-
-            return;
-
+        if (!response.ok) {
+            throw new Error(`Server responded ${response.status}`);
         }
 
-        reviews.forEach(r => {
+        const reviews = await response.json();
+        const tbody = document.getElementById("reviewsTableBody");
 
-            tbody.innerHTML += `
-                <tr>
-                    <td>${r.product_name}</td>
-                    <td>${r.fullname}</td>
-                    <td>${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</td>
-                    <td>${r.review}</td>
-                    <td>${new Date(r.created_at).toLocaleDateString()}</td>
-                    <td>
-                        <button class="delete-btn" onclick="deleteReview(${r.id})">
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            `;
+        if (!reviews.length) {
+            tbody.innerHTML = `<tr><td colspan="6">No reviews found.</td></tr>`;
+            return;
+        }
 
-        });
+        // Built as an array and joined once instead of `innerHTML +=` inside
+        // the loop, which re-parses the whole table body on every iteration.
+        const rows = reviews.map(r => `
+            <tr>
+                <td>${r.product_name}</td>
+                <td>${r.fullname}</td>
+                <td>${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</td>
+                <td>${r.review}</td>
+                <td>${new Date(r.created_at).toLocaleDateString()}</td>
+                <td>
+                    <button class="delete-btn" onclick="deleteReview(${r.id})">Delete</button>
+                </td>
+            </tr>
+        `).join("");
+
+        tbody.innerHTML = rows;
 
     } catch (err) {
-
         console.error(err);
+        showToast("Failed to load reviews.", "error");
+    }
 
+}
+
+async function deleteReview(id) {
+
+    if (!confirm("Delete this review?")) return;
+
+    try {
+
+        const response = await fetch(`${API_BASE_URL}/api/reviews/admin/${id}`, {
+            method: "DELETE"
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showToast("Review deleted.", "success");
+            loadReviews();
+        } else {
+            showToast("Failed to delete review.", "error");
+        }
+
+    } catch (err) {
+        console.error(err);
+        showToast("Server error.", "error");
     }
 
 }
@@ -946,28 +854,51 @@ async function loadMessages() {
 
     try {
 
-        const response = await fetch(`${API_BASE_URL}/api/contact/admin`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/contact/admin`);
+
+        if (!response.ok) {
+            throw new Error(`Server responded ${response.status}`);
+        }
 
         const messages = await response.json();
-
         renderMessages(messages);
 
     } catch (err) {
-
         console.error(err);
+        showToast("Failed to load messages.", "error");
 
         messagesTableBody.innerHTML = `
-            <tr>
-                <td colspan="6">
-                    Error loading messages
-                </td>
-            </tr>
+            <tr><td colspan="6">Error loading messages</td></tr>
         `;
-
     }
 
 }
+
+window.deleteMessage = async function(id) {
+
+    if (!confirm("Delete this message?")) return;
+
+    try {
+
+        const response = await fetch(`${API_BASE_URL}/api/contact/admin/${id}`, {
+            method: "DELETE"
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showToast("Message deleted.", "success");
+            loadMessages();
+        } else {
+            showToast("Failed to delete message.", "error");
+        }
+
+    } catch (err) {
+        console.error(err);
+        showToast("Server error.", "error");
+    }
+
+};
 
 // =========================
 // RENDER CONTACT MESSAGES
@@ -1017,65 +948,14 @@ function renderMessages(messages) {
 
 }
 
-// =========================
-// DELETE CONTACT MESSAGE
-// =========================
-window.deleteMessage = async function(id) {
-
-    if (!confirm("Delete this message?")) return;
-
-    try {
-
-        const response = await fetch(`${API_BASE_URL}/api/contact/admin/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-        const data = await response.json();
-
-        if (data.success) {
-
-            loadMessages();
-
-        } else {
-
-            alert("Failed to delete message.");
-
-        }
-
-    } catch (err) {
-
-        console.error(err);
-
-        alert("Server error.");
-
-    }
-
-};
-
-// =========================
-// DELETE REVIEW
-// =========================
-async function deleteReview(id) {
-
-    if (!confirm("Delete this review?")) return;
-
-    const response = await fetch(`${API_BASE_URL}/api/reviews/admin/${id}`,
-        {
-            method: "DELETE"
-        }
-    );
-
-    const data = await response.json();
-
-    if (data.success) {
-
-        loadReviews();
-
-    }
-
-}
+// Sidebar nav had no click-driven active state — "Dashboard" was
+// hardcoded active forever regardless of which section you scrolled to.
+document.querySelectorAll(".sidebar-nav a").forEach(link => {
+    link.addEventListener("click", () => {
+        document.querySelectorAll(".sidebar-nav a").forEach(a => a.classList.remove("active"));
+        link.classList.add("active");
+    });
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     loadProducts();

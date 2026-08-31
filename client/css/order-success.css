@@ -1,114 +1,267 @@
+/* =====================================================
+   YKB Clothing — Order Success
+   Design language: streetwear / Gen Z drop.
+   Tokens shared with cart.css & checkout.css
+   ----------------------------------------------------- */
+
+:root{
+    --teal:      #088178;
+    --teal-dark: #066b63;
+    --teal-tint: #e6f6f4;
+    --ink:       #0e1414;
+    --ink-70:    rgba(14,20,20,.68);
+    --stone:     #9aa3a2;
+    --line:      rgba(8,129,120,.22);
+    --white:     #ffffff;
+
+    --font-display: "Space Grotesk", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-mono: "Space Mono", monospace;
+
+    --radius-lg: 22px;
+    --radius-sm: 10px;
+    --shadow-card: 0 18px 40px rgba(8,129,120,.14);
+}
+
 .success-page{
-    min-height:100vh;
-    background:#f5f5f5;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    opacity:1 !important;
-    transform:none !important;
+    min-height: 100vh;
+    background: var(--teal-tint);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Organic blob decoration, same motif as the cart/hero header */
+.success-page::before{
+    content: "";
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    top: -160px;
+    left: -140px;
+    background: rgba(8,129,120,.10);
+    border-radius: 62% 38% 55% 45% / 45% 60% 40% 55%;
+}
+
+.success-page::after{
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    bottom: -140px;
+    right: -100px;
+    background: rgba(8,129,120,.08);
+    border-radius: 40% 60% 55% 45% / 55% 45% 60% 40%;
 }
 
 .success-card{
-    width:100%;
-    max-width:700px;
-    background:#fff;
-    padding:50px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 10px 30px rgba(0,0,0,.1);
-    color:#222;
-    opacity:1;
-}
-
-.success-card h1{
-    margin-bottom:20px;
-    color:#222;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 640px;
+    background: var(--white);
+    padding: 50px 44px;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    border: 1.5px solid var(--line);
+    color: var(--ink);
 }
 
 .checkmark{
-    width:100px;
-    height:100px;
-    background:#088178;
-    color:#fff;
-    border-radius:50%;
-    margin:0 auto 30px;
-    font-size:50px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    width: 84px;
+    height: 84px;
+    background: var(--teal);
+    color: var(--white);
+    border-radius: 50%;
+    margin: 0 auto 22px;
+    font-size: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 12px 24px rgba(8,129,120,.32);
 }
 
+.success-eyebrow{
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    background: var(--teal-tint);
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin-bottom: 16px;
+}
 
+.success-card h1{
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -.5px;
+    font-size: clamp(24px, 3.4vw, 32px);
+    margin: 0 0 14px;
+    color: var(--ink);
+}
 
 .message{
-    color:#777;
-    margin-bottom:35px;
-    line-height:28px;
+    color: var(--ink-70);
+    font-size: 14.5px;
+    margin: 0 0 30px;
+    line-height: 1.6;
 }
 
 .order-info{
-    background:#f8f8f8;
-    padding:25px;
-    border-radius:15px;
-    margin-bottom:35px;
+    background: var(--teal-tint);
+    padding: 22px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 26px;
+    border: 1.5px solid var(--line);
+}
+
+.order-info p{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    margin: 0 0 6px;
 }
 
 .order-info h2{
-    color:#088178;
-    margin-top:10px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--ink);
+    margin: 0;
 }
 
-.order-status{
-    display:flex;
-    justify-content:space-around;
-    flex-wrap:wrap;
-    gap:20px;
-    margin-bottom:40px;
+.order-info__meta{
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: var(--ink-70);
+    font-family: var(--font-mono);
 }
 
-.status-item{
-    width:150px;
+/* Order items list — only renders when data.items is present */
+.order-items{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+    margin-bottom: 30px;
 }
 
-.status-item span{
-    font-size:35px;
+.order-item{
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
 }
 
-.status-item p{
-    margin-top:10px;
-    color:#555;
+.order-item:last-child{
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.order-item__img{
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--teal-tint);
+    border: 1.5px solid var(--line);
+    flex-shrink: 0;
+}
+
+.order-item__img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.order-item__info h4{
+    margin: 0 0 2px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.order-item__info span{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--stone);
+}
+
+.order-item__price{
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
 }
 
 .buttons{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    flex-wrap:wrap;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .shopping-btn,
 .normal{
-    padding:15px 30px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
 .normal{
-    background:#088178;
-    color:white;
-}
-
-.shopping-btn{
-    background:#222;
-    color:white;
+    background: var(--teal);
+    color: var(--white);
 }
 
 .normal:hover{
-    background:#06665f;
+    background: var(--teal-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(8,129,120,.3);
+}
+
+.shopping-btn{
+    background: var(--ink);
+    color: var(--white);
 }
 
 .shopping-btn:hover{
-    background:#444;
+    background: #24302f;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(14,20,20,.24);
+}
+
+@media (max-width: 600px){
+    .success-card{
+        padding: 36px 24px;
+    }
+
+    .buttons{
+        flex-direction: column;
+    }
+
+    .buttons button{
+        width: 100%;
+    }
 }

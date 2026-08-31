@@ -1,61 +1,76 @@
 /* =====================================================
    YKB Clothing — Cart
-   Design language: the order slip / fitting-room rail.
+   Design language: streetwear / Gen Z drop.
    Same tokens as wishlist.css & checkout.css, scoped only
    to cart-specific selectors — the shared header/nav in
    styles.css is left untouched.
    ----------------------------------------------------- */
 
 :root{
-    --paper:   #FAF7F1;
-    --paper-2: #F1ECE1;
-    --ink:     #1C1A16;
-    --ink-70:  #4A463D;
-    --stone:   #8B8477;
-    --kraft:   #C9AD7F;
-    --brass:   #97742E;
-    --wine:    #7A2A34;
-    --wine-ink:#5C1F27;
-    --forest:  #21402C;
-    --line:    #E4DDCD;
+    --teal:      #088178;
+    --teal-dark: #066b63;
+    --teal-tint: #e6f6f4;
+    --ink:       #0e1414;
+    --ink-70:    rgba(14,20,20,.68);
+    --stone:     #9aa3a2;
+    --line:      rgba(8,129,120,.22);
+    --white:     #ffffff;
+    --pop:       #ff5a4e;   /* street-style accent for alerts/badges only */
+    --pop-dark:  #d6473d;
 
-    --font-display: "Fraunces", serif;
+    --font-display: "Space Grotesk", sans-serif;
     --font-body: "Inter", sans-serif;
     --font-mono: "Space Mono", monospace;
 
-    --radius-lg: 20px;
+    --radius-lg: 18px;
     --radius-sm: 10px;
-    --shadow-card: 0 16px 32px rgba(28,26,22,.08);
+    --shadow-card: 0 14px 30px rgba(8,129,120,.10);
 }
 
-/* CART HEADER
+/* CART HEADER — bold teal block with organic blob decoration
    (Previously there were two banner rules fighting each other:
    #page-header.cart-header { background-image: bn2.png }  <- ID selector, always won
    .cart-header { background-image: b19.jpg }               <- class selector, never showed
-   Kept one rule, using the ID selector since that's what actually renders.) */
+   Both are gone now — the header is a flat teal panel with CSS blobs instead
+   of a photo, matching the hero pattern used on index.html.) */
 
 #page-header.cart-header{
-    background-image: url(images/banner/bn2.png);
+    background: var(--teal);
     width: 100%;
-    height: 35vh;
-    background-size: cover;
-    background-position: center;
+    min-height: 32vh;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     text-align: center;
     position: relative;
+    overflow: hidden;
+    padding: 40px 20px;
+}
+
+.cart-header::before{
+    content: "";
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    top: -140px;
+    left: -100px;
+    background: rgba(255,255,255,.10);
+    border-radius: 62% 38% 55% 45% / 45% 60% 40% 55%;
+    z-index: 1;
 }
 
 .cart-header::after{
     content: "";
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, rgba(28,26,22,.35), rgba(28,26,22,.6));
-    top: 0;
-    left: 0;
+    width: 260px;
+    height: 260px;
+    bottom: -120px;
+    right: -80px;
+    background: var(--teal-tint);
+    opacity: .16;
+    border-radius: 40% 60% 55% 45% / 55% 45% 60% 40%;
+    z-index: 1;
 }
 
 .cart-header__eyebrow{
@@ -66,8 +81,11 @@
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--kraft);
-    margin-bottom: 10px;
+    color: var(--teal-tint);
+    background: rgba(255,255,255,.14);
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin-bottom: 14px;
 }
 
 .cart-header h2,
@@ -79,14 +97,16 @@
 
 .cart-header h2{
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 42px;
+    letter-spacing: -.5px;
     margin: 0 0 8px;
 }
 
 .cart-header p{
+    font-family: var(--font-body);
     font-size: 14px;
-    opacity: .9;
+    opacity: .92;
 }
 
 /* CART TABLE */
@@ -105,7 +125,7 @@
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-card);
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line);
 }
 
 #cart table img{
@@ -113,10 +133,11 @@
     height: 66px;
     border-radius: 10px;
     object-fit: cover;
+    border: 1.5px solid var(--line);
 }
 
 #cart table thead{
-    background: var(--paper-2);
+    background: var(--teal-tint);
 }
 
 #cart table thead td,
@@ -127,7 +148,7 @@
     letter-spacing: .6px;
     font-size: 11px;
     padding: 18px 16px;
-    color: var(--brass);
+    color: var(--teal-dark);
 }
 
 #cart table tbody tr{
@@ -136,7 +157,7 @@
 }
 
 #cart table tbody tr:hover{
-    background: var(--paper);
+    background: var(--teal-tint);
 }
 
 #cart table tbody tr.row-busy{
@@ -170,13 +191,13 @@
     background: var(--ink);
     color: #fff;
     padding: 8px 12px;
-    border-radius: 6px;
+    border-radius: 50px;
     cursor: pointer;
-    transition: .3s;
+    transition: .25s;
 }
 
 #cart button:hover:not(:disabled){
-    background: var(--brass);
+    background: var(--teal);
 }
 
 #cart button:disabled{
@@ -190,8 +211,10 @@
     text-align: center;
     padding: 40px;
     color: var(--ink-70);
-    font-size: 15px;
+    font-size: 14px;
     font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: .5px;
 }
 
 .cart-loading.show{
@@ -199,7 +222,7 @@
 }
 
 .cart-loading i{
-    color: var(--brass);
+    color: var(--teal);
     margin-right: 8px;
 }
 
@@ -220,16 +243,17 @@
     padding: 22px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line);
 }
 
 #coupon h3,
 #subtotal h3{
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 18px;
     padding-bottom: 15px;
     margin: 0;
+    color: var(--ink);
 }
 
 #coupon input{
@@ -237,13 +261,15 @@
     width: 60%;
     margin-right: 10px;
     border: 1.5px solid var(--line);
-    border-radius: 6px;
+    border-radius: 8px;
     font-family: var(--font-body);
+    background: var(--teal-tint);
 }
 
 #coupon input:focus{
     outline: none;
-    border-color: var(--brass);
+    border-color: var(--teal);
+    background: #fff;
 }
 
 #coupon button,
@@ -257,14 +283,15 @@
     cursor: pointer;
     font-weight: 700;
     font-family: var(--font-body);
-    transition: .3s;
+    transition: .25s;
 }
 
 #coupon button:hover,
 #subtotal button:hover,
 .checkout-btn:not(:disabled):hover{
+    background: var(--teal);
     transform: translateY(-2px);
-    box-shadow: 0 10px 22px rgba(28,26,22,.22);
+    box-shadow: 0 10px 22px rgba(8,129,120,.28);
 }
 
 #subtotal table{
@@ -283,7 +310,7 @@
 
 #subtotal table tr:last-child td{
     border-bottom: none;
-    border-top: 1px solid var(--line);
+    border-top: 1.5px solid var(--line);
     padding-top: 16px;
     font-family: var(--font-mono);
     font-size: 18px;
@@ -307,15 +334,17 @@
     gap: 8px;
     text-align: center;
     margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
 }
 
 .checkout-btn:disabled{
-    background: var(--paper-2);
+    background: var(--teal-tint);
     color: var(--stone);
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line);
 }
 
 #payment-method{
@@ -324,9 +353,10 @@
 
 #payment-method h3{
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 700;
     margin: 0 0 4px;
     font-size: 18px;
+    color: var(--ink);
 }
 
 #payment-method .payment-hint{
@@ -352,27 +382,28 @@
 }
 
 #payment-method label:has(input:checked){
-    border-color: var(--ink);
-    background: var(--paper-2);
+    border-color: var(--teal);
+    background: var(--teal-tint);
     color: var(--ink);
 }
 
 #payment-method input{
-    accent-color: var(--ink);
+    accent-color: var(--teal);
     margin-right: 2px;
 }
 
-/* CART BADGE */
+/* CART BADGE — sticker-style pop accent, distinct from primary teal */
 
 #cart-count{
     position: absolute;
     top: -8px;
     right: -10px;
 
-    background: var(--wine);
+    background: var(--pop);
     color: #fff;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
+    font-family: var(--font-mono);
 
     width: 18px;
     height: 18px;
@@ -382,7 +413,7 @@
     align-items: center;
     justify-content: center;
 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(255,90,78,.35);
 }
 
 /* TOAST STACK
@@ -407,14 +438,14 @@
     padding: 13px 18px;
     border-radius: var(--radius-sm);
     background: var(--ink);
-    color: var(--paper);
+    color: #fff;
     box-shadow: 0 14px 28px rgba(0,0,0,.22);
     animation: slideIn .3s ease;
     max-width: 300px;
 }
 
-.toast.toast--success{ background: var(--forest); }
-.toast.toast--error{ background: var(--wine-ink); }
+.toast.toast--success{ background: var(--teal-dark); }
+.toast.toast--error{ background: var(--pop-dark); }
 
 .toast.is-leaving{
     animation: slideOut .25s ease forwards;
@@ -438,7 +469,7 @@
     padding: 46px 20px;
     border: 1.5px dashed var(--line);
     border-radius: var(--radius-lg);
-    background: var(--paper-2);
+    background: var(--teal-tint);
     margin-bottom: 4px;
 }
 
@@ -448,15 +479,16 @@
 
 #empty-cart-image i{
     font-size: 44px;
-    color: var(--brass);
+    color: var(--teal);
     margin-bottom: 16px;
 }
 
 #empty-cart-image h3{
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 20px;
     margin-bottom: 8px;
+    color: var(--ink);
 }
 
 #empty-cart-image p{
@@ -474,10 +506,11 @@
     text-decoration: none;
     font-weight: 700;
     font-size: 13px;
-    transition: transform .2s ease;
+    transition: transform .2s ease, background .2s ease;
 }
 
 #empty-cart-image .normal:hover{
+    background: var(--teal);
     transform: translateY(-2px);
 }
 
@@ -503,6 +536,7 @@
     min-width: 20px;
     font-family: var(--font-mono);
     font-weight: 700;
+    color: var(--ink);
 }
 
 .qty-box button:disabled{
@@ -512,12 +546,12 @@
 
 .remove-btn{
     background: transparent !important;
-    color: var(--wine) !important;
-    border: 1.5px solid var(--wine) !important;
+    color: var(--pop) !important;
+    border: 1.5px solid var(--pop) !important;
 }
 
 .remove-btn:hover:not(:disabled){
-    background: var(--wine) !important;
+    background: var(--pop) !important;
     color: #fff !important;
 }
 
@@ -546,7 +580,12 @@
     }
 
     .cart-header h2{
-        font-size: 30px;
+        font-size: 28px;
+    }
+
+    .cart-header::before,
+    .cart-header::after{
+        opacity: .12;
     }
 
     #cart-add{

@@ -269,10 +269,21 @@ async function handleCheckoutSubmit(e) {
             throw new Error(data.message || "Checkout failed");
         }
 
+        // Order-success.html reads this key to render the confirmation —
+        // it has no API call of its own, so the data has to be handed off here.
+        localStorage.setItem("lastOrder", JSON.stringify({
+            orderId: data.order_id,
+            items: cartData,
+            total: cartTotal,
+            shippingInfo: shippingInfo,
+            paymentMethod: payment.value,
+            placedAt: new Date().toISOString()
+        }));
+
         showToast("Order placed successfully!", "success");
 
         setTimeout(() => {
-            window.location.href = `order-success.html?order_id=${data.order_id}`;
+            window.location.href = "order-success.html";
         }, 700);
 
     } catch (err) {

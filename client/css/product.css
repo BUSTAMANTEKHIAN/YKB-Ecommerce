@@ -17,7 +17,29 @@ body {
 #product-name {
     font-size: 38px;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin: 10px 0 15px;
+    padding: 0 !important;
+    color: #0a1f1c;
+    line-height: 1.15;
+}
+
+#product-description {
+    display: block;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #435855;
+    white-space: pre-line;
+}
+
+#product-stock {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #088178;
+}
+
+#product-stock.out-of-stock {
+    color: #e63946;
 }
 
 #product-price {
@@ -86,10 +108,9 @@ body {
     padding-top: 30px;
 }
 
-#prodetails .single-pro-details h4 {
-    padding: 40px 0 20px 0;
+#prodetails .single-pro-details > h4:not(#product-name) {
+    padding: 40px 0 20px;
 }
-
 #prodetails .single-pro-details h2 {
     font-size: 26px;
 }
@@ -402,4 +423,221 @@ body {
     width:200px;
     background:#088178;
     color:#fff;
+}
+
+/* ==========================================
+   PRODUCT PAGE — DARK MODE
+========================================== */
+
+body.dark-mode #prodetails {
+    background: #1b1d22;
+    color: #ffffff;
+}
+
+body.dark-mode #prodetails .single-pro-details {
+    color: #ffffff;
+}
+
+body.dark-mode #product-name,
+body.dark-mode #prodetails h1,
+body.dark-mode #prodetails h2,
+body.dark-mode #prodetails h3,
+body.dark-mode #prodetails h4,
+body.dark-mode #prodetails h5,
+body.dark-mode #prodetails p,
+body.dark-mode #prodetails span,
+body.dark-mode #product-description,
+body.dark-mode #product-category,
+body.dark-mode #product-stock {
+    color: #ffffff;
+}
+
+body.dark-mode #product-price {
+    color: #5fd6c8;
+}
+
+body.dark-mode #quantity,
+body.dark-mode #size,
+body.dark-mode #review-form select,
+body.dark-mode #review-form textarea {
+    background: #24262c;
+    color: #ffffff;
+    border-color: #444;
+}
+
+body.dark-mode #quantity::placeholder,
+body.dark-mode #size::placeholder,
+body.dark-mode #review-form textarea::placeholder {
+    color: #9ca3af;
+}
+
+/* Related products */
+
+body.dark-mode #related-products .pro {
+    background: #1b1d22;
+    color: #ffffff;
+}
+
+body.dark-mode #related-products .des span {
+    color: #b5b5b5;
+}
+
+body.dark-mode #related-products .des h5 {
+    color: #ffffff;
+}
+
+body.dark-mode #related-products .des h4 {
+    color: #5fd6c8;
+}
+
+/* Reviews */
+
+body.dark-mode #reviews {
+    background: #1b1d22;
+    color: #ffffff;
+}
+
+body.dark-mode #reviews h2,
+body.dark-mode #reviews h3,
+body.dark-mode #reviews h4,
+body.dark-mode #reviews p,
+body.dark-mode #reviews span {
+    color: #ffffff;
+}
+
+body.dark-mode .review-card {
+    border-color: #333;
+}
+
+body.dark-mode .review-date {
+    color: #9ca3af;
+}
+
+ 
+
+/* =========================================================
+   PRODUCT PAGE — DARK MODE
+========================================================= */
+
+body.dark-mode {
+    background: #0f1115;
+    color: #eafaf8;
+}
+
+body.dark-mode #prodetails {
+    background: #181b21;
+    color: #eafaf8;
+}
+
+body.dark-mode #prodetails .single-pro-details {
+    color: #eafaf8;
+}
+
+/* Product name */
+body.dark-mode #product-name {
+    color: #ffffff;
+}
+
+/* Product price */
+body.dark-mode #product-price {
+    color: #20c7b9;
+}
+
+/* Product description */
+body.dark-mode #prodetails .single-pro-details span,
+body.dark-mode #prodetails .single-pro-details p {
+    color: #d6e5e3;
+}
+
+/* Headings */
+body.dark-mode #prodetails .single-pro-details h2,
+body.dark-mode #prodetails .single-pro-details h4 {
+    color: #ffffff;
+}
+
+/* Labels */
+body.dark-mode #prodetails .single-pro-details label {
+    color: #d6e5e3;
+}
+
+/* Quantity input */
+body.dark-mode #quantity,
+body.dark-mode #prodetails .single-pro-details input {
+    background: #20242b;
+    color: #ffffff;
+    border-color: #3a414b;
+}
+
+/* Size dropdown */
+body.dark-mode #size,
+body.dark-mode #prodetails .single-pro-details select {
+    background: #20242b;
+    color: #ffffff;
+    border-color: #3a414b;
+}
+
+/* Dropdown options */
+body.dark-mode #size option,
+body.dark-mode #prodetails .single-pro-details select option {
+    background: #20242b;
+    color: #ffffff;
+}
+
+/* Related products */
+body.dark-mode #related-products .pro {
+    background: #181b21;
+    color: #ffffff;
+}
+
+body.dark-mode #related-products .des {
+    color: #eafaf8;
+}
+
+body.dark-mode #related-products .des span {
+    color: #9aa8a6;
+}
+
+body.dark-mode #related-products .des h5 {
+    color: #ffffff;
+}
+
+body.dark-mode #related-products .des h4 {
+    color: #20c7b9;
+}
+
+/* Reviews */
+body.dark-mode #reviews {
+    background: #181b21;
+    color: #eafaf8;
+}
+
+body.dark-mode .review-card {
+    border-color: #333840;
+}
+
+body.dark-mode .review-card h4 {
+    color: #ffffff;
+}
+
+body.dark-mode .review-date {
+    color: #9aa8a6;
+}
+
+/* Review form */
+body.dark-mode #review-form select,
+body.dark-mode #review-form textarea {
+    background: #20242b;
+    color: #ffffff;
+    border-color: #3a414b;
+}
+
+body.dark-mode #review-form select option {
+    background: #20242b;
+    color: #ffffff;
+}
+
+/* Wishlist */
+body.dark-mode #wishlist-btn {
+    background: #20242b;
+    color: #ffffff;
 }

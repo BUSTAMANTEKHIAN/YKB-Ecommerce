@@ -1,36 +1,35 @@
 /* =====================================================
    YKB Clothing — Checkout
-   Design language: an order ticket / garment docket.
-   Tokens shared with wishlist.css
+   Design language: streetwear / Gen Z drop.
+   Tokens shared with cart.css & wishlist.css
    ----------------------------------------------------- */
 
 :root {
-    --paper:   #FAF7F1;
-    --paper-2: #F1ECE1;
-    --ink:     #1C1A16;
-    --ink-70:  #4A463D;
-    --stone:   #8B8477;
-    --kraft:   #C9AD7F;
-    --brass:   #97742E;
-    --wine:    #7A2A34;
-    --wine-ink:#5C1F27;
-    --forest:  #21402C;
-    --line:    #E4DDCD;
+    --teal:      #088178;
+    --teal-dark: #066b63;
+    --teal-tint: #e6f6f4;
+    --ink:       #0e1414;
+    --ink-70:    rgba(14,20,20,.68);
+    --stone:     #9aa3a2;
+    --line:      rgba(8,129,120,.22);
+    --white:     #ffffff;
+    --pop:       #ff5a4e;
+    --pop-dark:  #d6473d;
 
-    --font-display: "Fraunces", serif;
+    --font-display: "Space Grotesk", sans-serif;
     --font-body: "Inter", sans-serif;
     --font-mono: "Space Mono", monospace;
 
-    --radius-lg: 22px;
+    --radius-lg: 20px;
     --radius-sm: 10px;
-    --shadow-card: 0 18px 34px rgba(28, 26, 22, 0.10);
+    --shadow-card: 0 16px 32px rgba(8,129,120,.10);
 }
 
 * { box-sizing: border-box; }
 
 body {
     margin: 0;
-    background: var(--paper);
+    background: var(--teal-tint);
     font-family: var(--font-body);
     color: var(--ink);
 }
@@ -42,15 +41,16 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 22px 8%;
-    border-bottom: 1px solid var(--line);
+    background: var(--white);
+    border-bottom: 1.5px solid var(--line);
 }
 
 .site-bar__mark {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 22px;
-    letter-spacing: 2px;
-    color: var(--ink);
+    letter-spacing: 1px;
+    color: var(--teal);
     text-decoration: none;
 }
 
@@ -65,7 +65,7 @@ body {
     transition: color .2s ease;
 }
 
-.site-bar__back:hover { color: var(--wine); }
+.site-bar__back:hover { color: var(--teal); }
 
 /* ===== Layout ===== */
 
@@ -82,18 +82,23 @@ body {
 .checkout-eyebrow {
     display: inline-block;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--brass);
-    margin-bottom: 12px;
+    color: var(--teal-dark);
+    background: var(--teal-tint);
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin-bottom: 14px;
 }
 
 .checkout-left h1 {
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: -.5px;
     font-size: clamp(30px, 3.6vw, 42px);
     margin: 0 0 8px;
+    color: var(--ink);
 }
 
 .checkout-sub {
@@ -122,7 +127,7 @@ body {
     font-family: var(--font-body);
     font-size: 15px;
     color: var(--ink);
-    background: white;
+    background: var(--white);
     border: 1.5px solid var(--line);
     border-radius: var(--radius-sm);
     outline: none;
@@ -141,25 +146,25 @@ body {
 }
 
 .field input:focus {
-    border-color: var(--brass);
+    border-color: var(--teal);
 }
 
 .field input:focus + label,
 .field input:not(:placeholder-shown) + label {
     top: 8px;
     transform: scale(.74);
-    color: var(--brass);
+    color: var(--teal-dark);
 }
 
 .field input.has-error {
-    border-color: var(--wine);
+    border-color: var(--pop);
 }
 
 .field-error {
     display: block;
     min-height: 16px;
     font-size: 12px;
-    color: var(--wine-ink);
+    color: var(--pop-dark);
     margin-top: 5px;
     font-weight: 600;
 }
@@ -169,8 +174,9 @@ body {
 .section-label {
     font-family: var(--font-display);
     font-size: 19px;
-    font-weight: 600;
+    font-weight: 700;
     margin: 14px 0 4px;
+    color: var(--ink);
 }
 
 .payment-method {
@@ -187,7 +193,7 @@ body {
     padding: 16px 18px;
     border: 1.5px solid var(--line);
     border-radius: var(--radius-sm);
-    background: white;
+    background: var(--white);
     cursor: pointer;
     transition: border-color .2s ease, background .2s ease;
 }
@@ -203,8 +209,8 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--paper-2);
-    color: var(--brass);
+    background: var(--teal-tint);
+    color: var(--teal);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -219,7 +225,7 @@ body {
     line-height: 1.35;
 }
 
-.pay-option__text strong { font-size: 14.5px; }
+.pay-option__text strong { font-size: 14.5px; color: var(--ink); }
 .pay-option__text small { color: var(--stone); font-size: 12.5px; }
 
 .pay-option__check {
@@ -238,14 +244,14 @@ body {
 }
 
 .pay-option:has(input:checked) {
-    border-color: var(--ink);
-    background: var(--paper-2);
+    border-color: var(--teal);
+    background: var(--teal-tint);
 }
 
 .pay-option:has(input:checked) .pay-option__check {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: white;
+    background: var(--teal);
+    border-color: var(--teal);
+    color: var(--white);
 }
 
 /* ===== Order ticket ===== */
@@ -253,8 +259,8 @@ body {
 .checkout-right { position: sticky; top: 30px; }
 
 .ticket {
-    background: white;
-    border: 1px solid var(--line);
+    background: var(--white);
+    border: 1.5px solid var(--line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
     padding: 28px 26px 26px;
@@ -269,14 +275,18 @@ body {
 
 .ticket__eyebrow {
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 20px;
+    color: var(--ink);
 }
 
 .ticket__count {
     font-family: var(--font-mono);
     font-size: 12px;
-    color: var(--stone);
+    color: var(--teal-dark);
+    background: var(--teal-tint);
+    padding: 3px 10px;
+    border-radius: 50px;
 }
 
 .ticket__items {
@@ -300,7 +310,8 @@ body {
     height: 54px;
     border-radius: 10px;
     overflow: hidden;
-    background: var(--paper-2);
+    background: var(--teal-tint);
+    border: 1.5px solid var(--line);
     flex-shrink: 0;
 }
 
@@ -316,6 +327,7 @@ body {
     font-size: 14px;
     font-weight: 600;
     line-height: 1.3;
+    color: var(--ink);
 }
 
 .order-item__info span {
@@ -329,6 +341,7 @@ body {
     font-size: 13.5px;
     font-weight: 700;
     white-space: nowrap;
+    color: var(--ink);
 }
 
 .ticket__empty {
@@ -341,7 +354,7 @@ body {
 .ticket__empty a {
     display: inline-block;
     margin-top: 12px;
-    color: var(--wine);
+    color: var(--teal);
     font-weight: 700;
     text-decoration: none;
 }
@@ -362,7 +375,7 @@ body {
     top: -9px;
     width: 18px;
     height: 18px;
-    background: var(--paper);
+    background: var(--teal-tint);
     border-radius: 50%;
 }
 
@@ -389,30 +402,33 @@ body {
     font-weight: 700;
     color: var(--ink);
     padding-top: 8px;
-    border-top: 1px solid var(--line);
+    border-top: 1.5px solid var(--line);
 }
 
 .place-order-btn {
     width: 100%;
     border: none;
     background: var(--ink);
-    color: var(--paper);
+    color: var(--white);
     padding: 17px;
     border-radius: 50px;
     font-family: var(--font-body);
     font-weight: 700;
     font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease;
 }
 
 .place-order-btn:hover:not(:disabled) {
+    background: var(--teal);
     transform: translateY(-3px);
-    box-shadow: 0 14px 26px rgba(28,26,22,.28);
+    box-shadow: 0 14px 26px rgba(8,129,120,.32);
 }
 
 .place-order-btn:disabled {
@@ -424,8 +440,8 @@ body {
     display: none;
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(250,247,241,.4);
-    border-top-color: var(--paper);
+    border: 2px solid rgba(255,255,255,.4);
+    border-top-color: var(--white);
     border-radius: 50%;
 }
 
@@ -463,14 +479,14 @@ body {
     padding: 14px 20px;
     border-radius: var(--radius-sm);
     background: var(--ink);
-    color: var(--paper);
+    color: var(--white);
     box-shadow: 0 14px 30px rgba(0,0,0,.22);
     animation: toastIn .25s ease;
     max-width: 320px;
 }
 
-.toast.toast--success { background: var(--forest); }
-.toast.toast--error { background: var(--wine-ink); }
+.toast.toast--success { background: var(--teal-dark); }
+.toast.toast--error { background: var(--pop-dark); }
 
 .toast.is-leaving { animation: toastOut .25s ease forwards; }
 

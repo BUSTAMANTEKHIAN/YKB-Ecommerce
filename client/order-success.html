@@ -4,18 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Successful | YKB Clothing</title>
-    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
-    <link rel="stylesheet" href="css/order-success.css">
+    <link rel="icon" href="images/banner/favicon.jpg" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/order-success.css">
 </head>
 <body>
 
-<section class="success-page show"> 
+<section class="success-page show">
 
     <div class="success-card">
 
-        <div class="checkmark">✓</div>
+        <div class="checkmark">
+            <i class="fa-solid fa-check"></i>
+        </div>
 
+        <span class="success-eyebrow">Order confirmed</span>
         <h1>Thank You For Your Order!</h1>
 
         <p class="message">
@@ -23,8 +30,16 @@
         </p>
 
         <div class="order-info">
-            <p><strong>Order Number:</strong></p>
-            <h2 id="order-number"></h2>
+            <p>Order Number</p>
+            <h2 id="order-number">—</h2>
+            <div class="order-info__meta">
+                <span id="order-date"></span>
+                <span id="order-total"></span>
+            </div>
+        </div>
+
+        <div id="order-items" class="order-items">
+            <!-- items render here, if available -->
         </div>
 
         <div class="buttons">
@@ -45,25 +60,7 @@
 
 </section>
 
-<script>
-let lastOrder =
-JSON.parse(localStorage.getItem("lastOrder"));
-
-if(lastOrder){
-    document.getElementById("order-number")
-        .innerHTML = lastOrder.orderId;
-}
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    let orders = JSON.parse(localStorage.getItem("orders")) || [];
-    let latest = orders[orders.length - 1];
-
-    document.getElementById("order-id").textContent = latest.id;
-});
-</script>
-
 <script src="js/config.js"></script>
+<script src="js/order-success.js"></script>
 </body>
 </html>

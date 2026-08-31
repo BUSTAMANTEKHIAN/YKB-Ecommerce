@@ -645,3 +645,170 @@ body.dark-mode .person {
         max-width: none;
     }
 }
+
+/* ==========================================
+   CONTACT — DARK MODE FIX
+========================================== */
+
+body.dark-mode {
+    background: #0f1115;
+    color: #eafaf8;
+}
+
+body.dark-mode .contact-page {
+    color: #eafaf8;
+}
+
+body.dark-mode .contact-page h1,
+body.dark-mode .contact-page h2,
+body.dark-mode .contact-page h3,
+body.dark-mode .contact-page h4,
+body.dark-mode .contact-page h5,
+body.dark-mode .contact-page p,
+body.dark-mode .contact-page span,
+body.dark-mode .contact-page li {
+    color: #eafaf8;
+}
+
+body.dark-mode #contact-details .details {
+    background: #1b1d22;
+    color: #eafaf8;
+    border-color: rgba(8,129,120,.3);
+}
+
+body.dark-mode #contact-details .details h2 {
+    color: #ffffff;
+}
+
+body.dark-mode #contact-details .details h3 {
+    color: #5fd6c8;
+}
+
+body.dark-mode #contact-details .details span {
+    color: #5fd6c8;
+}
+
+body.dark-mode #contact-details li {
+    background: rgba(8,129,120,.12);
+}
+
+body.dark-mode #contact-details li a,
+body.dark-mode #contact-details li .static-row {
+    color: #eafaf8;
+}
+
+body.dark-mode #contact-details li:hover {
+    background: rgba(8,129,120,.2);
+}
+
+body.dark-mode #form-details form {
+    background: #1b1d22;
+    color: #eafaf8;
+}
+
+body.dark-mode #form-details form h2 {
+    color: #ffffff;
+}
+
+body.dark-mode #form-details form span {
+    color: #5fd6c8;
+}
+
+body.dark-mode #form-details input,
+body.dark-mode #form-details textarea {
+    background: #24262c;
+    color: #ffffff;
+    border-color: #444;
+}
+
+body.dark-mode #form-details input::placeholder,
+body.dark-mode #form-details textarea::placeholder {
+    color: #9ca3af;
+}
+
+body.dark-mode #form-details input:focus,
+body.dark-mode #form-details textarea:focus {
+    background: #24262c;
+}
+
+body.dark-mode .person {
+    background: rgba(8,129,120,.12);
+    color: #eafaf8;
+}
+
+body.dark-mode .person:hover {
+    background: rgba(8,129,120,.2);
+}
+
+body.dark-mode .person p {
+    color: #b7cfcb;
+}
+
+body.dark-mode .person p a {
+    color: #5fd6c8;
+}
+
+body.dark-mode .person span {
+    color: #ffffff;
+}
+
+body.dark-mode footer {
+    background: #15181d;
+    color: #b7cfcb;
+}
+
+body.dark-mode footer p,
+body.dark-mode footer a,
+body.dark-mode footer h4 {
+    color: #eafaf8;
+}
+
+/* =========================================================
+   CONTACT — DARK MODE
+========================================================= */
+
+body.dark-mode {
+    background: #0f1115;
+    color: #eafaf8;
+}
+
+/* Contact headings */
+body.dark-mode .contact-page h1,
+body.dark-mode .contact-page h2,
+body.dark-mode .contact-page h3,
+body.dark-mode .contact-page h4,
+body.dark-mode .contact-page h5 {
+    color: #ffffff;
+}
+
+/* Contact paragraphs */
+body.dark-mode .contact-page p {
+    color: #cbd8d6;
+}
+
+/* Contact cards */
+body.dark-mode .contact-page .contact-card {
+    background: #181b21;
+    color: #eafaf8;
+    border-color: #2c323a;
+}
+
+/* Form */
+body.dark-mode .contact-page input,
+body.dark-mode .contact-page textarea,
+body.dark-mode .contact-page select {
+    background: #20242b;
+    color: #ffffff;
+    border-color: #3a414b;
+}
+
+/* Placeholder */
+body.dark-mode .contact-page input::placeholder,
+body.dark-mode .contact-page textarea::placeholder {
+    color: #8e9997;
+}
+
+/* Labels */
+body.dark-mode .contact-page label {
+    color: #d6e5e3;
+}

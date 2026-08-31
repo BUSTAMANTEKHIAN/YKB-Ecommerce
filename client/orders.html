@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Orders | YKB Clothing</title>
-    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+    <link rel="icon" href="images/banner/favicon.jpg" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/orders.css">
@@ -14,16 +17,23 @@
 <section class="orders-page show">
 
     <div class="orders-header">
-        <h1>📦 My Orders</h1>
+        <span class="orders-eyebrow">Order tracker</span>
+        <h1>My Orders</h1>
         <p>Track your purchases and view your order history.</p>
     </div>
 
-    <!-- FIXED ID -->
+    <div id="orders-loading" class="orders-loading">
+        <i class="fas fa-spinner fa-spin"></i> Loading your orders...
+    </div>
+
     <div id="orders-list">
         <!-- Orders will appear here -->
     </div>
 
 </section>
+
+<!-- Toast notifications, same pattern as cart/checkout -->
+<div id="toast-stack" class="toast-stack" aria-live="polite"></div>
 
 <script src="js/config.js"></script>
 <script src="js/orders.js"></script>

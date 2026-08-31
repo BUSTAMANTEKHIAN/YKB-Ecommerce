@@ -701,3 +701,178 @@ body.dark-mode .suggestions-box {
 body.dark-mode .suggestion-item:hover {
     background: rgba(8, 129, 120, 0.15);
 }
+
+/* ==========================================
+   BLOG — DARK MODE FIX
+========================================== */
+
+body.dark-mode .blog-page {
+    color: #eafaf8;
+}
+
+body.dark-mode .blog-page h1,
+body.dark-mode .blog-page h2,
+body.dark-mode .blog-page h3,
+body.dark-mode .blog-page h4,
+body.dark-mode .blog-page h5,
+body.dark-mode .blog-page p,
+body.dark-mode .blog-page span,
+body.dark-mode .blog-page label {
+    color: #eafaf8;
+}
+
+body.dark-mode #blog .blog-box {
+    background: #1b1d22;
+    border-color: #333;
+}
+
+body.dark-mode #blog .blog-details h4 {
+    color: #ffffff;
+}
+
+body.dark-mode #blog .blog-details p {
+    color: #b7cfcb;
+}
+
+body.dark-mode .read-time {
+    color: #5fd6c8;
+}
+
+body.dark-mode .category {
+    background: rgba(8,129,120,.2);
+    color: #5fd6c8;
+}
+
+body.dark-mode .empty-blog {
+    background: #1b1d22;
+    color: #b7cfcb;
+}
+
+body.dark-mode .empty-blog h2 {
+    color: #ffffff;
+}
+
+body.dark-mode #blog-modal {
+    background: rgba(0,0,0,.75);
+}
+
+body.dark-mode .modal-content {
+    background: #1b1d22;
+    color: #eafaf8;
+}
+
+body.dark-mode #modal-title {
+    color: #ffffff;
+}
+
+body.dark-mode #modal-date {
+    color: #5fd6c8;
+}
+
+body.dark-mode #modal-text {
+    color: #b7cfcb;
+}
+
+body.dark-mode #close-modal {
+    color: #ffffff;
+}
+
+body.dark-mode #search-input {
+    background: #24262c;
+    color: #ffffff;
+    border-color: #444;
+}
+
+body.dark-mode #search-input::placeholder {
+    color: #9ca3af;
+}
+
+body.dark-mode #pagination a {
+    background: #1b1d22;
+    color: #ffffff;
+    border-color: #333;
+}
+
+/* =========================================================
+   BLOG — DARK MODE
+========================================================= */
+
+body.dark-mode {
+    background: #0f1115;
+    color: #eafaf8;
+}
+
+/* Main blog page */
+body.dark-mode .blog-page {
+    background: #0f1115;
+    color: #eafaf8;
+}
+
+/* Blog headings */
+body.dark-mode .blog-page h1,
+body.dark-mode .blog-page h2,
+body.dark-mode .blog-page h3,
+body.dark-mode .blog-page h4,
+body.dark-mode .blog-page h5 {
+    color: #ffffff;
+}
+
+/* Paragraphs */
+body.dark-mode .blog-page p {
+    color: #cbd8d6;
+}
+
+/* Search */
+body.dark-mode .blog-page input,
+body.dark-mode .blog-page textarea,
+body.dark-mode .blog-page select {
+    background: #20242b;
+    color: #ffffff;
+    border-color: #3a414b;
+}
+
+body.dark-mode .blog-page input::placeholder {
+    color: #8e9997;
+}
+
+/* Blog cards */
+body.dark-mode .blog-card {
+    background: #181b21;
+    color: #eafaf8;
+    border-color: #2c323a;
+}
+
+body.dark-mode .blog-card h3,
+body.dark-mode .blog-card h4 {
+    color: #ffffff;
+}
+
+body.dark-mode .blog-card p {
+    color: #cbd8d6;
+}
+
+/* Blog metadata */
+body.dark-mode .blog-date,
+body.dark-mode .blog-category,
+body.dark-mode .blog-time {
+    color: #9aa8a6;
+}
+
+/* Blog links */
+body.dark-mode .blog-card a {
+    color: #20c7b9;
+}
+
+/* Blog content */
+body.dark-mode .blog-content {
+    color: #eafaf8;
+}
+
+body.dark-mode .blog-content p {
+    color: #cbd8d6;
+}
+
+body.dark-mode .blog-content h2,
+body.dark-mode .blog-content h3 {
+    color: #ffffff;
+}
