@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Account</title>
-    <link rel="icon" href="images\banner\favicon.jpg" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | YKB Clothing</title>
+    <link rel="icon" href="images/banner/favicon.jpg" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/profile.css">
 </head>
 <body>
@@ -13,11 +18,19 @@
     <div class="sidebar">
         <h2>YKB</h2>
 
-        <a class="active" href="profile.html">👤 Profile</a>
-        <a href="orders.html">📦 Orders</a>
-        <a href="settings.html">⚙️ Settings</a>
+        <a class="active" href="profile.html">
+            <i class="fas fa-user"></i> Profile
+        </a>
+        <a href="orders.html">
+            <i class="fas fa-box"></i> Orders
+        </a>
+        <a href="wishlist.html">
+            <i class="fas fa-heart"></i> Wishlist
+        </a>
 
-        <button onclick="logout()" class="logout">Logout</button>
+        <button onclick="logout()" class="logout">
+            <i class="fas fa-right-from-bracket"></i> Logout
+        </button>
     </div>
 
     <!-- MAIN -->
@@ -31,10 +44,10 @@
             <div class="profile-section">
 
                 <div class="avatar-wrapper">
-                    <img id="profile-image" src="images/default-user.png">
+                    <img id="profile-image" src="images/default-user.png" alt="Profile photo">
                     <label class="camera">
-                        📷
-                        <input type="file" id="upload-image" hidden>
+                        <i class="fas fa-camera"></i>
+                        <input type="file" id="upload-image" accept="image/*" hidden>
                     </label>
                 </div>
 
@@ -42,7 +55,9 @@
                     <h2 id="profile-name"></h2>
                     <p id="profile-email"></p>
 
-                    <button id="editBtn">Edit Profile</button>
+                    <button id="editBtn">
+                        <i class="fas fa-pen"></i> Edit Profile
+                    </button>
                 </div>
 
             </div>
@@ -52,12 +67,12 @@
         <div class="stats">
 
             <div class="card">
-                <h3 id="orderCount">0</h3>
+                <h3 id="orderCount">—</h3>
                 <p>Orders</p>
             </div>
 
             <div class="card">
-                <h3 id="totalSpent">₱0</h3>
+                <h3 id="totalSpent">—</h3>
                 <p>Total Spent</p>
             </div>
 
@@ -77,15 +92,28 @@
     <div class="modal-box">
         <h3>Edit Profile</h3>
 
-        <input type="text" id="edit-name" placeholder="Username">
-        <input type="email" id="edit-email" placeholder="Email">
+        <div class="field">
+            <input type="text" id="edit-name" placeholder="Full name">
+            <span class="field-error" id="edit-name-error"></span>
+        </div>
 
-        <button onclick="saveProfile()">Save</button>
-        <button onclick="closeModal()">Cancel</button>
+        <div class="field">
+            <input type="email" id="edit-email" placeholder="Email address">
+            <span class="field-error" id="edit-email-error"></span>
+        </div>
+
+        <div class="modal-actions">
+            <button class="save-btn" id="saveProfileBtn" onclick="saveProfile()">Save</button>
+            <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+        </div>
     </div>
 
 </div>
 
+<!-- Toast notifications -->
+<div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="js/config.js"></script>
 <script src="js/profile.js"></script>
 <script src="js/auth.js"></script>

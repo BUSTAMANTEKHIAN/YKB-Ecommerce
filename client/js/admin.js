@@ -274,10 +274,25 @@ const imageInput = document.getElementById("image");
 
 if (imageFile) {
     imageFile.addEventListener("change", async () => {
-
         const file = imageFile.files[0];
+
         if (!file) return;
 
+        // Check file type
+        if (!file.type.startsWith("image/")) {
+            showToast("Please select an image file.", "error");
+            imageFile.value = "";
+            return;
+        }
+
+        // Maximum 5 MB
+        if (file.size > 5 * 1024 * 1024) {
+            showToast("Image must be smaller than 5 MB.", "error");
+            imageFile.value = "";
+            return;
+        }
+
+        // Show preview immediately
         imagePreview.src = URL.createObjectURL(file);
         imagePreview.style.display = "block";
 
@@ -285,26 +300,45 @@ if (imageFile) {
         formData.append("image", file);
 
         try {
+            showToast("Uploading image...", "success");
 
-            const response = await fetch(`${API_BASE_URL}/api/products/upload`, {
-                method: "POST",
-                body: formData
-            });
+            const response = await fetch(
+                `${API_BASE_URL}/api/products/upload`,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
 
             const data = await response.json();
 
-            if (!response.ok) {
-                showToast("Image upload failed.", "error");
+            if (!response.ok || !data.success) {
+                console.error("Upload failed:", data);
+
+                showToast(
+                    data.message || "Image upload failed.",
+                    "error"
+                );
+
                 return;
             }
 
+            // Save Cloudinary URL in hidden input
             imageInput.value = data.imagePath;
 
-        } catch (error) {
-            console.error(error);
-            showToast("Cannot upload image.", "error");
-        }
+            // Use Cloudinary URL for preview
+            imagePreview.src = data.imagePath;
 
+            showToast("Image uploaded successfully!", "success");
+
+        } catch (error) {
+            console.error("Cloudinary upload error:", error);
+
+            showToast(
+                "Cannot upload image. Please try again.",
+                "error"
+            );
+        }
     });
 }
 
