@@ -640,3 +640,17 @@ body{
     outline:none;
     border-color:#088178;
 }
+
+#pagination a.active {
+    background-color: #088178;
+    color: #fff;
+}
+
+#pagination a {
+    cursor: pointer;
+}
+
+#pagination a:hover {
+    background-color: #088178;
+    color: #fff;
+}

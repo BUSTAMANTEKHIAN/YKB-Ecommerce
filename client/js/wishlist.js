@@ -154,7 +154,21 @@ function renderWishlist() {
 
             <div class="wish-card__body">
                 <h3 class="wish-card__name">${item.name}</h3>
-                <p class="wish-card__price">₱${Number(item.price).toLocaleString()}</p>
+            <p class="wish-card__price">
+                ₱${Number(item.price).toLocaleString()}
+            </p>
+
+            <div class="wish-card__details">
+                <span>
+                    <strong>Size:</strong>
+                    ${item.size || "Not selected"}
+                </span>
+
+                <span>
+                    <strong>Quantity:</strong>
+                    ${Number(item.quantity) || 1}
+                </span>
+            </div>
 
                 <div class="wish-buttons">
                     <button class="move-cart" onclick="moveToCart(${index})">
@@ -207,11 +221,12 @@ async function moveToCart(index) {
                 product_name: item.name,
                 price: item.price,
                 image: item.image,
-                size: "M",
-                quantity: 1,
+                size: item.size,
+                quantity: Number(item.quantity) || 1,
                 user_id: user.id
             })
         });
+
 
         if (!response.ok) {
             throw new Error(`Request failed with status ${response.status}`);
@@ -274,6 +289,10 @@ async function removeWishlist(index, { silent = false } = {}) {
 
             wishlist.splice(index, 1);
             renderWishlist();
+
+            if (typeof updateWishlistCount === "function") {
+                updateWishlistCount();
+            }
 
             if (!silent) showToast("Removed from your wishlist.", "default");
 

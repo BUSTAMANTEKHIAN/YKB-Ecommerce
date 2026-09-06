@@ -2,8 +2,11 @@ const addCartBtn = document.getElementById("add-cart");
 const buyNowBtn = document.getElementById("buy-now");
 const wishlistBtn = document.getElementById("wishlist-btn");
 
+let currentProductStock = 0;
+
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
+
 
 let currentProduct = null;
 
@@ -153,36 +156,127 @@ buyNowBtn.addEventListener("click", async () => {
 
     if (success) {
 
-        window.location.href = "cart.html";
+        // Go directly to checkout
+        window.location.href = "checkout.html";
 
     }
 
 });
 
 
-// ==========================================
-// WISHLIST
-// ==========================================
-
 wishlistBtn.addEventListener("click", async () => {
 
-    const user = JSON.parse(localStorage.getItem("currentUser"));
+    // ==============================
+    // CHECK LOGIN
+    // ==============================
 
-    if (!user) {
+    let user = null;
 
+    try {
+        user = JSON.parse(
+            localStorage.getItem("currentUser")
+        );
+    } catch (error) {
+        user = null;
+    }
+
+    if (!user || !user.id) {
         alert("Please login first.");
-
         window.location.href = "login.html";
+        return;
+    }
+
+
+    // ==============================
+    // GET PRODUCT
+    // ==============================
+
+    const productId =
+        document.getElementById("product-id").value;
+
+    if (!productId) {
+        alert("Product not found.");
+        return;
+    }
+
+
+    // ==============================
+    // GET SIZE
+    // ==============================
+
+    const size =
+        document.getElementById("size").value;
+
+
+    // ==============================
+    // GET QUANTITY
+    // ==============================
+
+    const quantity =
+        Number(document.getElementById("quantity").value);
+
+
+    // ==============================
+    // REQUIRE SIZE
+    // ==============================
+
+    if (!size) {
+
+        alert(
+            "Please select a size before adding this item to your wishlist."
+        );
+
+        document.getElementById("size").focus();
 
         return;
     }
 
 
-    const productId =
-        document.getElementById("product-id").value;
+    // ==============================
+    // REQUIRE QUANTITY
+    // ==============================
 
+    if (!quantity || quantity < 1) {
+
+        alert("Please enter a valid quantity.");
+
+        document.getElementById("quantity").focus();
+
+        return;
+    }
+
+
+    // ==============================
+    // CHECK STOCK
+    // ==============================
+
+    if (currentProductStock <= 0) {
+
+        alert(
+            "This product is currently out of stock."
+        );
+
+        return;
+    }
+
+
+    if (quantity > currentProductStock) {
+
+        alert(
+            `Only ${currentProductStock} item(s) are available.`
+        );
+
+        return;
+    }
+
+
+    // ==============================
+    // SAVE TO DATABASE
+    // ==============================
 
     try {
+
+        wishlistBtn.disabled = true;
 
         const response = await fetch(
             `${API_BASE_URL}/api/wishlist/add`,
@@ -195,7 +289,9 @@ wishlistBtn.addEventListener("click", async () => {
 
                 body: JSON.stringify({
                     user_id: user.id,
-                    product_id: productId
+                    product_id: Number(productId),
+                    size: size,
+                    quantity: quantity
                 })
             }
         );
@@ -204,26 +300,57 @@ wishlistBtn.addEventListener("click", async () => {
         const data = await response.json();
 
 
-        if (data.success) {
+        if (!response.ok || !data.success) {
 
-            wishlistBtn.classList.add("active");
+            alert(
+                data.message ||
+                "Failed to add to wishlist."
+            );
 
-            wishlistBtn.innerHTML =
-                '<i class="fas fa-heart"></i>';
-
-            alert("Added to wishlist!");
-
+            return;
         }
+
+
+        // ==============================
+        // SUCCESS
+        // ==============================
+
+        wishlistBtn.classList.add("active");
+            
+        wishlistBtn.innerHTML =
+            '<i class="fas fa-heart"></i>';
+            
+        // Update navbar wishlist number
+        if (typeof updateWishlistCount === "function") {
+            updateWishlistCount();
+        }
+        
+        alert(
+            `Added to wishlist!\n\nSize: ${size}\nQuantity: ${quantity}`
+        );
+
+        
+
 
     } catch (error) {
 
-        console.error("Wishlist error:", error);
+        console.error(
+            "Wishlist error:",
+            error
+        );
 
-        alert("Failed to add to wishlist.");
+        alert(
+            "Unable to connect to the server."
+        );
+
+    } finally {
+
+        wishlistBtn.disabled = false;
 
     }
 
 });
+
 
 
 // ==========================================
@@ -470,7 +597,6 @@ async function loadProduct() {
             .textContent =
             productDescription;
 
-
         // ==========================================
         // STOCK
         // ==========================================
@@ -480,6 +606,9 @@ async function loadProduct() {
                 0,
                 Number(product.stock) || 0
             );
+        
+        // Save stock for wishlist validation
+        currentProductStock = stock;
 
         const stockElement =
             document.getElementById("product-stock");

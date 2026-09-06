@@ -9,29 +9,53 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
 <div class="layout">
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
+
+    <div class="sidebar-brand">
         <h2>YKB</h2>
+        <span>MY ACCOUNT</span>
+    </div>
+
+    <nav class="profile-nav">
+
+        <a href="index.html">
+            <i class="fas fa-house"></i>
+            <span>Home</span>
+        </a>
 
         <a class="active" href="profile.html">
-            <i class="fas fa-user"></i> Profile
-        </a>
-        <a href="orders.html">
-            <i class="fas fa-box"></i> Orders
-        </a>
-        <a href="wishlist.html">
-            <i class="fas fa-heart"></i> Wishlist
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
         </a>
 
-        <button onclick="logout()" class="logout">
-            <i class="fas fa-right-from-bracket"></i> Logout
+        <a href="orders.html">
+            <i class="fas fa-box"></i>
+            <span>Orders</span>
+        </a>
+
+        <a href="wishlist.html">
+            <i class="fas fa-heart"></i>
+            <span>Wishlist</span>
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <button type="button" onclick="logout()" class="logout">
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Exit / Logout</span>
         </button>
+
     </div>
+
+</div>
 
     <!-- MAIN -->
     <div class="main">
@@ -113,7 +137,7 @@
 <!-- Toast notifications -->
 <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <script src="js/config.js"></script>
 <script src="js/profile.js"></script>
 <script src="js/auth.js"></script>

@@ -4,106 +4,255 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YKB CLOTHING</title> 
+    <title>YKB CLOTHING</title>
     <link rel="icon" href="images/banner/favicon.jpg" type="image/png">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
 
     <link rel="stylesheet" href="css/styles.css">
-    
-    
+
 </head>
 <body>
 
-    <section id="header">
+<!-- =========================================================
+     HEADER
+========================================================= -->
 
-        <a href="index.html" class="brand-logo">
-            <img src="images/banner/b1.png" class="logo" alt="YKB Clothing">
-            <div class="brand-text">
-                <span class="brand-name">YKB Clothing</span>
-                <span class="brand-tag">Premium Streetwear</span>
+<section id="header">
+
+    <!-- LOGO -->
+    <a href="index.html" class="brand-logo">
+
+        <img
+            src="images/banner/b1.png"
+            class="logo"
+            alt="YKB Clothing"
+        >
+
+        <div class="brand-text">
+            <span class="brand-name">YKB Clothing</span>
+            <span class="brand-tag">Premium Streetwear</span>
+        </div>
+
+    </a>
+
+
+    <!-- DESKTOP + MOBILE NAV -->
+    <ul id="navbar">
+
+        <!-- HOME -->
+        <li>
+            <a href="index.html" class="active">
+                Home
+            </a>
+        </li>
+
+        <!-- SHOP -->
+        <li>
+            <a href="shop.html">
+                Shop
+            </a>
+        </li>
+
+        <!-- BLOG -->
+        <li>
+            <a href="blog.html">
+                Blog
+            </a>
+        </li>
+
+        <!-- ABOUT -->
+        <li>
+            <a href="about.html">
+                About
+            </a>
+        </li>
+
+        <!-- CONTACT -->
+        <li>
+            <a href="contact.html">
+                Contact
+            </a>
+        </li>
+
+        <!-- =================================================
+             AUTH
+        ================================================== -->
+
+        <li id="auth-area">
+
+            <!-- Logged OUT -->
+            <div id="guest-links">
+
+                <a href="login.html" class="nav-login">
+                    Login
+                </a>
+
+                <a href="register.html" class="nav-register">
+                    Register
+                </a>
+
             </div>
+
+            <!-- Logged IN -->
+            <div id="user-menu" class="user-menu hidden">
+
+                <a href="#" id="user-btn" aria-haspopup="true" aria-expanded="false">
+
+                    <i class="fas fa-user-circle" aria-hidden="true"></i>
+
+                    <span id="nav-username"></span>
+
+                    <i class="fas fa-chevron-down dropdown-caret" aria-hidden="true"></i>
+
+                </a>
+
+                <!-- USER DROPDOWN -->
+                <div class="dropdown" id="user-dropdown">
+
+                    <a href="profile.html">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        My Profile
+                    </a>
+
+                    <a href="orders.html">
+                        <i class="fas fa-box" aria-hidden="true"></i>
+                        My Orders
+                    </a>
+
+                    <a href="wishlist.html">
+                        <i class="fas fa-heart" aria-hidden="true"></i>
+                        Wishlist
+                    </a>
+
+                    <a href="#" onclick="logout(); return false;">
+                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                        Logout
+                    </a>
+
+                </div>
+
+            </div>
+
+        </li>
+
+        <!-- =================================================
+             WISHLIST
+        ================================================== -->
+
+        <li class="wishlist-icon">
+
+            <a href="wishlist.html">
+
+                <i class="fas fa-heart" aria-hidden="true"></i>
+
+                <span class="nav-label">Wishlist</span>
+
+                <span id="wishlist-count" class="count-badge">0</span>
+
+            </a>
+
+        </li>
+
+        <!-- =================================================
+             CART
+        ================================================== -->
+
+        <li id="lg-bag">
+
+            <a href="cart.html">
+
+                <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+
+                <span class="nav-label">Cart</span>
+
+                <span id="cart-count" class="count-badge">0</span>
+
+            </a>
+
+        </li>
+
+        <!-- =================================================
+             DARK MODE
+        ================================================== -->
+
+        <li>
+
+            <button
+                id="dark-mode-btn"
+                type="button"
+                aria-label="Toggle dark mode"
+            >
+
+                <i class="fas fa-moon" aria-hidden="true"></i>
+
+            </button>
+
+        </li>
+
+        <!-- =================================================
+             MOBILE CLOSE
+        ================================================== -->
+
+        <li id="close-item">
+
+            <a
+                href="#"
+                id="close"
+                aria-label="Close menu"
+            >
+
+                <i class="fas fa-times" aria-hidden="true"></i>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+
+    <!-- =====================================================
+         MOBILE CONTROLS
+    ====================================================== -->
+
+    <div id="mobile">
+
+        <a
+            href="cart.html"
+            aria-label="Shopping cart"
+        >
+
+            <i
+                class="fas fa-shopping-bag"
+                aria-hidden="true"
+            ></i>
+
         </a>
-        
 
-        <div>
-            <ul id="navbar">
+        <button
+            type="button"
+            id="bar"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="navbar"
+        >
 
-    <li>
-        <a href="index.html">Home</a>
-    </li>
+            <i
+                class="fas fa-bars"
+                aria-hidden="true"
+            ></i>
 
-    <li>
-        <a href="shop.html">Shop</a>
-    </li>
-
-    <li>
-        <a href="blog.html">Blog</a>
-    </li>
-
-    <li>
-        <a href="about.html">About</a>
-    </li>
-
-    <li>
-        <a href="contact.html">Contact</a>
-    </li>
-
-    <li id="auth-area">
-
-    <div id="guest-links">
-        <a href="login.html" class="nav-login">Login</a>
-        <a href="register.html" class="nav-register">Register</a>
-    </div>
-
-    <div id="user-menu" class="user-menu hidden">
-        <a href="#" id="user-btn">
-            <i class="fas fa-user-circle"></i>
-            <span id="nav-username"></span>
-        </a>
-
-        <div class="dropdown" id="user-dropdown">
-            <a href="profile.html" id="profile-link">My Profile</a>
-            <a href="orders.html">My Orders</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="#" onclick="logout()">Logout</a>
-        </div>
-    </div>
-
-</li>
-
-    <li class="wishlist-icon">
-        <a href="wishlist.html">
-            <i class="fas fa-heart"></i>
-            <span id="wishlist-count">0</span>
-        </a>
-    </li>
-
-    <li id="lg-bag">
-        <a href="cart.html">
-            <i class="fas fa-shopping-bag"></i>
-            <span id="cart-count">0</span>
-        </a>
-    </li>
-
-    <li>
-        <button id="dark-mode-btn">
-            <i class="fas fa-moon"></i>
         </button>
-    </li>
 
-    <!-- Mobile close button -->
-    <li id="close-item">
-        <a href="#" id="close"><i class="fas fa-times"></i></a>
-    </li>
+    </div>
 
-</ul>
-        </div>
-        <div id="mobile">
-            <a href="cart.html"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
-            <i id="bar" class="fas fa-outdent"></i>
-        </div>
-    </section>
+</section>
+
+<!-- Dim backdrop shown behind the open mobile menu.
+     Must stay a SIBLING of #header, not nested inside it, so it
+     positions relative to the viewport, not the header bar. -->
+<div id="nav-overlay"></div>
+
 
     <section id="hero">
 
@@ -185,10 +334,7 @@
         </div>
     </section>
 
-    <!-- FIX: added class="product-section" (shared with the Women section below)
-         and kept id="product1" unique to this section only. Styles.css now
-         targets .product-section instead of the old duplicated #product1 id. -->
-
+    <!-- Men section: styled via the shared .product-section class -->
     <section id="product1" class="section-p1 product-section">
 
     <div class="section-heading">
@@ -235,11 +381,7 @@
         <button class="normal"> Explore More</button>
     </section>
 
-    <!-- FIX: this used to share id="product1" with the section above, which
-         is invalid HTML (duplicate IDs). Now it has its own unique id and
-         the same "product-section" class so the shared CSS styling still
-         applies. -->
-    
+    <!-- Women section: has its own unique id, shares .product-section class -->
     <section id="product2" class="section-p1 product-section">
 
 
@@ -251,11 +393,11 @@
             staples crafted for effortless everyday style.
         </p>
     </div>
-    
+
     <!-- Dynamic products from MySQL -->
     <div class="pro-container"></div>
-    
-    
+
+
     </section>
 
 
@@ -278,37 +420,178 @@
 </section>
 
     <section id="banner3">
-        <div class="banner-box">
+    
+        <!-- Seasonal Sale -->
+        <div class="banner-box banner-fixed-white banner-box1">
             <h2>Seasonal Sale</h2>
             <h3>Winter Collection -50% OFF</h3>
         </div>
-        <div class="banner-box banner-box2">
+    
+        <!-- New Collection -->
+        <div class="banner-box banner-fixed-white banner-box2">
             <h2>NEW COLLECTION</h2>
             <h3>Spring / Summer 2025</h3>
         </div>
-        <div class="banner-box banner-box3">
+    
+        <!-- T-Shirt -->
+        <div class="banner-box banner-fixed-white banner-box3">
             <h2>T-shirt</h2>
             <h3>New Trendy Prints</h3>
         </div>
+    
     </section>
 
     <section id="newsletter" class="section-p1 section-m1">
-        <div class="newstext">
-            <h4>Sign Up For Newsletter</h4>
-            <p>Get E-mail updates about our latest shop and <span>special offers.</span> 
-            </p>
+
+    <div class="newstext">
+
+        <h4>Sign Up For Newsletter</h4>
+
+        <p>
+            Get E-mail updates about our latest shop and
+            <span>special offers.</span>
+        </p>
+
+    </div>
+
+    <div class="form">
+
+        <input
+            type="text"
+            placeholder="Your Email Address"
+        >
+
+        <button
+            class="normal"
+            id="newsletter-button"
+        >
+            Sign Up
+        </button>
+
+    </div>
+
+</section>
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo" src="images/banner/b1.png" alt="">
+            <h4>Contact</h4>
+            <p> <strong>Address:</strong> 4170 Malaban Binan laguna ilaya st, zone 4</p>
+            <p> <strong>Phone:</strong> 09510699549</p>
+            <p> <strong>Hours:</strong> 9:00am - 9:00pm Mon - Sat</p>
+            <div class="follow">
+                <h4>Follow us</h4>
+        <div class="icon">
+
+            <!-- Facebook -->
+            <a
+                href="https://www.facebook.com/khian.bustamante.9"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+            >
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        
+            <!-- Twitter / X -->
+            <a
+                href="https://x.com/Bustamante35863"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+            >
+                <i class="fab fa-twitter"></i>
+            </a>
+        
+            <!-- Instagram -->
+            <a
+                href="https://www.instagram.com/yaaankeyyyy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+            >
+                <i class="fab fa-instagram"></i>
+            </a>
+        
+            <!-- TikTok -->
+            <a
+                href="https://www.tiktok.com/@osgesabimoe"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+            >
+                <i class="fab fa-tiktok"></i>
+            </a>
+        
+            <!-- YouTube -->
+            <a
+                href="https://www.youtube.com/channel/UCaHrhvvIIjrVQByQUCPq17Q"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+            >
+                <i class="fab fa-youtube"></i>
+            </a>
+        
         </div>
-        <div class="form">
-            <input type="text" placeholder="Your Email Address">
-            <button class="normal" onclick="window.location.href='login.html'" >Sign Up</button>
-            
+            </div>
+            <div></div>
         </div>
-    </section>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="about.html">About us</a>
+            <a href="checkout.html">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms and Conditions</a>
+            <a href="contact.html">Contact us</a>
+        </div>
+
+        <div class="col">
+
+    <h4>My account</h4>
+
+    <a href="#" id="account-signup">
+        Sign Up
+    </a>
+
+    <a href="cart.html">
+        View Cart
+    </a>
+
+    <a href="wishlist.html">
+        My Wishlist
+    </a>
+
+    <a href="orders.html">
+        Track My Order
+    </a>
+
+    <a href="#">
+        Help
+    </a>
+
+</div>
+
+        <div class="col install">
+            <h4>Install app</h4>
+            <p>From app Store or Google Play</p>
+            <div class="row">
+                <img src="images/pay/pay1.webp" alt="">
+                <img src="images/pay/pay2.webp" alt="">
+            </div>
+            <p>Secure Payment Gateway </p>
+            <img src="images/pay/pay3.jpg" alt="">
+        </div>
+
+        <div class="copyright">
+            <p>© 2026 YKB Clothing</p>
+        </div>
+    </footer>
 
 
     <script src="js/config.js"></script>
-    <script src="js/script.js"></script>   
-    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
     <script src="js/index-products.js"></script>
     <script src="js/darkmode.js"></script>
 </body>

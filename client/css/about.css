@@ -498,3 +498,12 @@ body.dark-mode .about-page .bubble-left {
     color: #eafaf8;
 }
 
+/* FORCE THESE 3 HOME BANNERS TO ALWAYS HAVE WHITE TEXT */
+.banner-white-text,
+.banner-white-text h2,
+.banner-white-text h3,
+.banner-white-text h4,
+.banner-white-text p,
+.banner-white-text span {
+    color: #ffffff !important;
+}
