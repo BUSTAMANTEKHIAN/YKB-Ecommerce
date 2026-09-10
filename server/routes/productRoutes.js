@@ -8,26 +8,27 @@ const productController = require("../controllers/productController");
 // ===============================
 // CLOUDINARY CONFIG
 // ===============================
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true
 });
 
 // ===============================
 // MULTER MEMORY STORAGE
 // ===============================
-// The image is temporarily stored in memory,
-// then uploaded directly to Cloudinary.
+
 const upload = multer({
     storage: multer.memoryStorage(),
 
     limits: {
-        fileSize: 5 * 1024 * 1024 // 5 MB
+        fileSize: 5 * 1024 * 1024
     },
 
     fileFilter: (req, file, cb) => {
-        if (file.mimetype.startsWith("image/")) {
+        if (file.mimetype && file.mimetype.startsWith("image/")) {
             cb(null, true);
         } else {
             cb(new Error("Only image files are allowed."));
@@ -49,15 +50,15 @@ router.put("/:id", productController.updateProduct);
 
 router.delete("/:id", productController.deleteProduct);
 
-
 // ===============================
-// UPLOAD IMAGE TO CLOUDINARY
+// CLOUDINARY IMAGE UPLOAD
 // ===============================
 
 router.post("/upload", upload.single("image"), async (req, res) => {
 
     try {
 
+        // Check file
         if (!req.file) {
             return res.status(400).json({
                 success: false,
@@ -65,48 +66,71 @@ router.post("/upload", upload.single("image"), async (req, res) => {
             });
         }
 
-        const uploadStream = cloudinary.uploader.upload_stream(
-            {
-                folder: "ykb-clothing/products",
-                resource_type: "image"
-            },
+        console.log("=================================");
+        console.log("📸 IMAGE UPLOAD START");
+        console.log("File:", req.file.originalname);
+        console.log("Type:", req.file.mimetype);
+        console.log("Size:", `${(req.file.size / 1024 / 1024).toFixed(2)} MB`);
+        console.log("Cloudinary Cloud:", process.env.CLOUDINARY_CLOUD_NAME);
+        console.log("=================================");
 
-            (error, result) => {
+        const result = await new Promise((resolve, reject) => {
 
-                if (error) {
-                    console.error("Cloudinary upload error:", error);
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "ykb-clothing/products",
+                    resource_type: "image",
+                    timeout: 120000
+                },
 
-                    return res.status(500).json({
-                        success: false,
-                        message: "Failed to upload image."
-                    });
+                (error, result) => {
+
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+
+                    resolve(result);
                 }
+            );
 
-                return res.json({
-                    success: true,
-                    message: "Image uploaded successfully!",
-                    imagePath: result.secure_url
-                });
-            }
-        );
+            uploadStream.on("error", (error) => {
+                reject(error);
+            });
 
-        uploadStream.end(req.file.buffer);
+            uploadStream.end(req.file.buffer);
+        });
+
+        console.log("=================================");
+        console.log("✅ CLOUDINARY UPLOAD SUCCESS");
+        console.log("Public ID:", result.public_id);
+        console.log("URL:", result.secure_url);
+        console.log("=================================");
+
+        return res.status(200).json({
+            success: true,
+            message: "Image uploaded successfully!",
+            imagePath: result.secure_url
+        });
 
     } catch (error) {
 
-        console.error("Image upload error:", error);
+        console.error("=================================");
+        console.error("❌ CLOUDINARY UPLOAD FAILED");
+        console.error("Message:", error.message);
+        console.error("HTTP Code:", error.http_code);
+        console.error("Name:", error.name);
+        console.error("=================================");
 
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
-            message: "Image upload failed."
+            message: error.message || "Image upload failed."
         });
     }
-
 });
 
-
 // ===============================
-// MULTER / UPLOAD ERROR HANDLER
+// MULTER ERROR HANDLER
 // ===============================
 
 router.use((err, req, res, next) => {
@@ -127,6 +151,9 @@ router.use((err, req, res, next) => {
     }
 
     if (err) {
+
+        console.error("Upload middleware error:", err);
+
         return res.status(400).json({
             success: false,
             message: err.message
@@ -135,6 +162,5 @@ router.use((err, req, res, next) => {
 
     next();
 });
-
 
 module.exports = router;
