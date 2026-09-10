@@ -1,4 +1,33 @@
 // =========================================================
+// TOAST SYSTEM (replaces alert() across the site)
+// Built from your documented spec: stacked, #toast-stack.
+// If your other pages already ship a matching toast.js,
+// drop that one in instead so every page stays identical.
+// =========================================================
+
+function showToast(message, type = "info", duration = 3200) {
+  const stack = document.getElementById("toast-stack");
+  if (!stack) {
+    // Fallback so nothing silently fails if a page is missing the container
+    console.warn("No #toast-stack found, falling back to alert:", message);
+    alert(message);
+    return;
+  }
+
+  const toast = document.createElement("div");
+  toast.className = `toast toast-${type}`;
+  toast.setAttribute("role", "status");
+  toast.textContent = message;
+
+  stack.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("toast-out");
+    toast.addEventListener("animationend", () => toast.remove(), { once: true });
+  }, duration);
+}
+
+// =========================================================
 // MOBILE NAVBAR
 // =========================================================
 
@@ -358,16 +387,25 @@ if (userBtn && userDropdown) {
 }
 
 // =========================================================
-// SIGN UP BUTTONS
+// SIGN UP BUTTONS + NEWSLETTER VALIDATION
 // =========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const newsletterButton =
-        document.getElementById("newsletter-button");
-
     const accountSignup =
         document.getElementById("account-signup");
+
+    const newsletterForm =
+        document.getElementById("newsletter-form");
+
+    const newsletterInput =
+        document.getElementById("newsletter-email");
+
+    const newsletterError =
+        document.getElementById("newsletter-error");
+
+    const newsletterButton =
+        document.getElementById("newsletter-button");
 
 
     function handleSignup(event) {
@@ -391,7 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (currentUser) {
 
-            alert("You Already SignUp");
+            showToast("You're already signed up!", "info");
 
             return;
         }
@@ -405,21 +443,82 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // Newsletter Sign Up button
-    if (newsletterButton) {
-        newsletterButton.addEventListener(
-            "click",
-            handleSignup
-        );
-    }
-
-
     // Footer My Account → Sign Up
     if (accountSignup) {
         accountSignup.addEventListener(
             "click",
             handleSignup
         );
+    }
+
+
+    // =========================================
+    // NEWSLETTER — real inline validation +
+    // duplicate-subscriber check via localStorage
+    // =========================================
+
+    if (newsletterForm && newsletterInput) {
+
+        function setNewsletterError(message) {
+            newsletterInput.classList.toggle("input-error", !!message);
+            if (newsletterError) newsletterError.textContent = message || "";
+        }
+
+        newsletterInput.addEventListener("input", () => {
+            setNewsletterError("");
+        });
+
+        newsletterForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const email = newsletterInput.value.trim();
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!email) {
+                setNewsletterError("Enter your email address.");
+                newsletterInput.focus();
+                return;
+            }
+
+            if (!emailPattern.test(email)) {
+                setNewsletterError("Enter a valid email address.");
+                newsletterInput.focus();
+                return;
+            }
+
+            let subscribers = [];
+            try {
+                subscribers = JSON.parse(localStorage.getItem("newsletter_subscribers")) || [];
+            } catch (error) {
+                subscribers = [];
+            }
+
+            if (subscribers.includes(email.toLowerCase())) {
+                setNewsletterError("This email is already subscribed.");
+                return;
+            }
+
+            setNewsletterError("");
+
+            if (newsletterButton) {
+                newsletterButton.classList.add("is-busy");
+                newsletterButton.disabled = true;
+            }
+
+            // Simulate the async subscribe call
+            setTimeout(() => {
+                subscribers.push(email.toLowerCase());
+                localStorage.setItem("newsletter_subscribers", JSON.stringify(subscribers));
+
+                showToast("You're subscribed! Check your inbox.", "success");
+                newsletterForm.reset();
+
+                if (newsletterButton) {
+                    newsletterButton.classList.remove("is-busy");
+                    newsletterButton.disabled = false;
+                }
+            }, 500);
+        });
     }
 
 });

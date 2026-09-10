@@ -195,17 +195,15 @@
         ================================================== -->
 
         <li id="close-item">
-
+        
             <a
                 href="#"
                 id="close"
                 aria-label="Close menu"
             >
-
                 <i class="fas fa-times" aria-hidden="true"></i>
-
             </a>
-
+        
         </li>
 
     </ul>
@@ -215,36 +213,32 @@
          MOBILE CONTROLS
     ====================================================== -->
 
-    <div id="mobile">
-
-        <a
-            href="cart.html"
-            aria-label="Shopping cart"
-        >
-
-            <i
-                class="fas fa-shopping-bag"
-                aria-hidden="true"
-            ></i>
-
-        </a>
-
-        <button
-            type="button"
-            id="bar"
-            aria-label="Open navigation menu"
-            aria-expanded="false"
-            aria-controls="navbar"
-        >
-
-            <i
-                class="fas fa-bars"
-                aria-hidden="true"
-            ></i>
-
-        </button>
-
-    </div>
+        <div id="mobile">
+        
+            <a
+                href="cart.html"
+                aria-label="Shopping cart"
+            >
+                <i
+                    class="fas fa-shopping-bag"
+                    aria-hidden="true"
+                ></i>
+            </a>
+        
+            <button
+                type="button"
+                id="bar"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="navbar"
+            >
+                <i
+                    class="fas fa-bars"
+                    aria-hidden="true"
+                ></i>
+            </button>
+        
+        </div>
 
 </section>
 
@@ -252,6 +246,10 @@
      Must stay a SIBLING of #header, not nested inside it, so it
      positions relative to the viewport, not the header bar. -->
 <div id="nav-overlay"></div>
+
+<!-- Shared stacked toast container. Lives at body level so it can
+     float above every page's content regardless of scroll position. -->
+<div id="toast-stack" aria-live="polite" aria-atomic="true"></div>
 
 
     <section id="hero">
@@ -309,28 +307,28 @@
 
     <section id="feature" class="section-p1">
         <div class="fe-box">
-            <img src= "images/banner/f1.png">
+            <img src="images/banner/f1.png" alt="Free shipping icon">
             <h6>Free Shipping</h6>
         </div>
         <div class="fe-box">
-            <img src= "images/banner/f2.png">
+            <img src="images/banner/f2.png" alt="Online ordering icon">
             <h6>Online Order</h6>
         </div>
         <div class="fe-box">
-            <img src= "images/banner/f3.png">
+            <img src="images/banner/f3.png" alt="Save money icon">
             <h6>Save Money</h6>
         </div>
         <div class="fe-box">
-            <img src= "images/banner/f4.png">
+            <img src="images/banner/f4.png" alt="Promotions icon">
             <h6>Promotions</h6>
         </div>
         <div class="fe-box">
-            <img src= "images/banner/f5.png">
+            <img src="images/banner/f5.png" alt="Happy sell icon">
             <h6>Happy Sell</h6>
         </div>
         <div class="fe-box">
-            <img src= "images/banner/f6.png">
-            <h6>F24/7 Support</h6>
+            <img src="images/banner/f6.png" alt="24/7 support icon">
+            <h6>24/7 Support</h6>
         </div>
     </section>
 
@@ -454,86 +452,93 @@
 
     </div>
 
-    <div class="form">
+    <form class="form" id="newsletter-form" novalidate>
 
-        <input
-            type="text"
-            placeholder="Your Email Address"
-        >
+        <div class="newsletter-field">
+            <input
+                type="email"
+                id="newsletter-email"
+                placeholder="Your Email Address"
+                aria-describedby="newsletter-error"
+                required
+            >
+            <span class="field-error" id="newsletter-error"></span>
+        </div>
 
         <button
             class="normal"
             id="newsletter-button"
+            type="submit"
         >
-            Sign Up
+            <span class="btn-label">Sign Up</span>
         </button>
 
-    </div>
+    </form>
 
 </section>
 
     <footer class="section-p1">
         <div class="col">
-            <img class="logo" src="images/banner/b1.png" alt="">
+            <img class="logo" src="images/banner/b1.png" alt="YKB Clothing logo">
             <h4>Contact</h4>
             <p> <strong>Address:</strong> 4170 Malaban Binan laguna ilaya st, zone 4</p>
             <p> <strong>Phone:</strong> 09510699549</p>
             <p> <strong>Hours:</strong> 9:00am - 9:00pm Mon - Sat</p>
             <div class="follow">
                 <h4>Follow us</h4>
-        <div class="icon">
+<div class="icon">
 
-            <!-- Facebook -->
-            <a
-                href="https://www.facebook.com/khian.bustamante.9"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-            >
-                <i class="fab fa-facebook-f"></i>
-            </a>
-        
-            <!-- Twitter / X -->
-            <a
-                href="https://x.com/Bustamante35863"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-            >
-                <i class="fab fa-twitter"></i>
-            </a>
-        
-            <!-- Instagram -->
-            <a
-                href="https://www.instagram.com/yaaankeyyyy/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-            >
-                <i class="fab fa-instagram"></i>
-            </a>
-        
-            <!-- TikTok -->
-            <a
-                href="https://www.tiktok.com/@osgesabimoe"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="TikTok"
-            >
-                <i class="fab fa-tiktok"></i>
-            </a>
-        
-            <!-- YouTube -->
-            <a
-                href="https://www.youtube.com/channel/UCaHrhvvIIjrVQByQUCPq17Q"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="YouTube"
-            >
-                <i class="fab fa-youtube"></i>
-            </a>
-        
-        </div>
+    <!-- Facebook -->
+    <a
+        href="https://www.facebook.com/khian.bustamante.9"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook"
+    >
+        <i class="fab fa-facebook-f"></i>
+    </a>
+
+    <!-- Twitter / X -->
+    <a
+        href="https://x.com/Bustamante35863"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Twitter"
+    >
+        <i class="fab fa-twitter"></i>
+    </a>
+
+    <!-- Instagram -->
+    <a
+        href="https://www.instagram.com/yaaankeyyyy/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+    >
+        <i class="fab fa-instagram"></i>
+    </a>
+
+    <!-- TikTok -->
+    <a
+        href="https://www.tiktok.com/@osgesabimoe"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="TikTok"
+    >
+        <i class="fab fa-tiktok"></i>
+    </a>
+
+    <!-- YouTube -->
+    <a
+        href="https://www.youtube.com/channel/UCaHrhvvIIjrVQByQUCPq17Q"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="YouTube"
+    >
+        <i class="fab fa-youtube"></i>
+    </a>
+
+</div>
             </div>
             <div></div>
         </div>
@@ -577,11 +582,11 @@
             <h4>Install app</h4>
             <p>From app Store or Google Play</p>
             <div class="row">
-                <img src="images/pay/pay1.webp" alt="">
-                <img src="images/pay/pay2.webp" alt="">
+                <img src="images/pay/pay1.webp" alt="Download on the App Store">
+                <img src="images/pay/pay2.webp" alt="Get it on Google Play">
             </div>
             <p>Secure Payment Gateway </p>
-            <img src="images/pay/pay3.jpg" alt="">
+            <img src="images/pay/pay3.jpg" alt="Accepted payment methods">
         </div>
 
         <div class="copyright">
@@ -593,6 +598,5 @@
     <script src="js/config.js"></script>
     <script src="js/script.js"></script>
     <script src="js/index-products.js"></script>
-    <script src="js/darkmode.js"></script>
 </body>
 </html>
