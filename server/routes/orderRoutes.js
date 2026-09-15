@@ -47,7 +47,6 @@ router.post("/checkout", async (req, res) => {
         });
     }
 
-
     // -------------------------------------------------
     // DATABASE CONNECTION
     // -------------------------------------------------
@@ -59,7 +58,6 @@ router.post("/checkout", async (req, res) => {
         connection = await db.getConnection();
 
         await connection.beginTransaction();
-
 
         // -------------------------------------------------
         // VERIFY USER
@@ -80,7 +78,6 @@ router.post("/checkout", async (req, res) => {
             });
 
         }
-
 
         // -------------------------------------------------
         // GET REAL PRODUCTS FROM DATABASE
@@ -106,15 +103,18 @@ router.post("/checkout", async (req, res) => {
 
             }
 
-
             const [products] = await connection.query(
-                `SELECT id, name, price, stock, image
+                `SELECT
+                    id,
+                    name,
+                    price,
+                    stock,
+                    image
                  FROM products
                  WHERE id = ?
                  LIMIT 1`,
                 [productId]
             );
-
 
             if (products.length === 0) {
 
@@ -127,9 +127,7 @@ router.post("/checkout", async (req, res) => {
 
             }
 
-
             const product = products[0];
-
 
             // -------------------------------------------------
             // CHECK STOCK
@@ -146,16 +144,14 @@ router.post("/checkout", async (req, res) => {
 
             }
 
-
             // IMPORTANT:
-            // Use database price, NOT item.price from browser.
+            // Always use database price.
 
             const price = Number(product.price);
 
             const subtotal = price * quantity;
 
             total += subtotal;
-
 
             verifiedItems.push({
                 product_id: product.id,
@@ -168,13 +164,11 @@ router.post("/checkout", async (req, res) => {
 
         }
 
-
         // -------------------------------------------------
         // ROUND TOTAL
         // -------------------------------------------------
 
         total = Number(total.toFixed(2));
-
 
         // -------------------------------------------------
         // CREATE YKB ORDER ID
@@ -182,24 +176,29 @@ router.post("/checkout", async (req, res) => {
 
         const orderId = `YKB-${Date.now()}`;
 
-
         // -------------------------------------------------
         // CREATE ORDER
         // -------------------------------------------------
 
         await connection.query(
             `INSERT INTO orders
-                (order_id, user_id, total, payment_method)
+                (
+                    order_id,
+                    user_id,
+                    total,
+                    payment_method,
+                    payment_status
+                )
              VALUES
-                (?, ?, ?, ?)`,
+                (?, ?, ?, ?, ?)`,
             [
                 orderId,
                 user_id,
                 total,
-                payment_method
+                payment_method,
+                "Pending"
             ]
         );
-
 
         // -------------------------------------------------
         // INSERT ORDER ITEMS + REDUCE STOCK
@@ -209,7 +208,13 @@ router.post("/checkout", async (req, res) => {
 
             await connection.query(
                 `INSERT INTO order_items
-                    (order_id, product_name, price, quantity, subtotal)
+                    (
+                        order_id,
+                        product_name,
+                        price,
+                        quantity,
+                        subtotal
+                    )
                  VALUES
                     (?, ?, ?, ?, ?)`,
                 [
@@ -220,7 +225,6 @@ router.post("/checkout", async (req, res) => {
                     item.subtotal
                 ]
             );
-
 
             await connection.query(
                 `UPDATE products
@@ -236,7 +240,6 @@ router.post("/checkout", async (req, res) => {
 
         }
 
-
         // =================================================
         // CASH ON DELIVERY
         // =================================================
@@ -250,22 +253,20 @@ router.post("/checkout", async (req, res) => {
 
             await connection.commit();
 
-
             console.log(
                 `📦 COD Order Created: ${orderId}`
             );
-
 
             return res.json({
                 success: true,
                 payment_required: false,
                 order_id: orderId,
                 payment_method: "COD",
+                payment_status: "Pending",
                 total: total
             });
 
         }
-
 
         // =================================================
         // PAYMONGO CHECKOUT
@@ -285,7 +286,6 @@ router.post("/checkout", async (req, res) => {
 
         }
 
-
         // -------------------------------------------------
         // PAYMONGO PAYMENT METHOD
         // -------------------------------------------------
@@ -302,7 +302,6 @@ router.post("/checkout", async (req, res) => {
 
         const paymongoPaymentMethod =
             paymongoMethodMap[payment_method];
-
 
         // -------------------------------------------------
         // CREATE PAYMONGO LINE ITEMS
@@ -323,7 +322,6 @@ router.post("/checkout", async (req, res) => {
 
             }));
 
-
         // -------------------------------------------------
         // APP URL
         // -------------------------------------------------
@@ -331,7 +329,6 @@ router.post("/checkout", async (req, res) => {
         const appUrl =
             process.env.APP_URL ||
             "http://localhost:3000";
-
 
         // -------------------------------------------------
         // CREATE PAYMONGO CHECKOUT SESSION
@@ -405,10 +402,8 @@ router.post("/checkout", async (req, res) => {
                 }
             );
 
-
         const paymongoData =
             await paymongoResponse.json();
-
 
         // -------------------------------------------------
         // PAYMONGO ERROR
@@ -425,10 +420,7 @@ router.post("/checkout", async (req, res) => {
                 )
             );
 
-
-            // Rollback order + order items + stock
             await connection.rollback();
-
 
             return res.status(400).json({
 
@@ -444,7 +436,6 @@ router.post("/checkout", async (req, res) => {
 
         }
 
-
         // -------------------------------------------------
         // GET CHECKOUT URL
         // -------------------------------------------------
@@ -455,7 +446,6 @@ router.post("/checkout", async (req, res) => {
                 ?.attributes
                 ?.checkout_url;
 
-
         if (!checkoutUrl) {
 
             console.error(
@@ -463,9 +453,7 @@ router.post("/checkout", async (req, res) => {
                 paymongoData
             );
 
-
             await connection.rollback();
-
 
             return res.status(500).json({
 
@@ -478,7 +466,6 @@ router.post("/checkout", async (req, res) => {
 
         }
 
-
         // -------------------------------------------------
         // CLEAR CART
         // -------------------------------------------------
@@ -488,26 +475,22 @@ router.post("/checkout", async (req, res) => {
             [user_id]
         );
 
-
         // -------------------------------------------------
         // COMMIT DATABASE CHANGES
         // -------------------------------------------------
 
         await connection.commit();
 
-
         console.log(
             `💳 PayMongo Checkout Created: ${orderId}`
         );
-
 
         console.log(
             `💰 Total: ₱${total.toFixed(2)}`
         );
 
-
         // -------------------------------------------------
-        // SEND CHECKOUT URL TO FRONTEND
+        // SEND CHECKOUT URL
         // -------------------------------------------------
 
         return res.json({
@@ -521,6 +504,9 @@ router.post("/checkout", async (req, res) => {
             payment_method:
                 payment_method,
 
+            payment_status:
+                "Pending",
+
             total: total,
 
             checkout_url:
@@ -528,18 +514,12 @@ router.post("/checkout", async (req, res) => {
 
         });
 
-
     } catch (error) {
 
         console.error(
             "❌ Checkout Error:",
             error
         );
-
-
-        // -------------------------------------------------
-        // ROLLBACK DATABASE
-        // -------------------------------------------------
 
         if (connection) {
 
@@ -558,7 +538,6 @@ router.post("/checkout", async (req, res) => {
 
         }
 
-
         return res.status(500).json({
 
             success: false,
@@ -573,7 +552,6 @@ router.post("/checkout", async (req, res) => {
 
         });
 
-
     } finally {
 
         if (connection) {
@@ -584,13 +562,318 @@ router.post("/checkout", async (req, res) => {
 
 });
 
-// GET /api/orders/:user_id
-router.get("/:user_id", async (req, res) => {
+
+
+// =====================================================
+// ADMIN - GET ALL ORDERS
+// GET /api/orders/admin/all
+// =====================================================
+
+router.get("/admin/all", async (req, res) => {
+
     try {
+
+        const [orders] = await db.query(
+
+            `SELECT
+                orders.order_id,
+                orders.total,
+                orders.status,
+                orders.payment_method,
+                orders.payment_status,
+                orders.created_at,
+                users.fullname,
+                users.email
+
+             FROM orders
+
+             LEFT JOIN users
+                ON orders.user_id = users.id
+
+             ORDER BY orders.created_at DESC`
+
+        );
+
+        res.json(orders);
+
+    } catch (error) {
+
+        console.error(
+            "❌ Admin Get Orders Error:",
+            error
+        );
+
+        res.status(500).json({
+
+            success: false,
+
+            message:
+                "Failed to load admin orders."
+
+        });
+
+    }
+
+});
+
+
+
+// =====================================================
+// ADMIN - GET SINGLE ORDER
+// GET /api/orders/admin/:order_id
+// =====================================================
+
+router.get("/admin/:order_id", async (req, res) => {
+
+    try {
+
+        const { order_id } = req.params;
+
+        // -------------------------------------------------
+        // GET ORDER
+        // -------------------------------------------------
+
+        const [orderRows] = await db.query(
+
+            `SELECT
+                orders.order_id,
+                orders.user_id,
+                orders.total,
+                orders.payment_method,
+                orders.payment_status,
+                orders.status,
+                orders.created_at,
+                users.fullname,
+                users.email
+
+             FROM orders
+
+             LEFT JOIN users
+                ON orders.user_id = users.id
+
+             WHERE orders.order_id = ?
+
+             LIMIT 1`,
+
+            [order_id]
+
+        );
+
+        if (orderRows.length === 0) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "Order not found."
+
+            });
+
+        }
+
+        // -------------------------------------------------
+        // GET ORDER ITEMS
+        // -------------------------------------------------
+
+        const [items] = await db.query(
+
+            `SELECT
+                order_id,
+                product_name,
+                price,
+                quantity,
+                subtotal
+
+             FROM order_items
+
+             WHERE order_id = ?`,
+
+            [order_id]
+
+        );
+
+        res.json({
+
+            success: true,
+
+            order:
+                orderRows[0],
+
+            items:
+                items
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "❌ Admin Get Order Error:",
+            error
+        );
+
+        res.status(500).json({
+
+            success: false,
+
+            message:
+                "Failed to load order details."
+
+        });
+
+    }
+
+});
+
+
+
+// =====================================================
+// ADMIN - UPDATE ORDER STATUS
+// PUT /api/orders/admin/:order_id/status
+// =====================================================
+
+router.put("/admin/:order_id/status", async (req, res) => {
+
+    try {
+
+        const { order_id } = req.params;
+
+        const { status } = req.body;
+
+        // -------------------------------------------------
+        // VALID STATUSES
+        // -------------------------------------------------
+
+        const allowedStatuses = [
+
+            "Pending",
+            "Processing",
+            "Shipped",
+            "Delivered",
+            "Cancelled"
+
+        ];
+
+        if (!allowedStatuses.includes(status)) {
+
+            return res.status(400).json({
+
+                success: false,
+
+                message:
+                    "Invalid order status."
+
+            });
+
+        }
+
+        // -------------------------------------------------
+        // CHECK ORDER
+        // -------------------------------------------------
+
+        const [existingOrders] = await db.query(
+
+            `SELECT
+                order_id,
+                status
+
+             FROM orders
+
+             WHERE order_id = ?
+
+             LIMIT 1`,
+
+            [order_id]
+
+        );
+
+        if (existingOrders.length === 0) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "Order not found."
+
+            });
+
+        }
+
+        // -------------------------------------------------
+        // UPDATE STATUS
+        // -------------------------------------------------
+
+        await db.query(
+
+            `UPDATE orders
+
+             SET status = ?
+
+             WHERE order_id = ?`,
+
+            [
+                status,
+                order_id
+            ]
+
+        );
+
+        console.log(
+            `📦 Order ${order_id} status updated to ${status}`
+        );
+
+        res.json({
+
+            success: true,
+
+            message:
+                "Order status updated successfully.",
+
+            order_id:
+                order_id,
+
+            status:
+                status
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "❌ Update Order Status Error:",
+            error
+        );
+
+        res.status(500).json({
+
+            success: false,
+
+            message:
+                "Failed to update order status."
+
+        });
+
+    }
+
+});
+
+
+
+// =====================================================
+// USER - GET ORDERS
+// GET /api/orders/:user_id
+// =====================================================
+
+router.get("/:user_id", async (req, res) => {
+
+    try {
+
         const { user_id } = req.params;
 
         const [orders] = await db.query(
-            `SELECT 
+
+            `SELECT
                 order_id,
                 user_id,
                 total,
@@ -598,23 +881,43 @@ router.get("/:user_id", async (req, res) => {
                 payment_status,
                 status,
                 created_at
-            FROM orders
+
+             FROM orders
+
              WHERE user_id = ?
+
              ORDER BY created_at DESC`,
+
             [user_id]
+
         );
 
         res.json(orders);
 
     } catch (error) {
-        console.error("❌ Get User Orders Error:", error);
+
+        console.error(
+            "❌ Get User Orders Error:",
+            error
+        );
+
         res.status(500).json({
+
             success: false,
-            message: "Failed to load orders"
+
+            message:
+                "Failed to load orders"
+
         });
+
     }
+
 });
 
 
+
+// =====================================================
+// EXPORT ROUTER
+// =====================================================
 
 module.exports = router;

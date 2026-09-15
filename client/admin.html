@@ -1,422 +1,1648 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>YKB Admin Dashboard</title>
-    <link rel="icon" href="images/banner/favicon.jpg" type="image/png">
 
+    <link
+        rel="icon"
+        href="images/banner/favicon.jpg"
+        type="image/png"
+    >
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="css/admin.css">
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
+    <!-- Admin CSS -->
+    <link
+        rel="stylesheet"
+        href="css/admin.css"
+    >
 
 </head>
+
+
 <body>
+
 
 <div class="admin-layout">
 
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-    <div class="sidebar-header">
-        <h2>YKB Admin</h2>
-        <p>Store Management</p>
-    </div>
-
-    <nav class="sidebar-nav">
-
-        <a href="#dashboard" class="active">
-            <i class="fas fa-chart-pie"></i>
-            Dashboard
-        </a>
-
-        <a href="#products">
-            <i class="fas fa-box"></i>
-            Products
-        </a>
-
-        <a href="#orders">
-            <i class="fas fa-shopping-bag"></i>
-            Orders
-        </a>
-
-        <a href="#users">
-            <i class="fas fa-users"></i>
-            Users
-        </a>
-
-    </nav>
-
-    <button id="adminLogout" class="logout-btn">
-        <i class="fas fa-right-from-bracket"></i>
-        Logout
-    </button>
-
-</aside>
-
-<!-- MAIN CONTENT -->
-<main class="main-content">
-
-    <header class="topbar">
+    <aside class="sidebar">
 
         <div>
-            <h1>Dashboard Overview</h1>
-            <p>Welcome back, Admin</p>
+
+            <div class="sidebar-header">
+
+                <h2>YKB Admin</h2>
+
+                <p>Store Management</p>
+
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <a
+                    href="#dashboard"
+                    class="active"
+                >
+
+                    <i class="fas fa-chart-pie"></i>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <a href="#products">
+
+                    <i class="fas fa-box"></i>
+
+                    <span>Products</span>
+
+                </a>
+
+
+                <a href="#orders">
+
+                    <i class="fas fa-shopping-bag"></i>
+
+                    <span>Orders</span>
+
+                </a>
+
+
+                <a href="#reviews">
+
+                    <i class="fas fa-star"></i>
+
+                    <span>Reviews</span>
+
+                </a>
+
+
+                <a href="#users">
+
+                    <i class="fas fa-users"></i>
+
+                    <span>Users</span>
+
+                </a>
+
+
+                <a href="#messages">
+
+                    <i class="fas fa-envelope"></i>
+
+                    <span>Messages</span>
+
+                </a>
+
+            </nav>
+
         </div>
 
-        <div class="admin-user">
-            <i class="fas fa-user-circle"></i>
-            <span id="adminName">Admin</span>
-        </div>
 
-    </header>
+        <!-- LOGOUT -->
 
-    <!-- STATS -->
-    <section class="stats-grid">
+        <button
+            id="adminLogout"
+            class="logout-btn"
+            type="button"
+        >
 
-        <div class="stat-card">
+            <i class="fas fa-right-from-bracket"></i>
 
-            <div class="icon blue">
-                <i class="fas fa-box"></i>
+            <span>Logout</span>
+
+        </button>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Dashboard Overview</h1>
+
+                <p>
+                    Welcome back, Admin
+                </p>
+
             </div>
 
-            <div class="stat-info">
-                <h3 id="totalProducts">0</h3>
-                <p>Total Products</p>
+
+            <div class="admin-user">
+
+                <i class="fas fa-user-circle"></i>
+
+                <div>
+
+                    <strong id="adminName">
+                        Admin
+                    </strong>
+
+                    <small>
+                        Store Administrator
+                    </small>
+
+                </div>
+
             </div>
 
-        </div>
+        </header>
 
-        <div class="stat-card">
 
-            <div class="icon green">
-                <i class="fas fa-shopping-bag"></i>
+
+        <!-- =================================================
+             DASHBOARD STATISTICS
+        ================================================== -->
+
+        <section
+            class="stats-grid"
+            id="dashboard"
+        >
+
+            <!-- TOTAL PRODUCTS -->
+
+            <div class="stat-card">
+
+                <div class="icon blue">
+
+                    <i class="fas fa-box"></i>
+
+                </div>
+
+                <div class="stat-info">
+
+                    <h3 id="totalProducts">
+                        0
+                    </h3>
+
+                    <p>
+                        Total Products
+                    </p>
+
+                </div>
+
             </div>
 
-            <div class="stat-info">
-                <h3 id="totalOrders">0</h3>
-                <p>Total Orders</p>
+
+            <!-- TOTAL ORDERS -->
+
+            <div class="stat-card">
+
+                <div class="icon green">
+
+                    <i class="fas fa-shopping-bag"></i>
+
+                </div>
+
+                <div class="stat-info">
+
+                    <h3 id="totalOrders">
+                        0
+                    </h3>
+
+                    <p>
+                        Total Orders
+                    </p>
+
+                </div>
+
             </div>
 
-        </div>
 
-        <div class="stat-card">
+            <!-- PAID REVENUE -->
 
-            <div class="icon purple">
-                <i class="fas fa-peso-sign"></i>
+            <div class="stat-card">
+
+                <div class="icon purple">
+
+                    <i class="fas fa-peso-sign"></i>
+
+                </div>
+
+                <div class="stat-info">
+
+                    <h3 id="totalRevenue">
+                        ₱0.00
+                    </h3>
+
+                    <p>
+                        Paid Revenue
+                    </p>
+
+                </div>
+
             </div>
 
-            <div class="stat-info">
-                <h3 id="totalRevenue">₱0</h3>
-                <p>Total Revenue</p>
+
+            <!-- LOW STOCK -->
+
+            <div class="stat-card">
+
+                <div class="icon orange">
+
+                    <i class="fas fa-triangle-exclamation"></i>
+
+                </div>
+
+                <div class="stat-info">
+
+                    <h3 id="lowStock">
+                        0
+                    </h3>
+
+                    <p>
+                        Low Stock
+                    </p>
+
+                </div>
+
             </div>
 
-        </div>
+        </section>
 
-        <div class="stat-card">
 
-            <div class="icon orange">
+
+        <!-- =================================================
+             ORDER SUMMARY
+        ================================================== -->
+
+        <section class="order-summary-grid">
+
+            <!-- PENDING -->
+
+            <div class="order-summary-card">
+
+                <div class="summary-icon pending">
+
+                    <i class="fas fa-clock"></i>
+
+                </div>
+
+                <div>
+
+                    <strong id="pendingOrders">
+                        0
+                    </strong>
+
+                    <span>
+                        Pending Orders
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROCESSING -->
+
+            <div class="order-summary-card">
+
+                <div class="summary-icon processing">
+
+                    <i class="fas fa-box-open"></i>
+
+                </div>
+
+                <div>
+
+                    <strong id="processingOrders">
+                        0
+                    </strong>
+
+                    <span>
+                        Processing
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAID -->
+
+            <div class="order-summary-card">
+
+                <div class="summary-icon paid">
+
+                    <i class="fas fa-circle-check"></i>
+
+                </div>
+
+                <div>
+
+                    <strong id="paidOrders">
+                        0
+                    </strong>
+
+                    <span>
+                        Paid Orders
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- DELIVERED -->
+
+            <div class="order-summary-card">
+
+                <div class="summary-icon delivered">
+
+                    <i class="fas fa-truck-fast"></i>
+
+                </div>
+
+                <div>
+
+                    <strong id="deliveredOrders">
+                        0
+                    </strong>
+
+                    <span>
+                        Delivered
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SALES ANALYTICS
+        ================================================== -->
+
+        <section
+            class="products-section sales-analytics-section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Sales Analytics
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Monitor your paid sales performance.
+                    </p>
+
+                </div>
+
+
+                <!-- SALES CONTROLS -->
+
+                <div class="sales-controls">
+
+
+                    <!-- YEAR -->
+
+                    <div class="sales-year-control">
+
+                        <label for="sales-year">
+                            Year
+                        </label>
+
+                        <select id="sales-year">
+
+                            <!--
+                                Years will automatically
+                                be generated by admin.js
+                            -->
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- LEGEND -->
+
+                    <div class="sales-chart-label">
+
+                        <span class="sales-dot"></span>
+
+                        <span>
+                            Paid Revenue
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHART -->
+
+            <div class="sales-chart-wrapper">
+
+                <canvas
+                    id="salesChart"
+                ></canvas>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRODUCTS
+        ================================================== -->
+
+        <section
+            class="products-section"
+            id="products"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Product Management
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Add, edit, delete, and manage your products.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="addProductBtn"
+                    type="button"
+                >
+
+                    <i class="fas fa-plus"></i>
+
+                    Add Product
+
+                </button>
+
+            </div>
+
+
+
+            <!-- LOW STOCK ALERT -->
+
+            <div
+                id="lowStockAlert"
+                class="alert-banner"
+                style="display:none;"
+            >
+
                 <i class="fas fa-triangle-exclamation"></i>
+
+                <span>
+                    Some products are running low on stock.
+                </span>
+
             </div>
 
-            <div class="stat-info">
-                <h3 id="lowStock">0</h3>
-                <p>Low Stock</p>
+
+
+            <!-- PRODUCT TABLE -->
+
+            <div class="table-wrapper">
+
+                <table class="products-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Image</th>
+
+                            <th>Name</th>
+
+                            <th>Category</th>
+
+                            <th>Price</th>
+
+                            <th>Stock</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="productsTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="loading"
+                            >
+
+                                Loading products...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
             </div>
 
-        </div>
-
-    </section>
-
-    <!-- SALES ANALYTICS -->
-    <section class="products-section" style="margin-bottom:32px;">
-
-        <div class="section-header">
-            <h2>Sales Analytics</h2>
-        </div>
-
-        <canvas id="salesChart" height="120"></canvas>
-
-    </section>
+        </section>
 
 
 
-    <!-- PRODUCTS -->
-    <section class="products-section" id="products">
+        <!-- =================================================
+             ORDERS
+        ================================================== -->
 
-        <div class="section-header">
+        <section
+            class="products-section"
+            id="orders"
+            style="margin-top:32px;"
+        >
 
-            <h2>Product Management</h2>
+            <!-- ORDER HEADER -->
 
-            <button id="addProductBtn">
-                <i class="fas fa-plus"></i>
-                Add Product
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Order Management
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Manage customer orders and payment status.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="refresh-orders"
+                    type="button"
+                >
+
+                    <i class="fas fa-rotate"></i>
+
+                    Refresh
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ORDER TOOLBAR
+            ================================================== -->
+
+            <div class="admin-toolbar">
+
+
+                <!-- SEARCH -->
+
+                <div class="search-box">
+
+                    <i class="fas fa-search"></i>
+
+                    <input
+                        type="text"
+                        id="order-search"
+                        placeholder="Search order ID, customer, or email..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+
+                <!-- ORDER STATUS -->
+
+                <select id="status-filter">
+
+                    <option value="all">
+                        All Orders
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Processing">
+                        Processing
+                    </option>
+
+                    <option value="Shipped">
+                        Shipped
+                    </option>
+
+                    <option value="Delivered">
+                        Delivered
+                    </option>
+
+                    <option value="Cancelled">
+                        Cancelled
+                    </option>
+
+                </select>
+
+
+
+                <!-- PAYMENT STATUS -->
+
+                <select id="payment-status-filter">
+
+                    <option value="all">
+                        All Payment Status
+                    </option>
+
+                    <option value="Paid">
+                        Paid
+                    </option>
+
+                    <option value="Pending">
+                        Payment Pending
+                    </option>
+
+                    <option value="Failed">
+                        Failed
+                    </option>
+
+                    <option value="Cancelled">
+                        Payment Cancelled
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ORDERS TABLE
+            ================================================== -->
+
+            <div class="table-wrapper">
+
+                <table class="products-table orders-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Order ID
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Payment
+                            </th>
+
+                            <th>
+                                Payment Status
+                            </th>
+
+                            <th>
+                                Order Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="ordersTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="8"
+                                class="loading"
+                            >
+
+                                Loading orders...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             REVIEWS
+        ================================================== -->
+
+        <section
+            class="products-section"
+            id="reviews"
+            style="margin-top:32px;"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Review Management
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Manage customer product reviews.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="table-wrapper">
+
+                <table class="products-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Product
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Rating
+                            </th>
+
+                            <th>
+                                Review
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="reviewsTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="loading"
+                            >
+
+                                Loading reviews...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             USERS
+        ================================================== -->
+
+        <section
+            class="products-section"
+            id="users"
+            style="margin-top:32px;"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        User Management
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Manage customers and administrator accounts.
+                    </p>
+
+                </div>
+
+
+                <div class="search-box">
+
+                    <i class="fas fa-search"></i>
+
+                    <input
+                        type="text"
+                        id="userSearch"
+                        placeholder="Search users..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <div class="table-wrapper">
+
+                <table class="products-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
+                                Joined
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="usersTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="loading"
+                            >
+
+                                Loading users...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CONTACT MESSAGES
+        ================================================== -->
+
+        <section
+            class="products-section"
+            id="messages"
+            style="margin-top:32px;"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Contact Messages
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Customer inquiries and messages.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="table-wrapper">
+
+                <table class="products-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Subject
+                            </th>
+
+                            <th>
+                                Message
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="messagesTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="loading"
+                            >
+
+                                Loading messages...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     ADD / EDIT PRODUCT MODAL
+========================================================== -->
+
+<div
+    class="modal"
+    id="productModal"
+>
+
+    <div class="modal-content">
+
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+                    Add New Product
+                </h2>
+
+            </div>
+
+
+            <button
+                id="closeModal"
+                type="button"
+                aria-label="Close"
+            >
+
+                &times;
+
             </button>
 
         </div>
 
-        <div id="lowStockAlert" class="alert-banner" style="display:none;">
-            ⚠ Some products are running low on stock.
-        </div>
 
-        <table class="products-table">
-
-            <thead>
-
-                <tr>
-                    <th>ID</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Actions</th>
-                </tr>
-
-            </thead>
-
-            <tbody id="productsTableBody">
-
-                <tr>
-                    <td colspan="7" class="loading">
-                        Loading products...
-                    </td>
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </section>
-
-    <!-- ORDERS -->
-<section class="products-section" id="orders" style="margin-top:32px;">
-
-    <div class="section-header">
-        <h2>Order Management</h2>
-    </div>
-
-    <table class="products-table">
-
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
-        <tbody id="ordersTableBody">
-
-            <tr>
-                <td colspan="6" class="loading">
-                    Loading orders...
-                </td>
-            </tr>
-
-        </tbody>
-
-    </table>
-
-</section>
-
-<!-- REVIEWS -->
-<section class="products-section" id="reviews" style="margin-top:32px;">
-
-    <div class="section-header">
-        <h2>Review Management</h2>
-    </div>
-
-    <table class="products-table">
-
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Customer</th>
-                <th>Rating</th>
-                <th>Review</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody id="reviewsTableBody">
-            <tr>
-                <td colspan="6" class="loading">
-                    Loading reviews...
-                </td>
-            </tr>
-        </tbody>
-
-    </table>
-
-</section>
-
-<!-- USERS -->
-<section class="products-section" id="users" style="margin-top:32px;">
-
-    <div class="section-header">
-        <h2>User Management</h2>
-
-        <input
-            type="text"
-            id="userSearch"
-            placeholder="Search users..."
-            style="padding:10px 14px;border-radius:10px;border:1px solid #ddd;"
-        >
-    </div>
-
-    <table class="products-table">
-
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Joined</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
-        <tbody id="usersTableBody">
-
-            <tr>
-                <td colspan="6" class="loading">
-                    Loading users...
-                </td>
-            </tr>
-
-        </tbody>
-
-    </table>
-
-</section>
-
-<!-- CONTACT MESSAGES -->
-<section class="products-section" id="messages" style="margin-top:32px;">
-
-    <div class="section-header">
-        <h2>Contact Messages</h2>
-    </div>
-
-    <table class="products-table">
-
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Subject</th>
-                <th>Message</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody id="messagesTableBody">
-            <tr>
-                <td colspan="6" class="loading">
-                    Loading messages...
-                </td>
-            </tr>
-        </tbody>
-
-    </table>
-
-</section>
-
-</main>
-
-
-</div>
-
-<!-- ADD PRODUCT MODAL -->
-<div class="modal" id="productModal">
-
-    <div class="modal-content">
-
-        <div class="modal-header">
-            <h2>Add New Product</h2>
-            <button id="closeModal">&times;</button>
-        </div>
 
         <form id="productForm">
 
-            <input type="hidden" id="productId">
+
+            <input
+                type="hidden"
+                id="productId"
+            >
+
+
 
             <div class="form-grid">
 
-                <input type="text" id="name" placeholder="Product Name" required>
 
-                <input type="text" id="brand" placeholder="Brand" required>
+                <!-- PRODUCT NAME -->
 
-                <select id="category" required>
-                    <option value="">Select Category</option>
-                    <option value="Men">Men</option>
-                    <option value="Women">Women</option>
-                    <option value="Hoodie">Hoodie</option>
-                    <option value="Shirt">Shirt</option>
-                    <option value="Jacket">Jacket</option>
-                    <option value="Accessories">Accessories</option>
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Product Name"
+                    required
+                >
+
+
+                <!-- BRAND -->
+
+                <input
+                    type="text"
+                    id="brand"
+                    placeholder="Brand"
+                    required
+                >
+
+
+                <!-- CATEGORY -->
+
+                <select
+                    id="category"
+                    required
+                >
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                    <option value="Men">
+                        Men
+                    </option>
+
+                    <option value="Women">
+                        Women
+                    </option>
+
+                    <option value="Hoodie">
+                        Hoodie
+                    </option>
+
+                    <option value="Shirt">
+                        Shirt
+                    </option>
+
+                    <option value="Jacket">
+                        Jacket
+                    </option>
+
+                    <option value="Accessories">
+                        Accessories
+                    </option>
+
                 </select>
 
-                <input type="number" id="price" placeholder="Price" required>
 
-                <input type="number" id="stock" placeholder="Stock" required>
+                <!-- PRICE -->
+
+                <input
+                    type="number"
+                    id="price"
+                    placeholder="Price"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+
+
+                <!-- STOCK -->
+
+                <input
+                    type="number"
+                    id="stock"
+                    placeholder="Stock"
+                    min="0"
+                    required
+                >
+
+
+
+                <!-- IMAGE -->
 
                 <div class="image-upload">
-                    <label for="imageFile">Choose Product Image</label>
-                    <input type="file" id="imageFile" accept="image/*" required>
-                    <img id="imagePreview" src="" alt="Preview">
-                    <input type="hidden" id="image">
+
+                    <label for="imageFile">
+                        Choose Product Image
+                    </label>
+
+                    <input
+                        type="file"
+                        id="imageFile"
+                        accept="image/*"
+                    >
+
+                    <img
+                        id="imagePreview"
+                        src=""
+                        alt="Product image preview"
+                    >
+
+                    <input
+                        type="hidden"
+                        id="image"
+                    >
+
                 </div>
 
             </div>
+
+
+
+            <!-- DESCRIPTION -->
 
             <textarea
                 id="description"
                 placeholder="Product Description"
                 rows="4"
-                required></textarea>
+                required
+            ></textarea>
 
-            <button type="submit" class="save-btn">
+
+
+            <!-- SAVE -->
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+
+                <i class="fas fa-save"></i>
+
                 Save Product
+
             </button>
+
 
         </form>
 
     </div>
+
 </div>
 
-    <!-- STATS -->
-    <section class="stats-grid" id="dashboard">
 
-<!-- ORDER DETAILS MODAL -->
-<div class="modal" id="orderModal">
+
+<!-- =========================================================
+     ORDER DETAILS MODAL
+========================================================== -->
+
+<div
+    class="modal"
+    id="orderModal"
+>
+
     <div class="modal-content">
+
+
         <div class="modal-header">
-            <h2>Order Details</h2>
-            <button id="closeOrderModal">&times;</button>
+
+            <div>
+
+                <h2>
+                    Order Details
+                </h2>
+
+                <p id="modal-order-id"></p>
+
+            </div>
+
+
+            <button
+                id="closeOrderModal"
+                type="button"
+                aria-label="Close"
+            >
+
+                &times;
+
+            </button>
+
         </div>
+
+
 
         <div id="orderDetails">
-            <p>Loading order...</p>
+
+            <p class="loading">
+                Loading order...
+            </p>
+
         </div>
+
+
     </div>
+
 </div>
 
-<!-- Toast notifications -->
-<div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+
+<!-- =========================================================
+     TOAST NOTIFICATIONS
+========================================================== -->
+
+<div
+    id="toast-stack"
+    class="toast-stack"
+    aria-live="polite"
+    aria-atomic="true"
+></div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================== -->
 
 <script src="js/config.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script src="js/admin.js"></script>
+
+
+
+<!-- =========================================================
+     ORDER FILTERS
+========================================================== -->
+
+<script>
+
+(function () {
+
+
+    function applyOrderFilters() {
+
+        const searchInput =
+            document.getElementById(
+                "order-search"
+            );
+
+
+        const statusFilter =
+            document.getElementById(
+                "status-filter"
+            );
+
+
+        const paymentFilter =
+            document.getElementById(
+                "payment-status-filter"
+            );
+
+
+        const tableBody =
+            document.getElementById(
+                "ordersTableBody"
+            );
+
+
+        if (
+            !searchInput ||
+            !statusFilter ||
+            !paymentFilter ||
+            !tableBody
+        ) {
+
+            return;
+
+        }
+
+
+        const search =
+            searchInput.value
+                .trim()
+                .toLowerCase();
+
+
+        const selectedStatus =
+            statusFilter.value;
+
+
+        const selectedPayment =
+            paymentFilter.value;
+
+
+        const rows =
+            tableBody.querySelectorAll(
+                "tr"
+            );
+
+
+        rows.forEach(row => {
+
+
+            /*
+             * Ignore loading/error rows
+             */
+
+            const statusSelect =
+                row.querySelector(
+                    "select"
+                );
+
+
+            if (!statusSelect) {
+
+                return;
+
+            }
+
+
+            /*
+             * SEARCH
+             */
+
+            const rowText =
+                row.textContent
+                    .toLowerCase();
+
+
+            const matchesSearch =
+                search === "" ||
+                rowText.includes(
+                    search
+                );
+
+
+            /*
+             * ORDER STATUS
+             */
+
+            const orderStatus =
+                statusSelect.value;
+
+
+            const matchesOrderStatus =
+                selectedStatus === "all" ||
+                orderStatus ===
+                    selectedStatus;
+
+
+            /*
+             * PAYMENT STATUS
+             */
+
+            const paymentElement =
+                row.querySelector(
+                    ".payment-status"
+                );
+
+
+            const paymentStatus =
+                paymentElement
+                    ? paymentElement.textContent
+                        .trim()
+                    : "";
+
+
+            const matchesPaymentStatus =
+                selectedPayment === "all" ||
+                paymentStatus.toLowerCase() ===
+                    selectedPayment.toLowerCase();
+
+
+            /*
+             * SHOW / HIDE
+             */
+
+            if (
+                matchesSearch &&
+                matchesOrderStatus &&
+                matchesPaymentStatus
+            ) {
+
+                row.style.display = "";
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        });
+
+    }
+
+
+
+    /*
+     * Setup filters
+     */
+
+    function setupOrderFilters() {
+
+
+        const searchInput =
+            document.getElementById(
+                "order-search"
+            );
+
+
+        const statusFilter =
+            document.getElementById(
+                "status-filter"
+            );
+
+
+        const paymentFilter =
+            document.getElementById(
+                "payment-status-filter"
+            );
+
+
+        if (searchInput) {
+
+            searchInput.addEventListener(
+                "input",
+                applyOrderFilters
+            );
+
+        }
+
+
+        if (statusFilter) {
+
+            statusFilter.addEventListener(
+                "change",
+                applyOrderFilters
+            );
+
+        }
+
+
+        if (paymentFilter) {
+
+            paymentFilter.addEventListener(
+                "change",
+                applyOrderFilters
+            );
+
+        }
+
+    }
+
+
+
+    /*
+     * Wait until the page is loaded
+     */
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            setupOrderFilters
+        );
+
+    } else {
+
+        setupOrderFilters();
+
+    }
+
+
+
+    /*
+     * Re-apply filters after orders reload.
+     *
+     * This watches the Orders table
+     * for changes made by admin.js.
+     */
+
+    const tableBody =
+        document.getElementById(
+            "ordersTableBody"
+        );
+
+
+    if (tableBody) {
+
+        const observer =
+            new MutationObserver(
+                function () {
+
+                    applyOrderFilters();
+
+                }
+            );
+
+
+        observer.observe(
+            tableBody,
+            {
+                childList: true
+            }
+        );
+
+    }
+
+
+})();
+
+</script>
+
 
 </body>
 </html>
