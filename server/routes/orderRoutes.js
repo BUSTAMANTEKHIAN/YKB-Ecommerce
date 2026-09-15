@@ -584,4 +584,36 @@ router.post("/checkout", async (req, res) => {
 
 });
 
+// GET /api/orders/:user_id
+router.get("/:user_id", async (req, res) => {
+    try {
+        const { user_id } = req.params;
+
+        const [orders] = await db.query(
+            `SELECT 
+                order_id,
+                user_id,
+                total,
+                payment_method,
+                status,
+                created_at
+             FROM orders
+             WHERE user_id = ?
+             ORDER BY created_at DESC`,
+            [user_id]
+        );
+
+        res.json(orders);
+
+    } catch (error) {
+        console.error("❌ Get User Orders Error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to load orders"
+        });
+    }
+});
+
+
+
 module.exports = router;
