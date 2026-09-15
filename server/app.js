@@ -23,10 +23,21 @@ const forgotRoutes = require("./routes/forgotRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const paymongoRoutes = require("./routes/paymongoRoutes");
 
 const app = express();
 
 app.use(cors());
+
+// PayMongo webhook MUST receive the raw body
+app.use(
+    "/api/paymongo/webhook",
+    express.raw({
+        type: "application/json"
+    })
+);
+
+// Normal JSON requests
 app.use(express.json());
 
 
@@ -65,6 +76,7 @@ app.use("/api/auth", forgotRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/paymongo", paymongoRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);

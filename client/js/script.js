@@ -29,6 +29,9 @@ function showToast(message, type = "info", duration = 3200) {
 
 // =========================================================
 // MOBILE NAVBAR
+// Note: dark mode is handled entirely by darkmode.js (its own file,
+// loaded separately). Nothing in this file touches .dark-mode — keep
+// it that way so there's only ever one toggle listener running.
 // =========================================================
 
 const bar = document.getElementById("bar");

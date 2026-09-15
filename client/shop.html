@@ -15,83 +15,101 @@
 
     <section id="header">
 
-        <a href="#">
-            <img src= "images/banner/b1.png" class="logo" alt="YKB Clothing">
+        <a href="index.html" class="brand-logo">
+            <img src="images/banner/b1.png" class="logo" alt="YKB Clothing">
+            <div class="brand-text">
+                <span class="brand-name">YKB Clothing</span>
+                <span class="brand-tag">Premium Streetwear</span>
+            </div>
         </a>
 
-        <div>
-                        <ul id="navbar">
+        <ul id="navbar">
 
-    <li>
-        <a href="index.html">Home</a>
-    </li>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
 
-    <li>
-        <a href="shop.html">Shop</a>
-    </li>
+            <li>
+                <a href="shop.html" class="active">Shop</a>
+            </li>
 
-    <li>
-        <a href="blog.html">Blog</a>
-    </li>
+            <li>
+                <a href="blog.html">Blog</a>
+            </li>
 
-    <li>
-        <a href="about.html">About</a>
-    </li>
+            <li>
+                <a href="about.html">About</a>
+            </li>
 
-    <li>
-        <a href="contact.html">Contact</a>
-    </li>
+            <li>
+                <a href="contact.html">Contact</a>
+            </li>
 
-    <li id="auth-area">
+            <li id="auth-area">
 
-    <div id="guest-links">
-        <a href="login.html" class="nav-login">Login</a>
-        <a href="register.html" class="nav-register">Register</a>
-    </div>
+                <div id="guest-links">
+                    <a href="login.html" class="nav-login">Login</a>
+                    <a href="register.html" class="nav-register">Register</a>
+                </div>
 
-    <div id="user-menu" class="user-menu hidden">
-        <a href="#" id="user-btn">
-            <i class="fas fa-user-circle"></i>
-            <span id="nav-username"></span>
-        </a>
+                <div id="user-menu" class="user-menu hidden">
+                    <a href="#" id="user-btn" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-circle" aria-hidden="true"></i>
+                        <span id="nav-username"></span>
+                        <i class="fas fa-chevron-down dropdown-caret" aria-hidden="true"></i>
+                    </a>
 
-        <div class="dropdown" id="user-dropdown">
-            <a href="profile.html" id="profile-link">My Profile</a>
-            <a href="orders.html">My Orders</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="#" onclick="logout()">Logout</a>
-        </div>
-    </div>
+                    <div class="dropdown" id="user-dropdown">
+                        <a href="profile.html" id="profile-link">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            My Profile
+                        </a>
+                        <a href="orders.html">
+                            <i class="fas fa-box" aria-hidden="true"></i>
+                            My Orders
+                        </a>
+                        <a href="wishlist.html">
+                            <i class="fas fa-heart" aria-hidden="true"></i>
+                            Wishlist
+                        </a>
+                        <a href="#" onclick="logout(); return false;">
+                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
 
-</li>
+            </li>
 
-    <li class="wishlist-icon">
-        <a href="wishlist.html">
-            <i class="fas fa-heart"></i>
-            <span id="wishlist-count">0</span>
-        </a>
-    </li>
+            <li class="wishlist-icon">
+                <a href="wishlist.html">
+                    <i class="fas fa-heart" aria-hidden="true"></i>
+                    <span class="nav-label">Wishlist</span>
+                    <span id="wishlist-count" class="count-badge">0</span>
+                </a>
+            </li>
 
-    <li id="lg-bag">
-        <a href="cart.html">
-            <i class="fas fa-shopping-bag"></i>
-            <span id="cart-count">0</span>
-        </a>
-    </li>
+            <li id="lg-bag">
+                <a href="cart.html">
+                    <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+                    <span class="nav-label">Cart</span>
+                    <span id="cart-count" class="count-badge">0</span>
+                </a>
+            </li>
 
-    <li>
-        <button id="dark-mode-btn">
-            <i class="fas fa-moon"></i>
-        </button>
-    </li>
+            <li>
+                <button id="dark-mode-btn" type="button" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+            </li>
 
-    <!-- Mobile close button -->
-    <li id="close-item">
-        <a href="#" id="close"><i class="fas fa-times"></i></a>
-    </li>
+            <!-- Mobile close button -->
+            <li id="close-item">
+                <a href="#" id="close" aria-label="Close menu"><i class="fas fa-times" aria-hidden="true"></i></a>
+            </li>
 
-</ul>
-        </div>
+        </ul>
+
         <div id="mobile">
 
     <a
@@ -108,6 +126,8 @@
         type="button"
         id="bar"
         aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="navbar"
     >
         <i
             class="fas fa-bars"
@@ -117,6 +137,14 @@
 
 </div>
     </section>
+
+    <!-- Dim backdrop shown behind the open mobile menu. Must stay a
+         SIBLING of #header, not nested inside it. -->
+    <div id="nav-overlay"></div>
+
+    <!-- Shared stacked toast container — same one every other page uses. -->
+    <div id="toast-stack" aria-live="polite" aria-atomic="true"></div>
+
     <section id="page-header">
         <h2>#Stay at home</h2>
         <p>Save more with coupons & up to 70% off!</p>
@@ -215,7 +243,7 @@
             <h4>My account</h4>
             <a href="register.html">Sign in</a>
             <a href="cart.html">View Cart</a>
-            <a href="shop.html">My Wishlist</a>
+            <a href="wishlist.html">My Wishlist</a>
             <a href="orders.html">Track My Order</a>
             <a href="#">Help</a>
         </div>

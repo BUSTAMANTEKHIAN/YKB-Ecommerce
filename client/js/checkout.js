@@ -14,7 +14,7 @@ let cartData = [];
 let cartTotal = 0;
 
 // =========================
-// TOASTS (replaces alert())
+// TOASTS
 // =========================
 function showToast(message, type = "default") {
     const stack = document.getElementById("toast-stack");
@@ -23,20 +23,28 @@ function showToast(message, type = "default") {
     const toast = document.createElement("div");
     toast.className = `toast toast--${type}`;
     toast.textContent = message;
+
     stack.appendChild(toast);
 
     setTimeout(() => {
         toast.classList.add("is-leaving");
-        toast.addEventListener("animationend", () => toast.remove());
+
+        toast.addEventListener(
+            "animationend",
+            () => toast.remove()
+        );
     }, 2600);
 }
 
 // =========================
-// GUARD: must be logged in
+// GUARD: MUST BE LOGGED IN
 // =========================
 if (!user || !user.id) {
 
-    showToast("Please log in to check out.", "error");
+    showToast(
+        "Please log in to check out.",
+        "error"
+    );
 
     setTimeout(() => {
         window.location.href = "login.html";
@@ -44,9 +52,15 @@ if (!user || !user.id) {
 
 } else {
 
-    document.addEventListener("DOMContentLoaded", loadCheckoutCart);
-    form.addEventListener("submit", handleCheckoutSubmit);
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadCheckoutCart
+    );
 
+    form.addEventListener(
+        "submit",
+        handleCheckoutSubmit
+    );
 }
 
 // =========================
@@ -58,10 +72,14 @@ async function loadCheckoutCart() {
 
     try {
 
-        const response = await fetch(`${API_BASE}/cart/${user.id}`);
+        const response = await fetch(
+            `${API_BASE}/cart/${user.id}`
+        );
 
         if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`);
+            throw new Error(
+                `Request failed with status ${response.status}`
+            );
         }
 
         const data = await response.json();
@@ -73,11 +91,13 @@ async function loadCheckoutCart() {
 
     } catch (err) {
 
-        console.error("Checkout cart error:", err);
+        console.error(
+            "Checkout cart error:",
+            err
+        );
+
         renderCartError();
-
     }
-
 }
 
 // =========================
@@ -90,10 +110,12 @@ function renderSkeleton() {
     orderItemsEl.innerHTML = `
         <div class="order-item">
             <div class="order-item__img"></div>
-            <div class="order-item__info"><h4>Loading order…</h4></div>
+
+            <div class="order-item__info">
+                <h4>Loading order…</h4>
+            </div>
         </div>
     `;
-
 }
 
 // =========================
@@ -105,7 +127,8 @@ function renderCartError() {
 
     orderItemsEl.innerHTML = `
         <div class="ticket__empty">
-            We couldn't load your cart. Please refresh the page.
+            We couldn't load your cart.
+            Please refresh the page.
         </div>
     `;
 
@@ -113,7 +136,6 @@ function renderCartError() {
     totalEl.textContent = "₱0";
 
     placeOrderBtn.disabled = true;
-
 }
 
 // =========================
@@ -122,7 +144,9 @@ function renderCartError() {
 function renderOrderSummary() {
 
     itemCountEl.textContent =
-        `${cartData.length} item${cartData.length !== 1 ? "s" : ""}`;
+        `${cartData.length} item${
+            cartData.length !== 1 ? "s" : ""
+        }`;
 
     if (!cartData.length) {
 
@@ -130,45 +154,78 @@ function renderOrderSummary() {
             <div class="ticket__empty">
                 Your cart is empty.
                 <br>
-                <a href="cart.html">Go back to your cart</a>
+                <a href="cart.html">
+                    Go back to your cart
+                </a>
             </div>
         `;
 
         subtotalEl.textContent = "₱0";
         totalEl.textContent = "₱0";
+
         placeOrderBtn.disabled = true;
 
         return;
-
     }
 
-    orderItemsEl.innerHTML = cartData.map(item => {
+    orderItemsEl.innerHTML =
+        cartData.map(item => {
 
-        const subtotal = item.price * item.quantity;
+            const subtotal =
+                Number(item.price) *
+                Number(item.quantity);
 
-        return `
-            <div class="order-item">
-                <div class="order-item__img">
-                    <img
-                        src="${item.image || "images/placeholder.jpg"}"
-                        alt="${item.product_name}"
-                        onerror="this.src='images/placeholder.jpg'"
-                    >
+            return `
+                <div class="order-item">
+
+                    <div class="order-item__img">
+
+                        <img
+                            src="${
+                                item.image ||
+                                "images/placeholder.jpg"
+                            }"
+                            alt="${item.product_name}"
+                            onerror="
+                                this.src='images/placeholder.jpg'
+                            "
+                        >
+
+                    </div>
+
+                    <div class="order-item__info">
+
+                        <h4>
+                            ${item.product_name}
+                        </h4>
+
+                        <span>
+                            Qty ${item.quantity}
+                            ${
+                                item.size
+                                    ? ` · ${item.size}`
+                                    : ""
+                            }
+                        </span>
+
+                    </div>
+
+                    <div class="order-item__price">
+                        ₱${subtotal.toLocaleString()}
+                    </div>
+
                 </div>
-                <div class="order-item__info">
-                    <h4>${item.product_name}</h4>
-                    <span>Qty ${item.quantity}${item.size ? ` · ${item.size}` : ""}</span>
-                </div>
-                <div class="order-item__price">₱${subtotal.toLocaleString()}</div>
-            </div>
-        `;
+            `;
 
-    }).join("");
+        }).join("");
 
-    subtotalEl.textContent = `₱${cartTotal.toLocaleString()}`;
-    totalEl.textContent = `₱${cartTotal.toLocaleString()}`;
+    subtotalEl.textContent =
+        `₱${cartTotal.toLocaleString()}`;
+
+    totalEl.textContent =
+        `₱${cartTotal.toLocaleString()}`;
+
     placeOrderBtn.disabled = false;
-
 }
 
 // =========================
@@ -179,35 +236,53 @@ function validateForm() {
     let firstInvalid = null;
     let isValid = true;
 
-    const fields = form.querySelectorAll("input[required]");
+    const fields =
+        form.querySelectorAll(
+            "input[required]"
+        );
 
     fields.forEach(input => {
 
-        const errorEl = form.querySelector(`[data-error-for="${input.id}"]`);
-        input.classList.remove("has-error");
-        if (errorEl) errorEl.textContent = "";
+        const errorEl =
+            form.querySelector(
+                `[data-error-for="${input.id}"]`
+            );
+
+        input.classList.remove(
+            "has-error"
+        );
+
+        if (errorEl) {
+            errorEl.textContent = "";
+        }
 
         if (!input.checkValidity()) {
 
             isValid = false;
-            input.classList.add("has-error");
+
+            input.classList.add(
+                "has-error"
+            );
 
             if (errorEl) {
-                errorEl.textContent = input.validity.valueMissing
-                    ? "This field is required."
-                    : "Please enter a valid value.";
+
+                errorEl.textContent =
+                    input.validity.valueMissing
+                        ? "This field is required."
+                        : "Please enter a valid value.";
             }
 
-            if (!firstInvalid) firstInvalid = input;
-
+            if (!firstInvalid) {
+                firstInvalid = input;
+            }
         }
-
     });
 
-    if (firstInvalid) firstInvalid.focus();
+    if (firstInvalid) {
+        firstInvalid.focus();
+    }
 
     return isValid;
-
 }
 
 // =========================
@@ -217,88 +292,279 @@ async function handleCheckoutSubmit(e) {
 
     e.preventDefault();
 
+    // -------------------------
+    // EMPTY CART
+    // -------------------------
+
     if (!cartData.length) {
-        showToast("Your cart is empty.", "error");
+
+        showToast(
+            "Your cart is empty.",
+            "error"
+        );
+
         return;
     }
+
+    // -------------------------
+    // FORM VALIDATION
+    // -------------------------
 
     if (!validateForm()) {
-        showToast("Please fill in the required fields.", "error");
+
+        showToast(
+            "Please fill in the required fields.",
+            "error"
+        );
+
         return;
     }
 
-    const payment = form.querySelector('input[name="payment"]:checked');
+    // -------------------------
+    // PAYMENT METHOD
+    // -------------------------
+
+    const payment =
+        form.querySelector(
+            'input[name="payment"]:checked'
+        );
 
     if (!payment) {
-        showToast("Please select a payment method.", "error");
+
+        showToast(
+            "Please select a payment method.",
+            "error"
+        );
+
         return;
     }
 
+    // -------------------------
+    // SHIPPING INFORMATION
+    // -------------------------
+
     const shippingInfo = {
-        fullName: form.fullName.value.trim(),
-        email: form.email.value.trim(),
-        phone: form.phone.value.trim(),
-        address: form.address.value.trim(),
-        city: form.city.value.trim(),
-        postalCode: form.postalCode.value.trim()
+
+        fullName:
+            form.fullName.value.trim(),
+
+        email:
+            form.email.value.trim(),
+
+        phone:
+            form.phone.value.trim(),
+
+        address:
+            form.address.value.trim(),
+
+        city:
+            form.city.value.trim(),
+
+        postalCode:
+            form.postalCode.value.trim()
     };
 
     setSubmitting(true);
 
     try {
 
-        const response = await fetch(`${API_BASE}/orders/checkout`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                user_id: user.id,
-                payment_method: payment.value,
-                shipping_info: shippingInfo,
-                items: cartData,
-                total: cartTotal
-            })
-        });
+        // =========================
+        // SEND CHECKOUT TO BACKEND
+        // =========================
+
+        const response =
+            await fetch(
+                `${API_BASE}/orders/checkout`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        user_id:
+                            user.id,
+
+                        payment_method:
+                            payment.value,
+
+                        shipping_info:
+                            shippingInfo,
+
+                        items:
+                            cartData,
+
+                        // This is only sent for compatibility.
+                        // Backend now calculates the real total
+                        // from the database.
+                        total:
+                            cartTotal
+                    })
+                }
+            );
+
+
+        // =========================
+        // READ SERVER RESPONSE
+        // =========================
+
+        const data =
+            await response.json();
+
 
         if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`);
+
+            throw new Error(
+                data.message ||
+                "Checkout failed."
+            );
         }
 
-        const data = await response.json();
 
         if (data.success === false) {
-            throw new Error(data.message || "Checkout failed");
+
+            throw new Error(
+                data.message ||
+                "Checkout failed."
+            );
         }
 
-        // Order-success.html reads this key to render the confirmation —
-        // it has no API call of its own, so the data has to be handed off here.
-        localStorage.setItem("lastOrder", JSON.stringify({
-            orderId: data.order_id,
-            items: cartData,
-            total: cartTotal,
-            shippingInfo: shippingInfo,
-            paymentMethod: payment.value,
-            placedAt: new Date().toISOString()
-        }));
 
-        showToast("Order placed successfully!", "success");
+        // =========================
+        // PAYMONGO PAYMENT
+        // =========================
+
+        if (
+            data.payment_required &&
+            data.checkout_url
+        ) {
+
+            // Save order information temporarily.
+            // The order is still Pending until
+            // PayMongo confirms payment.
+
+            localStorage.setItem(
+                "lastOrder",
+                JSON.stringify({
+
+                    orderId:
+                        data.order_id,
+
+                    items:
+                        cartData,
+
+                    total:
+                        Number(data.total),
+
+                    shippingInfo:
+                        shippingInfo,
+
+                    paymentMethod:
+                        payment.value,
+
+                    paymentStatus:
+                        "Pending",
+
+                    placedAt:
+                        new Date().toISOString()
+                })
+            );
+
+
+            showToast(
+                "Redirecting to secure payment...",
+                "success"
+            );
+
+
+            setTimeout(() => {
+
+                window.location.href =
+                    data.checkout_url;
+
+            }, 500);
+
+
+            return;
+        }
+
+
+        // =========================
+        // COD ORDER
+        // =========================
+
+        localStorage.setItem(
+            "lastOrder",
+            JSON.stringify({
+
+                orderId:
+                    data.order_id,
+
+                items:
+                    cartData,
+
+                total:
+                    Number(data.total),
+
+                shippingInfo:
+                    shippingInfo,
+
+                paymentMethod:
+                    payment.value,
+
+                paymentStatus:
+                    "Paid on Delivery",
+
+                placedAt:
+                    new Date().toISOString()
+            })
+        );
+
+
+        showToast(
+            "Order placed successfully!",
+            "success"
+        );
+
 
         setTimeout(() => {
-            window.location.href = "order-success.html";
+
+            window.location.href =
+                "order-success.html";
+
         }, 700);
+
 
     } catch (err) {
 
-        console.error(err);
-        showToast("Checkout failed. Please try again.", "error");
+        console.error(
+            "Checkout error:",
+            err
+        );
+
+        showToast(
+            err.message ||
+            "Checkout failed. Please try again.",
+            "error"
+        );
+
         setSubmitting(false);
-
     }
-
 }
 
+// =========================
+// SUBMIT BUTTON STATE
+// =========================
 function setSubmitting(isSubmitting) {
 
-    placeOrderBtn.disabled = isSubmitting;
-    placeOrderBtn.classList.toggle("is-loading", isSubmitting);
+    placeOrderBtn.disabled =
+        isSubmitting;
 
+    placeOrderBtn.classList.toggle(
+        "is-loading",
+        isSubmitting
+    );
 }

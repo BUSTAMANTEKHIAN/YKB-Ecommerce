@@ -35,31 +35,13 @@ function getProductImage(image) {
 
 // =========================================================
 // TOAST
+// Uses the shared showToast(message, type, duration) from script.js
+// and the #toast-stack container — this used to have its own
+// showToast() here that shadowed the shared one (same function name,
+// loaded after script.js, so it silently won), which is why this page
+// showed a single bottom banner instead of the stacked design used
+// everywhere else. Don't redeclare showToast in page-specific files.
 // =========================================================
-
-function showToast(message, type = "success") {
-
-    let toast = document.getElementById("toast");
-
-    if (!toast) {
-
-        toast = document.createElement("div");
-
-        toast.id = "toast";
-
-        document.body.appendChild(toast);
-    }
-
-    toast.textContent = message;
-
-    toast.className = `show ${type}`;
-
-    setTimeout(() => {
-
-        toast.classList.remove("show");
-
-    }, 2500);
-}
 
 
 // =========================================================

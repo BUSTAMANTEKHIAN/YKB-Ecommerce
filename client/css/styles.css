@@ -305,7 +305,8 @@ a {
     transform:translateY(-2px);
 }
 
-/* Dark mode toggle button */
+/* Dark mode toggle button — icon swap (fa-moon <-> fa-sun) is handled
+   by darkmode.js; this just styles the circle itself. */
 #dark-mode-btn{
     width:42px;
     height:42px;
@@ -318,14 +319,23 @@ a {
     align-items:center;
     justify-content:center;
     cursor:pointer;
-    transition:.3s;
+    transition:background .3s, transform .3s, box-shadow .3s;
     flex-shrink:0;
 }
 
 #dark-mode-btn:hover{
     background:var(--primary-dark);
     transform:rotate(180deg);
+    box-shadow:0 6px 18px rgba(8,129,120,.35);
 }
+
+#dark-mode-btn:active{
+    transform:scale(.9);
+}
+
+/* Shine sweep (added for other pill buttons) doesn't suit a small
+   rotating circle — skip it here */
+#dark-mode-btn::before{ display:none; }
 
 /* Mobile hamburger / cart icons (hidden on desktop) */
 #mobile{ display:none; }
@@ -921,7 +931,7 @@ a {
     align-items:center;
     justify-content:center;
     border-radius:50%;
-    background:var(--text);
+    background:#0e1414;
     color:#fff;
     box-shadow:0 12px 28px rgba(17,24,39,.28);
     transition:.3s;
@@ -930,6 +940,20 @@ a {
 .product-section .pro .cart:hover{
     background:var(--primary);
     transform:scale(1.08);
+}
+
+/* Without this, the button used --text for its background — which is
+   near-black in light mode but flips to white in dark mode, so a white
+   icon on a white circle effectively disappeared. Pin it to a fixed
+   dark shade instead so it's always visible regardless of theme. */
+.dark-mode .product-section .pro .cart{
+    background:#1f2937;
+    color:#fff;
+    box-shadow:0 12px 28px rgba(0,0,0,.5);
+}
+
+.dark-mode .product-section .pro .cart:hover{
+    background:var(--primary);
 }
 
 .product-section .pro .des{
@@ -1078,7 +1102,7 @@ a {
 
 #banner .normal{
     background:#fff;
-    color:var(--text);
+    color:#0e1414;
     border-radius:999px;
     padding:14px 28px;
     font-weight:700;
@@ -1159,7 +1183,7 @@ a {
 
 #sm-banner .white{
     background:#fff;
-    color:var(--text);
+    color:#0e1414;
     border-radius:999px;
     padding:12px 22px;
     font-weight:700;
@@ -1310,7 +1334,7 @@ a {
     font-size:15px;
     border-radius:999px;
     background:#fff;
-    color:var(--text);
+    color:#0e1414;
     transition:.2s;
 }
 
@@ -1888,6 +1912,46 @@ footer .copyright{
     color: white;
 }
 
+/* ---- Filled in for dark mode: components the previous pass missed ---- */
+
+.dark-mode .filter-btn,
+.dark-mode #sort-products,
+.dark-mode .search-wrapper input,
+.dark-mode .nav-login,
+.dark-mode #coupon input,
+.dark-mode #subtotal,
+.dark-mode #subtotal table td{
+    background:var(--surface-2);
+    color:var(--text);
+    border-color:var(--border);
+}
+
+.dark-mode .filter-btn:hover,
+.dark-mode .filter-btn.active{
+    background:var(--primary);
+    color:#fff;
+    border-color:var(--primary);
+}
+
+.dark-mode .search-wrapper input:focus{
+    box-shadow:0 0 0 4px rgba(94,234,212,.14);
+}
+
+.dark-mode .nav-login:hover{
+    border-color:var(--primary);
+    color:var(--primary);
+}
+
+.dark-mode #feature .fe-box{
+    background:var(--surface);
+    box-shadow:var(--shadow);
+}
+
+.dark-mode .hero-badge{
+    background:#101a19;
+    color:#5eead4;
+}
+
 @media (max-width:477px){
 
     body{
@@ -2035,4 +2099,157 @@ header,
 
 .icon a:hover i {
     transform: translateY(-3px);
+}
+
+/* =========================================================
+   PREMIUM POLISH LAYER
+   Purely additive — refines existing components, introduces
+   no new markup dependencies, and respects the design system
+   (teal primary, pill buttons, mint accents, no glassmorphism
+   beyond the header's existing blur).
+========================================================= */
+
+/* -- Selection & scrollbar -- */
+::selection{
+    background:var(--primary);
+    color:#fff;
+}
+
+html{
+    scrollbar-color: var(--primary) var(--surface-2);
+    scrollbar-width: thin;
+}
+
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-track{ background:var(--surface-2); }
+::-webkit-scrollbar-thumb{
+    background:var(--primary);
+    border-radius:999px;
+    border:2px solid var(--surface-2);
+}
+::-webkit-scrollbar-thumb:hover{ background:var(--primary-dark); }
+
+/* -- Accessible, on-brand focus states (keyboard nav) -- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+.filter-btn:focus-visible{
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
+/* -- Button shine sweep on the primary pill buttons -- */
+button,
+.normal,
+.hero-primary,
+.checkout-btn{
+    position:relative;
+    overflow:hidden;
+}
+
+button::before,
+.normal::before,
+.hero-primary::before,
+.checkout-btn::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-60%;
+    width:40%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+    transform:skewX(-20deg);
+    transition:left .6s ease;
+    pointer-events:none;
+}
+
+button:hover::before,
+.normal:hover::before,
+.hero-primary:hover::before,
+.checkout-btn:hover::before{
+    left:130%;
+}
+
+/* Buttons that are white/light already (e.g. inside dark banners)
+   shouldn't get the light shine — swap to a dark sweep instead. */
+#banner .normal::before,
+#sm-banner .white::before{
+    background:linear-gradient(120deg, transparent, rgba(8,129,120,.25), transparent);
+}
+
+/* -- Hero: gentle floating motion on the organic blob so the
+   section feels alive instead of static -- */
+#hero::after{
+    animation: heroFloat 9s ease-in-out infinite;
+}
+
+@keyframes heroFloat{
+    0%, 100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(-18px,-22px) scale(1.05); }
+}
+
+@media (prefers-reduced-motion: reduce){
+    #hero::after{ animation:none; }
+    section:not(#header),
+    button::before, .normal::before, .hero-primary::before, .checkout-btn::before{
+        animation:none;
+        transition:none;
+    }
+}
+
+/* -- Feature icon boxes: soft gradient edge that appears on hover,
+   reinforcing the lift without changing the layout -- */
+#feature .fe-box{
+    position:relative;
+    border:1px solid transparent;
+}
+
+#feature .fe-box::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    padding:1.5px;
+    background:linear-gradient(135deg, var(--primary), transparent 60%);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity:0;
+    transition:opacity .3s ease;
+    pointer-events:none;
+}
+
+#feature .fe-box:hover::after{ opacity:1; }
+
+/* -- Product cards: slightly richer depth + a teal glow ring on
+   hover instead of a flat shadow bump -- */
+.product-section .pro{
+    will-change: transform;
+}
+
+.product-section .pro:hover{
+    box-shadow:
+        0 28px 60px rgba(0,0,0,.14),
+        0 0 0 1px rgba(8,129,120,.18);
+}
+
+.dark-mode .product-section .pro:hover{
+    box-shadow:
+        0 28px 60px rgba(0,0,0,.5),
+        0 0 0 1px rgba(94,234,212,.18);
+}
+
+/* -- Section chips get a hairline ring so they read as "premium
+   sticker" rather than a flat fill -- */
+.product-section .section-chip{
+    box-shadow: inset 0 0 0 1px rgba(8,129,120,.18);
+}
+
+/* -- Newsletter block: soft teal glow edge -- */
+#newsletter{
+    box-shadow: 0 30px 70px rgba(0,0,0,.12);
 }
