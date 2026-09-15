@@ -4,15 +4,19 @@ let salesChart;
 // ADMIN AUTH PROTECTION
 // =========================
 
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+);
 
 if (!currentUser) {
     window.location.href = "login.html";
     throw new Error("Not logged in — redirecting.");
 }
 
-if (currentUser.role !== "admin" && currentUser.role !== "owner") {
-
+if (
+    currentUser.role !== "admin" &&
+    currentUser.role !== "owner"
+) {
     document.body.innerHTML = `
         <div style="
             height:100vh;
@@ -24,8 +28,13 @@ if (currentUser.role !== "admin" && currentUser.role !== "owner") {
             text-align:center;
             background:#f8fafc;
         ">
-            <h1 style="color:#dc2626;">Access Denied</h1>
-            <p>This page is only available for administrators and owners.</p>
+            <h1 style="color:#dc2626;">
+                Access Denied
+            </h1>
+
+            <p>
+                This page is only available for administrators and owners.
+            </p>
 
             <a href="index.html" style="
                 margin-top:20px;
@@ -40,59 +49,117 @@ if (currentUser.role !== "admin" && currentUser.role !== "owner") {
         </div>
     `;
 
-    throw new Error("Unauthorized — access denied.");
+    throw new Error(
+        "Unauthorized — access denied."
+    );
 }
 
-document.getElementById("adminName").textContent =
-    currentUser.fullname || "Admin";
+const adminNameElement =
+    document.getElementById("adminName");
 
-const tableBody = document.getElementById("productsTableBody");
+if (adminNameElement) {
+    adminNameElement.textContent =
+        currentUser.fullname || "Admin";
+}
+
+const tableBody =
+    document.getElementById(
+        "productsTableBody"
+    );
 
 // =========================
 // PRODUCT MODAL ELEMENTS
 // =========================
 
-const addProductBtn = document.getElementById("addProductBtn");
-const productModal = document.getElementById("productModal");
-const closeModal = document.getElementById("closeModal");
+const addProductBtn =
+    document.getElementById(
+        "addProductBtn"
+    );
 
-const productForm = document.getElementById("productForm");
+const productModal =
+    document.getElementById(
+        "productModal"
+    );
 
-const productIdInput = document.getElementById("productId");
-const imageFile = document.getElementById("imageFile");
-const imagePreview = document.getElementById("imagePreview");
-const imageInput = document.getElementById("image");
+const closeModal =
+    document.getElementById(
+        "closeModal"
+    );
 
-const saveProductBtn = productForm
-    ? productForm.querySelector(".save-btn")
-    : null;
+const productForm =
+    document.getElementById(
+        "productForm"
+    );
 
-// Tracks whether Cloudinary is currently uploading
+const productIdInput =
+    document.getElementById(
+        "productId"
+    );
+
+const imageFile =
+    document.getElementById(
+        "imageFile"
+    );
+
+const imagePreview =
+    document.getElementById(
+        "imagePreview"
+    );
+
+const imageInput =
+    document.getElementById(
+        "image"
+    );
+
+const saveProductBtn =
+    productForm
+        ? productForm.querySelector(
+            ".save-btn"
+        )
+        : null;
+
+// Tracks whether Cloudinary is uploading
 let imageUploading = false;
 
-// Prevents an older upload from affecting a newer selected image
+// Prevents an older upload from
+// affecting a newer selected image
 let uploadVersion = 0;
 
 // =========================
 // TOASTS
 // =========================
 
-function showToast(message, type = "default") {
-
-    const stack = document.getElementById("toast-stack");
+function showToast(
+    message,
+    type = "default"
+) {
+    const stack =
+        document.getElementById(
+            "toast-stack"
+        );
 
     if (!stack) return;
 
-    const toast = document.createElement("div");
+    const toast =
+        document.createElement(
+            "div"
+        );
 
-    toast.className = `toast toast--${type}`;
-    toast.textContent = message;
+    toast.className =
+        `toast toast--${type}`;
 
-    stack.appendChild(toast);
+    toast.textContent =
+        message;
+
+    stack.appendChild(
+        toast
+    );
 
     setTimeout(() => {
 
-        toast.classList.add("is-leaving");
+        toast.classList.add(
+            "is-leaving"
+        );
 
         toast.addEventListener(
             "animationend",
@@ -124,12 +191,14 @@ function clearImageState() {
 
     if (imagePreview) {
         imagePreview.src = "";
-        imagePreview.style.display = "none";
+        imagePreview.style.display =
+            "none";
     }
 
     if (saveProductBtn) {
         saveProductBtn.disabled = false;
-        saveProductBtn.textContent = "Save Product";
+        saveProductBtn.textContent =
+            "Save Product";
     }
 }
 
@@ -146,14 +215,19 @@ function resetProductForm() {
     clearImageState();
 
     const modalTitle =
-        document.querySelector(".modal-header h2");
+        document.querySelector(
+            ".modal-header h2"
+        );
 
     if (modalTitle) {
-        modalTitle.textContent = "Add New Product";
+        modalTitle.textContent =
+            "Add New Product";
     }
 }
 
-function setExistingImage(imageUrl) {
+function setExistingImage(
+    imageUrl
+) {
 
     if (!imageUrl) {
 
@@ -169,24 +243,27 @@ function setExistingImage(imageUrl) {
     imageUploading = false;
 
     if (imageInput) {
-        imageInput.value = imageUrl;
+        imageInput.value =
+            imageUrl;
     }
 
     if (imageFile) {
-        // Existing image is already available.
-        // Selecting a new image is optional while editing.
         imageFile.value = "";
         imageFile.required = false;
     }
 
     if (imagePreview) {
 
-        imagePreview.src = imageUrl;
-        imagePreview.style.display = "block";
+        imagePreview.src =
+            imageUrl;
+
+        imagePreview.style.display =
+            "block";
 
         imagePreview.onerror = () => {
 
-            imagePreview.style.display = "none";
+            imagePreview.style.display =
+                "none";
 
             showToast(
                 "Existing product image could not be previewed.",
@@ -196,8 +273,11 @@ function setExistingImage(imageUrl) {
     }
 
     if (saveProductBtn) {
-        saveProductBtn.disabled = false;
-        saveProductBtn.textContent = "Save Product";
+        saveProductBtn.disabled =
+            false;
+
+        saveProductBtn.textContent =
+            "Save Product";
     }
 }
 
@@ -205,44 +285,65 @@ function setExistingImage(imageUrl) {
 // ADD PRODUCT BUTTON
 // =========================
 
-if (addProductBtn && productModal) {
+if (
+    addProductBtn &&
+    productModal
+) {
 
-    addProductBtn.addEventListener("click", () => {
+    addProductBtn.addEventListener(
+        "click",
+        () => {
 
-        // IMPORTANT:
-        // Always completely reset the form when creating
-        // a new product. This prevents the previous product's
-        // Cloudinary URL from being reused.
+            resetProductForm();
 
-        resetProductForm();
+            productModal.classList.add(
+                "active"
+            );
 
-        productModal.classList.add("active");
-    });
+        }
+    );
 }
 
 // =========================
 // CLOSE PRODUCT MODAL
 // =========================
 
-if (closeModal && productModal) {
+if (
+    closeModal &&
+    productModal
+) {
 
-    closeModal.addEventListener("click", () => {
+    closeModal.addEventListener(
+        "click",
+        () => {
 
-        productModal.classList.remove("active");
+            productModal.classList.remove(
+                "active"
+            );
 
-    });
+        }
+    );
 }
 
-// Close modal when clicking outside
-window.addEventListener("click", (e) => {
+// Close product modal
+// when clicking outside
+window.addEventListener(
+    "click",
+    (e) => {
 
-    if (e.target === productModal) {
+        if (
+            e.target ===
+            productModal
+        ) {
 
-        productModal.classList.remove("active");
+            productModal.classList.remove(
+                "active"
+            );
+
+        }
 
     }
-
-});
+);
 
 // =========================
 // LOAD PRODUCTS
@@ -250,40 +351,70 @@ window.addEventListener("click", (e) => {
 
 async function loadProducts() {
 
+    if (!tableBody) return;
+
     try {
 
         const response =
-            await fetch(`${API_BASE_URL}/api/products`);
+            await fetch(
+                `${API_BASE_URL}/api/products`
+            );
 
         if (!response.ok) {
+
             throw new Error(
                 `Server responded ${response.status}`
             );
         }
 
-        const products = await response.json();
+        const products =
+            await response.json();
 
-        document.getElementById("totalProducts").textContent =
-            products.length;
+        // Total products
+        const totalProductsElement =
+            document.getElementById(
+                "totalProducts"
+            );
 
+        if (totalProductsElement) {
+            totalProductsElement.textContent =
+                products.length;
+        }
+
+        // Low stock
         const lowStock =
             products.filter(
-                p => Number(p.stock) <= 5
+                p =>
+                    Number(p.stock) <= 5
             ).length;
 
-        document.getElementById("lowStock").textContent =
-            lowStock;
+        const lowStockElement =
+            document.getElementById(
+                "lowStock"
+            );
 
+        if (lowStockElement) {
+            lowStockElement.textContent =
+                lowStock;
+        }
+
+        // Low stock alert
         const alertBanner =
-            document.getElementById("lowStockAlert");
+            document.getElementById(
+                "lowStockAlert"
+            );
 
         if (alertBanner) {
 
             alertBanner.style.display =
-                lowStock > 0 ? "block" : "none";
+                lowStock > 0
+                    ? "block"
+                    : "none";
         }
 
-        renderProducts(products);
+        renderProducts(
+            products
+        );
 
     } catch (error) {
 
@@ -308,13 +439,21 @@ async function loadProducts() {
 // RENDER PRODUCTS
 // =========================
 
-function renderProducts(products) {
+function renderProducts(
+    products
+) {
 
-    tableBody.innerHTML = products.map(product => `
+    if (!tableBody) return;
+
+    tableBody.innerHTML =
+        products.map(
+            product => `
 
         <tr>
 
-            <td>${product.id}</td>
+            <td>
+                ${product.id}
+            </td>
 
             <td>
 
@@ -325,7 +464,6 @@ function renderProducts(products) {
                                 src="${product.image}"
                                 alt="${product.name}"
                                 class="admin-product-image"
-
                                 onerror="
                                     this.style.display='none';
                                     this.parentElement.innerHTML=
@@ -342,12 +480,24 @@ function renderProducts(products) {
 
             </td>
 
-            <td>${product.name}</td>
-
-            <td>${product.category}</td>
+            <td>
+                ${product.name}
+            </td>
 
             <td>
-                ₱${Number(product.price).toLocaleString()}
+                ${product.category}
+            </td>
+
+            <td>
+                ₱${Number(
+                    product.price
+                ).toLocaleString(
+                    "en-PH",
+                    {
+                        minimumFractionDigits:
+                            2
+                    }
+                )}
             </td>
 
             <td>
@@ -396,163 +546,201 @@ function renderProducts(products) {
 
         </tr>
 
-    `).join("");
+    `
+        ).join("");
 }
 
 // =========================
 // EDIT PRODUCT
 // =========================
 
-window.editProduct = async function(id) {
+window.editProduct =
+    async function(id) {
 
-    try {
+        try {
 
-        const response =
-            await fetch(`${API_BASE_URL}/api/products`);
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/products`
+                );
 
-        if (!response.ok) {
+            if (!response.ok) {
 
-            throw new Error(
-                `Server responded ${response.status}`
+                throw new Error(
+                    `Server responded ${response.status}`
+                );
+            }
+
+            const products =
+                await response.json();
+
+            const product =
+                products.find(
+                    p => p.id == id
+                );
+
+            if (!product) {
+
+                showToast(
+                    "Product not found.",
+                    "error"
+                );
+
+                return;
+            }
+
+            document.getElementById(
+                "productId"
+            ).value =
+                product.id;
+
+            document.getElementById(
+                "name"
+            ).value =
+                product.name || "";
+
+            document.getElementById(
+                "brand"
+            ).value =
+                product.brand || "";
+
+            document.getElementById(
+                "category"
+            ).value =
+                product.category || "";
+
+            document.getElementById(
+                "description"
+            ).value =
+                product.description || "";
+
+            document.getElementById(
+                "price"
+            ).value =
+                product.price || "";
+
+            document.getElementById(
+                "stock"
+            ).value =
+                product.stock || "";
+
+            setExistingImage(
+                product.image
             );
-        }
 
-        const products = await response.json();
+            const modalTitle =
+                document.querySelector(
+                    ".modal-header h2"
+                );
 
-        const product =
-            products.find(p => p.id == id);
+            if (modalTitle) {
 
-        if (!product) {
+                modalTitle.textContent =
+                    "Edit Product";
+            }
+
+            if (productModal) {
+
+                productModal.classList.add(
+                    "active"
+                );
+            }
+
+        } catch (error) {
+
+            console.error(error);
 
             showToast(
-                "Product not found.",
+                "Failed to load product.",
                 "error"
             );
-
-            return;
         }
-
-        // Fill product fields
-        document.getElementById("productId").value =
-            product.id;
-
-        document.getElementById("name").value =
-            product.name || "";
-
-        document.getElementById("brand").value =
-            product.brand || "";
-
-        document.getElementById("category").value =
-            product.category || "";
-
-        document.getElementById("description").value =
-            product.description || "";
-
-        document.getElementById("price").value =
-            product.price || "";
-
-        document.getElementById("stock").value =
-            product.stock || "";
-
-        // IMPORTANT:
-        // Load the existing image into the hidden input
-        // and preview.
-        setExistingImage(product.image);
-
-        const modalTitle =
-            document.querySelector(".modal-header h2");
-
-        if (modalTitle) {
-            modalTitle.textContent =
-                "Edit Product";
-        }
-
-        productModal.classList.add("active");
-
-    } catch (error) {
-
-        console.error(error);
-
-        showToast(
-            "Failed to load product.",
-            "error"
-        );
-    }
-};
+    };
 
 // =========================
 // DELETE PRODUCT
 // =========================
 
-window.deleteProduct = async function(id) {
+window.deleteProduct =
+    async function(id) {
 
-    const confirmed =
-        confirm(
-            "Are you sure you want to delete this product?"
-        );
-
-    if (!confirmed) return;
-
-    try {
-
-        const response =
-            await fetch(
-                `${API_BASE_URL}/api/products/${id}`,
-                {
-                    method: "DELETE"
-                }
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this product?"
             );
 
-        const data =
-            await response.json();
+        if (!confirmed) return;
 
-        if (!response.ok) {
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/products/${id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+
+                showToast(
+                    data.message ||
+                    "Failed to delete product.",
+                    "error"
+                );
+
+                return;
+            }
 
             showToast(
-                data.message ||
-                "Failed to delete product.",
-                "error"
+                "Product deleted successfully.",
+                "success"
             );
 
-            return;
+            await loadProducts();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Server error.",
+                "error"
+            );
         }
-
-        showToast(
-            "Product deleted successfully.",
-            "success"
-        );
-
-        loadProducts();
-
-    } catch (error) {
-
-        console.error(error);
-
-        showToast(
-            "Server error.",
-            "error"
-        );
-    }
-};
+    };
 
 // =========================
 // LOGOUT
 // =========================
 
 const logoutBtn =
-    document.getElementById("adminLogout");
+    document.getElementById(
+        "adminLogout"
+    );
 
 if (logoutBtn) {
 
-    logoutBtn.addEventListener("click", () => {
+    logoutBtn.addEventListener(
+        "click",
+        () => {
 
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("token");
+            localStorage.removeItem(
+                "currentUser"
+            );
 
-        window.location.href =
-            "login.html";
+            localStorage.removeItem(
+                "token"
+            );
 
-    });
+            window.location.href =
+                "login.html";
+
+        }
+    );
 }
 
 // =========================
@@ -570,15 +758,15 @@ if (imageFile) {
 
             if (!file) return;
 
-            // Create unique upload version.
-            // If user selects another image before this
-            // upload finishes, the old upload will not
-            // overwrite the new image URL.
             const thisUploadVersion =
                 ++uploadVersion;
 
-            // Check file type
-            if (!file.type.startsWith("image/")) {
+            // File type
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
 
                 showToast(
                     "Please select an image file.",
@@ -590,8 +778,11 @@ if (imageFile) {
                 return;
             }
 
-            // Maximum 5 MB
-            if (file.size > 5 * 1024 * 1024) {
+            // 5 MB limit
+            if (
+                file.size >
+                5 * 1024 * 1024
+            ) {
 
                 showToast(
                     "Image must be smaller than 5 MB.",
@@ -603,22 +794,25 @@ if (imageFile) {
                 return;
             }
 
-            // Show local preview immediately
+            // Local preview
             if (imagePreview) {
 
                 imagePreview.src =
-                    URL.createObjectURL(file);
+                    URL.createObjectURL(
+                        file
+                    );
 
                 imagePreview.style.display =
                     "block";
             }
 
-            // Mark upload as active
             imageUploading = true;
 
             if (saveProductBtn) {
 
-                saveProductBtn.disabled = true;
+                saveProductBtn.disabled =
+                    true;
+
                 saveProductBtn.textContent =
                     "Uploading Image...";
             }
@@ -654,17 +848,19 @@ if (imageFile) {
                     data =
                         await response.json();
 
-                } catch (jsonError) {
+                } catch (
+                    jsonError
+                ) {
 
                     throw new Error(
                         `Server returned an invalid response (${response.status}).`
                     );
                 }
 
-                // If another image was selected while this
-                // upload was running, ignore this result.
+                // Ignore old upload
                 if (
-                    thisUploadVersion !== uploadVersion
+                    thisUploadVersion !==
+                    uploadVersion
                 ) {
 
                     console.log(
@@ -684,7 +880,8 @@ if (imageFile) {
                         data
                     );
 
-                    imageUploading = false;
+                    imageUploading =
+                        false;
 
                     if (saveProductBtn) {
 
@@ -704,10 +901,10 @@ if (imageFile) {
                     return;
                 }
 
-                // Make sure Cloudinary returned a URL
                 if (!data.imagePath) {
 
-                    imageUploading = false;
+                    imageUploading =
+                        false;
 
                     if (saveProductBtn) {
 
@@ -718,11 +915,6 @@ if (imageFile) {
                             "Save Product";
                     }
 
-                    console.error(
-                        "Cloudinary response:",
-                        data
-                    );
-
                     showToast(
                         "Cloudinary did not return an image URL.",
                         "error"
@@ -731,14 +923,10 @@ if (imageFile) {
                     return;
                 }
 
-                // =========================
-                // SAVE CLOUDINARY URL
-                // =========================
-
+                // Save Cloudinary URL
                 imageInput.value =
                     data.imagePath;
 
-                // Show Cloudinary image
                 if (imagePreview) {
 
                     imagePreview.src =
@@ -748,7 +936,8 @@ if (imageFile) {
                         "block";
                 }
 
-                imageUploading = false;
+                imageUploading =
+                    false;
 
                 if (saveProductBtn) {
 
@@ -776,13 +965,13 @@ if (imageFile) {
                     error
                 );
 
-                // Only reset if this is still the
-                // current upload.
                 if (
-                    thisUploadVersion === uploadVersion
+                    thisUploadVersion ===
+                    uploadVersion
                 ) {
 
-                    imageUploading = false;
+                    imageUploading =
+                        false;
 
                     if (saveProductBtn) {
 
@@ -816,7 +1005,6 @@ if (productForm) {
 
             e.preventDefault();
 
-            // Prevent saving while image is uploading
             if (imageUploading) {
 
                 showToast(
@@ -833,10 +1021,7 @@ if (productForm) {
             const imageUrl =
                 imageInput.value.trim();
 
-            // =========================
-            // CHECK IMAGE
-            // =========================
-
+            // Image required
             if (!imageUrl) {
 
                 showToast(
@@ -849,38 +1034,39 @@ if (productForm) {
 
             const price =
                 parseFloat(
-                    document.getElementById("price").value
+                    document.getElementById(
+                        "price"
+                    ).value
                 );
 
             const stock =
                 parseInt(
-                    document.getElementById("stock").value
+                    document.getElementById(
+                        "stock"
+                    ).value
                 );
-
-            // =========================
-            // PRODUCT DATA
-            // =========================
 
             const product = {
 
                 name:
-                    document.getElementById("name")
-                        .value
-                        .trim(),
+                    document.getElementById(
+                        "name"
+                    ).value.trim(),
 
                 brand:
-                    document.getElementById("brand")
-                        .value
-                        .trim(),
+                    document.getElementById(
+                        "brand"
+                    ).value.trim(),
 
                 category:
-                    document.getElementById("category")
-                        .value,
+                    document.getElementById(
+                        "category"
+                    ).value,
 
                 description:
-                    document.getElementById("description")
-                        .value
-                        .trim(),
+                    document.getElementById(
+                        "description"
+                    ).value.trim(),
 
                 price,
 
@@ -890,7 +1076,7 @@ if (productForm) {
                     imageUrl
             };
 
-            // Basic validation
+            // Validation
             if (!product.name) {
 
                 showToast(
@@ -952,14 +1138,8 @@ if (productForm) {
                 product
             );
 
-            console.log(
-                "🖼️ Image URL being saved:",
-                product.image
-            );
-
             try {
 
-                // Disable save button while saving
                 if (saveProductBtn) {
 
                     saveProductBtn.disabled =
@@ -986,7 +1166,9 @@ if (productForm) {
                             },
 
                             body:
-                                JSON.stringify(product)
+                                JSON.stringify(
+                                    product
+                                )
                         }
                     );
 
@@ -1020,14 +1202,15 @@ if (productForm) {
                     "success"
                 );
 
-                // Reset form after successful save
                 resetProductForm();
 
-                productModal.classList.remove(
-                    "active"
-                );
+                if (productModal) {
 
-                // Reload products from database
+                    productModal.classList.remove(
+                        "active"
+                    );
+                }
+
                 await loadProducts();
 
             } catch (error) {
@@ -1052,14 +1235,18 @@ if (productForm) {
     );
 }
 
-// =========================
-// LOAD ORDERS
-// =========================
+// =========================================================
+// ORDERS
+// =========================================================
 
 const ordersTableBody =
     document.getElementById(
         "ordersTableBody"
     );
+
+// =========================
+// LOAD ORDERS
+// =========================
 
 async function loadOrders() {
 
@@ -1082,223 +1269,531 @@ async function loadOrders() {
         const orders =
             await response.json();
 
-        document.getElementById(
-            "totalOrders"
-        ).textContent =
+        // =================================================
+        // BASIC STATISTICS
+        // =================================================
+
+        const totalOrders =
             orders.length;
+
+        const pendingOrders =
+            orders.filter(
+                order =>
+                    String(
+                        order.status || ""
+                    ).toLowerCase() ===
+                    "pending"
+            ).length;
+
+        const processingOrders =
+            orders.filter(
+                order =>
+                    String(
+                        order.status || ""
+                    ).toLowerCase() ===
+                    "processing"
+            ).length;
+
+        const shippedOrders =
+            orders.filter(
+                order =>
+                    String(
+                        order.status || ""
+                    ).toLowerCase() ===
+                    "shipped"
+            ).length;
+
+        const deliveredOrders =
+            orders.filter(
+                order =>
+                    String(
+                        order.status || ""
+                    ).toLowerCase() ===
+                    "delivered"
+            ).length;
+
+        const cancelledOrders =
+            orders.filter(
+                order =>
+                    String(
+                        order.status || ""
+                    ).toLowerCase() ===
+                    "cancelled"
+            ).length;
+
+        const paidOrders =
+            orders.filter(
+                order =>
+                    String(
+                        order.payment_status ||
+                        "Pending"
+                    ).toLowerCase() ===
+                    "paid"
+            ).length;
+
+        // =================================================
+        // PAID REVENUE
+        // =================================================
 
         const revenue =
             orders.reduce(
-                (sum, order) =>
-                    sum + Number(order.total),
+                (sum, order) => {
+
+                    const paymentStatus =
+                        String(
+                            order.payment_status ||
+                            "Pending"
+                        ).toLowerCase();
+
+                    const orderStatus =
+                        String(
+                            order.status ||
+                            "Pending"
+                        ).toLowerCase();
+
+                    if (
+                        paymentStatus ===
+                            "paid" &&
+                        orderStatus !==
+                            "cancelled"
+                    ) {
+
+                        return (
+                            sum +
+                            Number(
+                                order.total ||
+                                0
+                            )
+                        );
+                    }
+
+                    return sum;
+                },
                 0
             );
 
-        document.getElementById(
-            "totalRevenue"
-        ).textContent =
-            "₱" +
-            revenue.toLocaleString();
+        // =================================================
+        // UPDATE DASHBOARD
+        // =================================================
 
-        const monthlySales = {};
-
-        orders.forEach(order => {
-
-            const date =
-                new Date(order.created_at);
-
-            const month =
-                date.toLocaleString(
-                    "default",
-                    {
-                        month: "short"
-                    }
-                );
-
-            monthlySales[month] =
-                (monthlySales[month] || 0) +
-                Number(order.total);
-        });
-
-        const labels =
-            Object.keys(monthlySales);
-
-        const values =
-            Object.values(monthlySales);
-
-        const ctx =
+        const totalOrdersElement =
             document.getElementById(
-                "salesChart"
+                "totalOrders"
             );
 
-        if (ctx) {
+        const totalRevenueElement =
+            document.getElementById(
+                "totalRevenue"
+            );
 
-            if (salesChart) {
-                salesChart.destroy();
-            }
+        const pendingOrdersElement =
+            document.getElementById(
+                "pendingOrders"
+            );
 
-            salesChart =
-                new Chart(
-                    ctx,
+        const processingOrdersElement =
+            document.getElementById(
+                "processingOrders"
+            );
+
+        const shippedOrdersElement =
+            document.getElementById(
+                "shippedOrders"
+            );
+
+        const deliveredOrdersElement =
+            document.getElementById(
+                "deliveredOrders"
+            );
+
+        const paidOrdersElement =
+            document.getElementById(
+                "paidOrders"
+            );
+
+        const cancelledOrdersElement =
+            document.getElementById(
+                "cancelledOrders"
+            );
+
+        if (totalOrdersElement) {
+
+            totalOrdersElement.textContent =
+                totalOrders;
+        }
+
+        if (totalRevenueElement) {
+
+            totalRevenueElement.textContent =
+                "₱" +
+                revenue.toLocaleString(
+                    "en-PH",
                     {
-                        type: "bar",
-
-                        data: {
-                            labels,
-
-                            datasets: [
-                                {
-                                    label:
-                                        "Sales (₱)",
-
-                                    data:
-                                        values,
-
-                                    backgroundColor:
-                                        "#088178",
-
-                                    borderRadius:
-                                        10
-                                }
-                            ]
-                        },
-
-                        options: {
-                            responsive: true,
-
-                            plugins: {
-                                legend: {
-                                    display: false
-                                }
-                            }
-                        }
+                        minimumFractionDigits:
+                            2
                     }
                 );
         }
 
+        if (pendingOrdersElement) {
+
+            pendingOrdersElement.textContent =
+                pendingOrders;
+        }
+
+        if (processingOrdersElement) {
+
+            processingOrdersElement.textContent =
+                processingOrders;
+        }
+
+        if (shippedOrdersElement) {
+
+            shippedOrdersElement.textContent =
+                shippedOrders;
+        }
+
+        if (deliveredOrdersElement) {
+
+            deliveredOrdersElement.textContent =
+                deliveredOrders;
+        }
+
+        if (paidOrdersElement) {
+
+            paidOrdersElement.textContent =
+                paidOrders;
+        }
+
+        if (cancelledOrdersElement) {
+
+            cancelledOrdersElement.textContent =
+                cancelledOrders;
+        }
+
+        // =================================================
+        // SALES ANALYTICS
+        // =================================================
+
+        renderSalesChart(
+            orders
+        );
+
+        // =================================================
+        // ORDERS TABLE
+        // =================================================
+
         ordersTableBody.innerHTML =
-            orders.map(order => `
+            orders.map(
+                order => {
 
-                <tr>
+                    const paymentStatus =
+                        order.payment_status ||
+                        "Pending";
 
-                    <td>
-                        ${order.order_id}
-                    </td>
+                    const orderStatus =
+                        order.status ||
+                        "Pending";
 
-                    <td>
-                        <strong>
-                            ${order.fullname}
-                        </strong>
+                    const paymentClass =
+                        String(
+                            paymentStatus
+                        )
+                            .toLowerCase()
+                            .replace(
+                                /\s+/g,
+                                "-"
+                            );
 
-                        <br>
+                    const statusClass =
+                        String(
+                            orderStatus
+                        )
+                            .toLowerCase()
+                            .replace(
+                                /\s+/g,
+                                "-"
+                            );
 
-                        <small>
-                            ${order.email}
-                        </small>
-                    </td>
+                    const paymentIcon =
+                        paymentClass ===
+                        "paid"
+                            ? "fa-circle-check"
+                            : paymentClass ===
+                              "failed"
+                                ? "fa-circle-xmark"
+                                : paymentClass ===
+                                  "cancelled"
+                                    ? "fa-circle-xmark"
+                                    : "fa-clock";
 
-                    <td>
-                        ₱${Number(order.total).toLocaleString()}
-                    </td>
+                    const statusIcon =
+                        statusClass ===
+                        "delivered"
+                            ? "fa-circle-check"
+                            : statusClass ===
+                              "cancelled"
+                                ? "fa-circle-xmark"
+                                : statusClass ===
+                                  "shipped"
+                                    ? "fa-truck"
+                                    : statusClass ===
+                                      "processing"
+                                        ? "fa-box"
+                                        : "fa-clock";
 
-                    <td>
-
-                        <select
-                            onchange="
-                                updateOrderStatus(
-                                    '${order.order_id}',
-                                    this.value
-                                )
-                            "
-                        >
-
-                            <option
-                                value="Pending"
-                                ${
-                                    order.status === "Pending"
-                                        ? "selected"
-                                        : ""
+                    const createdDate =
+                        order.created_at
+                            ? new Date(
+                                order.created_at
+                            ).toLocaleDateString(
+                                "en-PH",
+                                {
+                                    year:
+                                        "numeric",
+                                    month:
+                                        "short",
+                                    day:
+                                        "numeric"
                                 }
-                            >
-                                Pending
-                            </option>
+                            )
+                            : "N/A";
 
-                            <option
-                                value="Processing"
-                                ${
-                                    order.status === "Processing"
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-                                Processing
-                            </option>
+                    return `
 
-                            <option
-                                value="Shipped"
-                                ${
-                                    order.status === "Shipped"
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-                                Shipped
-                            </option>
+                        <tr>
 
-                            <option
-                                value="Delivered"
-                                ${
-                                    order.status === "Delivered"
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-                                Delivered
-                            </option>
+                            <!-- ORDER ID -->
 
-                            <option
-                                value="Cancelled"
-                                ${
-                                    order.status === "Cancelled"
-                                        ? "selected"
-                                        : ""
-                                }
-                            >
-                                Cancelled
-                            </option>
+                            <td>
 
-                        </select>
+                                <strong>
+                                    ${order.order_id}
+                                </strong>
 
-                    </td>
+                            </td>
 
-                    <td>
-                        ${new Date(
-                            order.created_at
-                        ).toLocaleDateString()}
-                    </td>
+                            <!-- CUSTOMER -->
 
-                    <td>
+                            <td>
 
-                        <button
-                            class="edit-btn"
-                            onclick="
-                                viewOrder(
-                                    '${order.order_id}'
-                                )
-                            "
-                        >
-                            View
-                        </button>
+                                <strong>
+                                    ${
+                                        order.fullname ||
+                                        "Unknown Customer"
+                                    }
+                                </strong>
 
-                    </td>
+                                <br>
 
-                </tr>
+                                <small>
+                                    ${
+                                        order.email ||
+                                        "No email"
+                                    }
+                                </small>
 
-            `).join("");
+                            </td>
+
+                            <!-- TOTAL -->
+
+                            <td>
+
+                                <strong>
+                                    ₱${Number(
+                                        order.total ||
+                                        0
+                                    ).toLocaleString(
+                                        "en-PH",
+                                        {
+                                            minimumFractionDigits:
+                                                2
+                                        }
+                                    )}
+                                </strong>
+
+                            </td>
+
+                            <!-- PAYMENT METHOD -->
+
+                            <td>
+
+                                <span class="payment-method">
+
+                                    <i class="fas ${
+                                        String(
+                                            order.payment_method ||
+                                            ""
+                                        ).toLowerCase() ===
+                                        "cod"
+                                            ? "fa-money-bill-wave"
+                                            : "fa-credit-card"
+                                    }"></i>
+
+                                    ${
+                                        order.payment_method ||
+                                        "N/A"
+                                    }
+
+                                </span>
+
+                            </td>
+
+                            <!-- PAYMENT STATUS -->
+
+                            <td>
+
+                                <span
+                                    class="payment-status ${paymentClass}"
+                                >
+
+                                    <i
+                                        class="fas ${paymentIcon}"
+                                    ></i>
+
+                                    ${paymentStatus}
+
+                                </span>
+
+                            </td>
+
+                            <!-- ORDER STATUS -->
+
+                            <td>
+
+                                <div class="order-status-wrapper">
+
+                                    <span
+                                        class="order-status-badge ${statusClass}"
+                                    >
+
+                                        <i
+                                            class="fas ${statusIcon}"
+                                        ></i>
+
+                                        ${orderStatus}
+
+                                    </span>
+
+                                    <select
+                                        class="order-status-select"
+                                        onchange="
+                                            updateOrderStatus(
+                                                '${order.order_id}',
+                                                this.value
+                                            )
+                                        "
+                                    >
+
+                                        <option
+                                            value="Pending"
+                                            ${
+                                                orderStatus ===
+                                                "Pending"
+                                                    ? "selected"
+                                                    : ""
+                                            }
+                                        >
+                                            Pending
+                                        </option>
+
+                                        <option
+                                            value="Processing"
+                                            ${
+                                                orderStatus ===
+                                                "Processing"
+                                                    ? "selected"
+                                                    : ""
+                                            }
+                                        >
+                                            Processing
+                                        </option>
+
+                                        <option
+                                            value="Shipped"
+                                            ${
+                                                orderStatus ===
+                                                "Shipped"
+                                                    ? "selected"
+                                                    : ""
+                                            }
+                                        >
+                                            Shipped
+                                        </option>
+
+                                        <option
+                                            value="Delivered"
+                                            ${
+                                                orderStatus ===
+                                                "Delivered"
+                                                    ? "selected"
+                                                    : ""
+                                            }
+                                        >
+                                            Delivered
+                                        </option>
+
+                                        <option
+                                            value="Cancelled"
+                                            ${
+                                                orderStatus ===
+                                                "Cancelled"
+                                                    ? "selected"
+                                                    : ""
+                                            }
+                                        >
+                                            Cancelled
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </td>
+
+                            <!-- DATE -->
+
+                            <td>
+                                ${createdDate}
+                            </td>
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <button
+                                    class="edit-btn"
+                                    type="button"
+                                    onclick="
+                                        viewOrder(
+                                            '${order.order_id}'
+                                        )
+                                    "
+                                >
+
+                                    <i class="fas fa-eye"></i>
+
+                                    View
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+                }
+            ).join("");
+
+        // Reapply filters after loading
+        filterOrders();
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Load Orders Error:",
+            error
+        );
 
         showToast(
             "Failed to load orders.",
@@ -1306,21 +1801,522 @@ async function loadOrders() {
         );
 
         ordersTableBody.innerHTML = `
+
             <tr>
-                <td colspan="6" class="loading">
+
+                <td
+                    colspan="8"
+                    class="loading"
+                >
+
+                    <i class="fas fa-circle-exclamation"></i>
+
                     Failed to load orders.
+
                 </td>
+
             </tr>
+
         `;
     }
 }
 
-// =========================
+// =========================================================
+// SALES ANALYTICS
+// =========================================================
+
+function renderSalesChart(
+    orders
+) {
+
+    const ctx =
+        document.getElementById(
+            "salesChart"
+        );
+
+    if (!ctx) return;
+
+    const monthLabels = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+    ];
+
+    // =================================================
+    // AVAILABLE YEARS
+    // =================================================
+
+    const availableYears = [
+        ...new Set(
+            orders
+                .map(order => {
+
+                    const date =
+                        new Date(
+                            order.created_at
+                        );
+
+                    return Number.isNaN(
+                        date.getTime()
+                    )
+                        ? null
+                        : date.getFullYear();
+
+                })
+                .filter(
+                    year =>
+                        year !== null
+                )
+        )
+    ].sort(
+        (a, b) =>
+            b - a
+    );
+
+    if (
+        availableYears.length === 0
+    ) {
+
+        availableYears.push(
+            new Date().getFullYear()
+        );
+    }
+
+    // =================================================
+    // YEAR DROPDOWN
+    // =================================================
+
+    const salesYearSelect =
+        document.getElementById(
+            "sales-year"
+        );
+
+    let selectedYear;
+
+    if (salesYearSelect) {
+
+        const previousValue =
+            Number(
+                salesYearSelect.value
+            );
+
+        salesYearSelect.innerHTML =
+            availableYears
+                .map(
+                    year => `
+                        <option
+                            value="${year}"
+                        >
+                            ${year}
+                        </option>
+                    `
+                )
+                .join("");
+
+        if (
+            availableYears.includes(
+                previousValue
+            )
+        ) {
+
+            salesYearSelect.value =
+                previousValue;
+
+        } else {
+
+            salesYearSelect.value =
+                availableYears[0];
+        }
+
+        selectedYear =
+            Number(
+                salesYearSelect.value
+            );
+
+    } else {
+
+        selectedYear =
+            new Date().getFullYear();
+    }
+
+    // =================================================
+    // MONTHLY SALES
+    // =================================================
+
+    const monthlySales =
+        new Array(12).fill(0);
+
+    orders.forEach(
+        order => {
+
+            const paymentStatus =
+                String(
+                    order.payment_status ||
+                    "Pending"
+                ).toLowerCase();
+
+            const orderStatus =
+                String(
+                    order.status ||
+                    "Pending"
+                ).toLowerCase();
+
+            // Only confirmed paid orders
+            if (
+                paymentStatus !==
+                    "paid" ||
+                orderStatus ===
+                    "cancelled"
+            ) {
+
+                return;
+            }
+
+            const date =
+                new Date(
+                    order.created_at
+                );
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return;
+            }
+
+            if (
+                date.getFullYear() !==
+                selectedYear
+            ) {
+
+                return;
+            }
+
+            const monthIndex =
+                date.getMonth();
+
+            monthlySales[
+                monthIndex
+            ] += Number(
+                order.total || 0
+            );
+        }
+    );
+
+    // =================================================
+    // BEST MONTH
+    // =================================================
+
+    const highestSales =
+        Math.max(
+            ...monthlySales
+        );
+
+    const bestMonthIndex =
+        highestSales > 0
+            ? monthlySales.indexOf(
+                highestSales
+            )
+            : -1;
+
+    const bestMonthElement =
+        document.getElementById(
+            "bestSalesMonth"
+        );
+
+    if (bestMonthElement) {
+
+        bestMonthElement.textContent =
+            bestMonthIndex >= 0
+                ? monthLabels[
+                    bestMonthIndex
+                  ]
+                : "—";
+    }
+
+    const bestSalesValueElement =
+        document.getElementById(
+            "bestSalesValue"
+        );
+
+    if (bestSalesValueElement) {
+
+        bestSalesValueElement.textContent =
+            highestSales > 0
+                ? "₱" +
+                  highestSales.toLocaleString(
+                      "en-PH",
+                      {
+                          minimumFractionDigits:
+                              2
+                      }
+                  )
+                : "₱0.00";
+    }
+
+    // =================================================
+    // YEAR TOTAL
+    // =================================================
+
+    const yearlySales =
+        monthlySales.reduce(
+            (
+                sum,
+                value
+            ) =>
+                sum + value,
+            0
+        );
+
+    const yearlySalesElement =
+        document.getElementById(
+            "yearlySales"
+        );
+
+    if (yearlySalesElement) {
+
+        yearlySalesElement.textContent =
+            "₱" +
+            yearlySales.toLocaleString(
+                "en-PH",
+                {
+                    minimumFractionDigits:
+                        2
+                }
+            );
+    }
+
+    // =================================================
+    // DESTROY OLD CHART
+    // =================================================
+
+    if (salesChart) {
+
+        salesChart.destroy();
+
+        salesChart = null;
+    }
+
+    // =================================================
+    // CREATE CHART
+    // =================================================
+
+    salesChart =
+        new Chart(
+            ctx,
+            {
+                type: "bar",
+
+                data: {
+
+                    labels:
+                        monthLabels,
+
+                    datasets: [
+
+                        {
+                            label:
+                                "Paid Sales (₱)",
+
+                            data:
+                                monthlySales,
+
+                            backgroundColor:
+                                "#088178",
+
+                            borderRadius:
+                                10,
+
+                            borderSkipped:
+                                false
+                        }
+
+                    ]
+                },
+
+                options: {
+
+                    responsive:
+                        true,
+
+                    maintainAspectRatio:
+                        false,
+
+                    interaction: {
+
+                        intersect:
+                            false,
+
+                        mode:
+                            "index"
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display:
+                                false
+                        },
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                title:
+                                    function(
+                                        tooltipItems
+                                    ) {
+
+                                        return (
+                                            tooltipItems[0]
+                                                .label +
+                                            " " +
+                                            selectedYear
+                                        );
+                                    },
+
+                                label:
+                                    function(
+                                        context
+                                    ) {
+
+                                        return (
+                                            " Paid Sales: ₱" +
+                                            Number(
+                                                context.raw ||
+                                                0
+                                            ).toLocaleString(
+                                                "en-PH",
+                                                {
+                                                    minimumFractionDigits:
+                                                        2
+                                                }
+                                            )
+                                        );
+                                    }
+                            }
+                        }
+                    },
+
+                    scales: {
+
+                        x: {
+
+                            grid: {
+
+                                display:
+                                    false
+                            }
+                        },
+
+                        y: {
+
+                            beginAtZero:
+                                true,
+
+                            grid: {
+
+                                color:
+                                    "rgba(0,0,0,0.06)"
+                            },
+
+                            ticks: {
+
+                                callback:
+                                    function(
+                                        value
+                                    ) {
+
+                                        return (
+                                            "₱" +
+                                            Number(
+                                                value
+                                            ).toLocaleString(
+                                                "en-PH"
+                                            )
+                                        );
+                                    }
+                            }
+                        }
+                    }
+                }
+            }
+        );
+}
+
+// =========================================================
+// SALES YEAR CHANGE
+// =========================================================
+
+const salesYearSelect =
+    document.getElementById(
+        "sales-year"
+    );
+
+if (salesYearSelect) {
+
+    salesYearSelect.addEventListener(
+        "change",
+        async () => {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/api/orders/admin/all`
+                    );
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Server responded ${response.status}`
+                    );
+                }
+
+                const orders =
+                    await response.json();
+
+                renderSalesChart(
+                    orders
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Sales year change error:",
+                    error
+                );
+
+                showToast(
+                    "Failed to update sales chart.",
+                    "error"
+                );
+            }
+        }
+    );
+}
+
+// =========================================================
 // UPDATE ORDER STATUS
-// =========================
+// =========================================================
 
 window.updateOrderStatus =
-    async function(orderId, status) {
+    async function(
+        orderId,
+        status
+    ) {
 
         try {
 
@@ -1328,7 +2324,8 @@ window.updateOrderStatus =
                 await fetch(
                     `${API_BASE_URL}/api/orders/admin/${orderId}/status`,
                     {
-                        method: "PUT",
+                        method:
+                            "PUT",
 
                         headers: {
                             "Content-Type":
@@ -1344,7 +2341,15 @@ window.updateOrderStatus =
 
             if (!response.ok) {
 
+                const data =
+                    await response
+                        .json()
+                        .catch(
+                            () => ({})
+                        );
+
                 throw new Error(
+                    data.message ||
                     `Server responded ${response.status}`
                 );
             }
@@ -1354,20 +2359,35 @@ window.updateOrderStatus =
                 "success"
             );
 
+            // Reload orders so:
+            // - dashboard stats update
+            // - revenue updates
+            // - chart updates
+            // - badge updates
+            await loadOrders();
+
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Update Order Status Error:",
+                error
+            );
 
             showToast(
+                error.message ||
                 "Failed to update order status.",
                 "error"
             );
+
+            // Reload to restore
+            // correct select value
+            await loadOrders();
         }
     };
 
-// =========================
+// =========================================================
 // VIEW ORDER DETAILS
-// =========================
+// =========================================================
 
 const orderModal =
     document.getElementById(
@@ -1390,26 +2410,50 @@ if (closeOrderModal) {
         "click",
         () => {
 
-            orderModal.classList.remove(
-                "active"
-            );
+            if (orderModal) {
+
+                orderModal.classList.remove(
+                    "active"
+                );
+            }
 
         }
     );
 }
 
 window.viewOrder =
-    async function(orderId) {
+    async function(
+        orderId
+    ) {
+
+        if (
+            !orderModal ||
+            !orderDetails
+        ) {
+
+            return;
+        }
 
         try {
 
+            // Open modal
             orderModal.classList.add(
                 "active"
             );
 
-            orderDetails.innerHTML =
-                "<p>Loading order...</p>";
+            orderDetails.innerHTML = `
+                <div class="order-loading">
 
+                    <i class="fas fa-spinner fa-spin"></i>
+
+                    <p>
+                        Loading order...
+                    </p>
+
+                </div>
+            `;
+
+            // Fetch order
             const response =
                 await fetch(
                     `${API_BASE_URL}/api/orders/admin/${orderId}`
@@ -1429,102 +2473,498 @@ window.viewOrder =
                 data.order;
 
             const items =
-                data.items;
+                data.items || [];
+
+            if (!order) {
+
+                throw new Error(
+                    "Order not found."
+                );
+            }
+
+            // =================================================
+            // FORMAT VALUES
+            // =================================================
+
+            const total =
+                Number(
+                    order.total || 0
+                );
+
+            const paymentStatus =
+                order.payment_status ||
+                "Pending";
+
+            const orderStatus =
+                order.status ||
+                "Pending";
+
+            const paymentClass =
+                String(
+                    paymentStatus
+                )
+                    .toLowerCase()
+                    .replace(
+                        /\s+/g,
+                        "-"
+                    );
+
+            const statusClass =
+                String(
+                    orderStatus
+                )
+                    .toLowerCase()
+                    .replace(
+                        /\s+/g,
+                        "-"
+                    );
+
+            const orderDate =
+                order.created_at
+                    ? new Date(
+                        order.created_at
+                    ).toLocaleString(
+                        "en-PH",
+                        {
+                            year:
+                                "numeric",
+
+                            month:
+                                "long",
+
+                            day:
+                                "numeric",
+
+                            hour:
+                                "numeric",
+
+                            minute:
+                                "2-digit"
+                        }
+                    )
+                    : "N/A";
+
+            // Modal order ID
+            const modalOrderId =
+                document.getElementById(
+                    "modal-order-id"
+                );
+
+            if (modalOrderId) {
+
+                modalOrderId.textContent =
+                    order.order_id;
+            }
+
+            // =================================================
+            // PRODUCT ROWS
+            // =================================================
+
+            const itemRows =
+                items.length > 0
+
+                    ? items.map(
+                        item => {
+
+                            const price =
+                                Number(
+                                    item.price ||
+                                    0
+                                );
+
+                            const quantity =
+                                Number(
+                                    item.quantity ||
+                                    0
+                                );
+
+                            const subtotal =
+                                Number(
+                                    item.subtotal ||
+                                    price *
+                                    quantity
+                                );
+
+                            return `
+
+                                <tr>
+
+                                    <td>
+
+                                        <div class="admin-order-product">
+
+                                            <strong>
+                                                ${
+                                                    item.product_name ||
+                                                    "Unknown Product"
+                                                }
+                                            </strong>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+
+                                        ₱${price.toLocaleString(
+                                            "en-PH",
+                                            {
+                                                minimumFractionDigits:
+                                                    2
+                                            }
+                                        )}
+
+                                    </td>
+
+                                    <td>
+
+                                        ${quantity}
+
+                                    </td>
+
+                                    <td>
+
+                                        <strong>
+                                            ₱${subtotal.toLocaleString(
+                                                "en-PH",
+                                                {
+                                                    minimumFractionDigits:
+                                                        2
+                                                }
+                                            )}
+                                        </strong>
+
+                                    </td>
+
+                                </tr>
+
+                            `;
+                        }
+                    ).join("")
+
+                    : `
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                class="empty-order-items"
+                            >
+
+                                No products found.
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+            // =================================================
+            // RENDER ORDER DETAILS
+            // =================================================
 
             orderDetails.innerHTML = `
 
-                <div class="order-info">
+                <!-- CUSTOMER INFORMATION -->
 
-                    <div class="order-card">
-                        <h4>Order ID</h4>
-                        <p>${order.order_id}</p>
+                <div class="order-detail-section">
+
+                    <div class="order-detail-section-title">
+
+                        <i class="fas fa-user"></i>
+
+                        <h3>
+                            Customer Information
+                        </h3>
+
                     </div>
 
-                    <div class="order-card">
-                        <h4>Customer</h4>
-                        <p>${order.fullname}</p>
-                    </div>
+                    <div class="order-info">
 
-                    <div class="order-card">
-                        <h4>Email</h4>
-                        <p>${order.email}</p>
-                    </div>
+                        <div class="order-card">
 
-                    <div class="order-card">
-                        <h4>Payment</h4>
-                        <p>${order.payment_method}</p>
-                    </div>
+                            <span>
+                                Customer
+                            </span>
 
-                    <div class="order-card">
-                        <h4>Status</h4>
-                        <p>${order.status}</p>
-                    </div>
+                            <strong>
+                                ${
+                                    order.fullname ||
+                                    "Unknown"
+                                }
+                            </strong>
 
-                    <div class="order-card">
-                        <h4>Total</h4>
-                        <p>
-                            ₱${Number(
-                                order.total
-                            ).toLocaleString()}
-                        </p>
+                        </div>
+
+                        <div class="order-card">
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong>
+                                ${
+                                    order.email ||
+                                    "No email"
+                                }
+                            </strong>
+
+                        </div>
+
                     </div>
 
                 </div>
 
-                <table class="order-items-table">
+                <!-- ORDER INFORMATION -->
 
-                    <thead>
+                <div class="order-detail-section">
 
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Qty</th>
-                            <th>Subtotal</th>
-                        </tr>
+                    <div class="order-detail-section-title">
 
-                    </thead>
+                        <i class="fas fa-receipt"></i>
 
-                    <tbody>
+                        <h3>
+                            Order Information
+                        </h3>
 
-                        ${items.map(item => `
+                    </div>
 
-                            <tr>
+                    <div class="order-info">
 
-                                <td>
-                                    ${item.product_name}
-                                </td>
+                        <div class="order-card">
 
-                                <td>
-                                    ₱${Number(
-                                        item.price
-                                    ).toLocaleString()}
-                                </td>
+                            <span>
+                                Order ID
+                            </span>
 
-                                <td>
-                                    ${item.quantity}
-                                </td>
+                            <strong>
+                                ${order.order_id}
+                            </strong>
 
-                                <td>
-                                    ₱${Number(
-                                        item.subtotal
-                                    ).toLocaleString()}
-                                </td>
+                        </div>
 
-                            </tr>
+                        <div class="order-card">
 
-                        `).join("")}
+                            <span>
+                                Order Date
+                            </span>
 
-                    </tbody>
+                            <strong>
+                                ${orderDate}
+                            </strong>
 
-                </table>
+                        </div>
+
+                        <div class="order-card">
+
+                            <span>
+                                Payment Method
+                            </span>
+
+                            <strong>
+                                ${
+                                    order.payment_method ||
+                                    "N/A"
+                                }
+                            </strong>
+
+                        </div>
+
+                        <div class="order-card">
+
+                            <span>
+                                Payment Status
+                            </span>
+
+                            <strong
+                                class="
+                                    detail-status
+                                    payment-status
+                                    ${paymentClass}
+                                "
+                            >
+
+                                <i class="fas ${
+                                    paymentClass ===
+                                    "paid"
+                                        ? "fa-circle-check"
+                                        : paymentClass ===
+                                          "failed"
+                                            ? "fa-circle-xmark"
+                                            : "fa-clock"
+                                }"></i>
+
+                                ${paymentStatus}
+
+                            </strong>
+
+                        </div>
+
+                        <div class="order-card">
+
+                            <span>
+                                Order Status
+                            </span>
+
+                            <strong
+                                class="
+                                    detail-status
+                                    order-status
+                                    ${statusClass}
+                                "
+                            >
+
+                                <i class="fas ${
+                                    statusClass ===
+                                    "delivered"
+                                        ? "fa-circle-check"
+                                        : statusClass ===
+                                          "cancelled"
+                                            ? "fa-circle-xmark"
+                                            : statusClass ===
+                                              "shipped"
+                                                ? "fa-truck"
+                                                : statusClass ===
+                                                  "processing"
+                                                    ? "fa-box"
+                                                    : "fa-clock"
+                                }"></i>
+
+                                ${orderStatus}
+
+                            </strong>
+
+                        </div>
+
+                        <div class="order-card total-card">
+
+                            <span>
+                                Order Total
+                            </span>
+
+                            <strong>
+                                ₱${total.toLocaleString(
+                                    "en-PH",
+                                    {
+                                        minimumFractionDigits:
+                                            2
+                                    }
+                                )}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ORDER ITEMS -->
+
+                <div class="order-detail-section">
+
+                    <div class="order-detail-section-title">
+
+                        <i class="fas fa-box-open"></i>
+
+                        <h3>
+                            Products Ordered
+                        </h3>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table class="order-items-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Product
+                                    </th>
+
+                                    <th>
+                                        Price
+                                    </th>
+
+                                    <th>
+                                        Qty
+                                    </th>
+
+                                    <th>
+                                        Subtotal
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                ${itemRows}
+
+                            </tbody>
+
+                            <tfoot>
+
+                                <tr>
+
+                                    <td
+                                        colspan="3"
+                                        class="order-total-label"
+                                    >
+                                        Total
+                                    </td>
+
+                                    <td
+                                        class="order-total-value"
+                                    >
+                                        ₱${total.toLocaleString(
+                                            "en-PH",
+                                            {
+                                                minimumFractionDigits:
+                                                    2
+                                            }
+                                        )}
+                                    </td>
+
+                                </tr>
+
+                            </tfoot>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
             `;
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "View Order Error:",
+                error
+            );
 
-            orderDetails.innerHTML =
-                "<p>Failed to load order.</p>";
+            orderDetails.innerHTML = `
+
+                <div class="order-error">
+
+                    <i class="fas fa-circle-exclamation"></i>
+
+                    <h3>
+                        Failed to load order
+                    </h3>
+
+                    <p>
+                        ${error.message}
+                    </p>
+
+                </div>
+
+            `;
 
             showToast(
                 "Failed to load order.",
@@ -1533,9 +2973,27 @@ window.viewOrder =
         }
     };
 
-// =========================
+// Close order modal
+window.addEventListener(
+    "click",
+    (e) => {
+
+        if (
+            orderModal &&
+            e.target === orderModal
+        ) {
+
+            orderModal.classList.remove(
+                "active"
+            );
+        }
+
+    }
+);
+
+// =========================================================
 // LOAD USERS
-// =========================
+// =========================================================
 
 const usersTableBody =
     document.getElementById(
@@ -1588,7 +3046,7 @@ async function loadUsers() {
 
         usersTableBody.innerHTML = `
             <tr>
-                <td colspan="6" class="loading">
+                <td colspan="8" class="loading">
                     Failed to load users.
                 </td>
             </tr>
@@ -1596,14 +3054,19 @@ async function loadUsers() {
     }
 }
 
-// =========================
+// =========================================================
 // RENDER USERS
-// =========================
+// =========================================================
 
-function renderUsers(users) {
+function renderUsers(
+    users
+) {
+
+    if (!usersTableBody) return;
 
     usersTableBody.innerHTML =
-        users.map(user => `
+        users.map(
+            user => `
 
             <tr>
 
@@ -1652,7 +3115,8 @@ function renderUsers(users) {
                 <td>
 
                     ${
-                        user.role === "owner"
+                        user.role ===
+                        "owner"
 
                             ? `
 
@@ -1676,7 +3140,8 @@ function renderUsers(users) {
                                     "
                                 >
                                     ${
-                                        user.role === "admin"
+                                        user.role ===
+                                        "admin"
                                             ? "Make User"
                                             : "Make Admin"
                                     }
@@ -1750,15 +3215,19 @@ function renderUsers(users) {
 
             </tr>
 
-        `).join("");
+        `
+        ).join("");
 }
 
-// =========================
+// =========================================================
 // TOGGLE USER ROLE
-// =========================
+// =========================================================
 
 window.toggleRole =
-    async function(userId, currentRole) {
+    async function(
+        userId,
+        currentRole
+    ) {
 
         const newRole =
             currentRole === "admin"
@@ -1771,7 +3240,8 @@ window.toggleRole =
                 await fetch(
                     `${API_BASE_URL}/api/admin/users/${userId}/role`,
                     {
-                        method: "PUT",
+                        method:
+                            "PUT",
 
                         headers: {
                             "Content-Type":
@@ -1780,7 +3250,9 @@ window.toggleRole =
 
                         body:
                             JSON.stringify({
-                                role: newRole,
+                                role:
+                                    newRole,
+
                                 adminRole:
                                     currentUser.role
                             })
@@ -1819,12 +3291,15 @@ window.toggleRole =
         }
     };
 
-// =========================
+// =========================================================
 // SUSPEND USER
-// =========================
+// =========================================================
 
 window.suspendUser =
-    async function(userId, days) {
+    async function(
+        userId,
+        days
+    ) {
 
         const label =
             days === "permanent"
@@ -1836,6 +3311,7 @@ window.suspendUser =
                 `Are you sure you want to ${label} this user?`
             )
         ) {
+
             return;
         }
 
@@ -1845,7 +3321,8 @@ window.suspendUser =
                 await fetch(
                     `${API_BASE_URL}/api/admin/users/${userId}/suspend`,
                     {
-                        method: "PUT",
+                        method:
+                            "PUT",
 
                         headers: {
                             "Content-Type":
@@ -1855,6 +3332,7 @@ window.suspendUser =
                         body:
                             JSON.stringify({
                                 days,
+
                                 adminRole:
                                     currentUser.role
                             })
@@ -1893,12 +3371,14 @@ window.suspendUser =
         }
     };
 
-// =========================
+// =========================================================
 // UNBAN USER
-// =========================
+// =========================================================
 
 window.unbanUser =
-    async function(userId) {
+    async function(
+        userId
+    ) {
 
         try {
 
@@ -1906,7 +3386,8 @@ window.unbanUser =
                 await fetch(
                     `${API_BASE_URL}/api/admin/users/${userId}/unsuspend`,
                     {
-                        method: "PUT"
+                        method:
+                            "PUT"
                     }
                 );
 
@@ -1935,9 +3416,9 @@ window.unbanUser =
         }
     };
 
-// =========================
+// =========================================================
 // USER SEARCH
-// =========================
+// =========================================================
 
 if (userSearch) {
 
@@ -1946,21 +3427,33 @@ if (userSearch) {
         function() {
 
             const value =
-                this.value.toLowerCase();
+                this.value
+                    .toLowerCase()
+                    .trim();
 
             const filtered =
-                allUsers.filter(user =>
+                allUsers.filter(
+                    user =>
 
-                    user.fullname
-                        .toLowerCase()
-                        .includes(value)
+                        String(
+                            user.fullname ||
+                            ""
+                        )
+                            .toLowerCase()
+                            .includes(
+                                value
+                            )
 
-                    ||
+                        ||
 
-                    user.email
-                        .toLowerCase()
-                        .includes(value)
-
+                        String(
+                            user.email ||
+                            ""
+                        )
+                            .toLowerCase()
+                            .includes(
+                                value
+                            )
                 );
 
             renderUsers(
@@ -1970,9 +3463,9 @@ if (userSearch) {
     );
 }
 
-// =========================
+// =========================================================
 // LOAD REVIEWS
-// =========================
+// =========================================================
 
 async function loadReviews() {
 
@@ -1998,6 +3491,8 @@ async function loadReviews() {
                 "reviewsTableBody"
             );
 
+        if (!tbody) return;
+
         if (!reviews.length) {
 
             tbody.innerHTML = `
@@ -2011,8 +3506,9 @@ async function loadReviews() {
             return;
         }
 
-        const rows =
-            reviews.map(r => `
+        tbody.innerHTML =
+            reviews.map(
+                r => `
 
                 <tr>
 
@@ -2025,8 +3521,12 @@ async function loadReviews() {
                     </td>
 
                     <td>
-                        ${"★".repeat(r.rating)}
-                        ${"☆".repeat(5 - r.rating)}
+                        ${"★".repeat(
+                            r.rating
+                        )}
+                        ${"☆".repeat(
+                            5 - r.rating
+                        )}
                     </td>
 
                     <td>
@@ -2056,14 +3556,12 @@ async function loadReviews() {
 
                 </tr>
 
-            `).join("");
+            `
+            ).join("");
 
-        tbody.innerHTML =
-            rows;
+    } catch (error) {
 
-    } catch (err) {
-
-        console.error(err);
+        console.error(error);
 
         showToast(
             "Failed to load reviews.",
@@ -2072,69 +3570,78 @@ async function loadReviews() {
     }
 }
 
-// =========================
+// =========================================================
 // DELETE REVIEW
-// =========================
+// =========================================================
 
-async function deleteReview(id) {
+window.deleteReview =
+    async function(
+        id
+    ) {
 
-    if (!confirm("Delete this review?")) {
-        return;
-    }
+        if (
+            !confirm(
+                "Delete this review?"
+            )
+        ) {
 
-    try {
+            return;
+        }
 
-        const response =
-            await fetch(
-                `${API_BASE_URL}/api/reviews/admin/${id}`,
-                {
-                    method: "DELETE"
-                }
-            );
+        try {
 
-        const data =
-            await response.json();
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/reviews/admin/${id}`,
+                    {
+                        method:
+                            "DELETE"
+                    }
+                );
 
-        if (data.success) {
+            const data =
+                await response.json();
+
+            if (data.success) {
+
+                showToast(
+                    "Review deleted.",
+                    "success"
+                );
+
+                loadReviews();
+
+            } else {
+
+                showToast(
+                    "Failed to delete review.",
+                    "error"
+                );
+            }
+
+        } catch (error) {
+
+            console.error(error);
 
             showToast(
-                "Review deleted.",
-                "success"
-            );
-
-            loadReviews();
-
-        } else {
-
-            showToast(
-                "Failed to delete review.",
+                "Server error.",
                 "error"
             );
         }
+    };
 
-    } catch (err) {
-
-        console.error(err);
-
-        showToast(
-            "Server error.",
-            "error"
-        );
-    }
-}
-
-// =========================
+// =========================================================
 // CONTACT MESSAGES
-// =========================
+// =========================================================
 
 const messagesTableBody =
     document.getElementById(
         "messagesTableBody"
     );
 
-// =========================
+// =========================================================
 // LOAD CONTACT MESSAGES
-// =========================
+// =========================================================
 
 async function loadMessages() {
 
@@ -2163,9 +3670,9 @@ async function loadMessages() {
             messages
         );
 
-    } catch (err) {
+    } catch (error) {
 
-        console.error(err);
+        console.error(error);
 
         showToast(
             "Failed to load messages.",
@@ -2182,18 +3689,21 @@ async function loadMessages() {
     }
 }
 
-// =========================
+// =========================================================
 // DELETE CONTACT MESSAGE
-// =========================
+// =========================================================
 
 window.deleteMessage =
-    async function(id) {
+    async function(
+        id
+    ) {
 
         if (
             !confirm(
                 "Delete this message?"
             )
         ) {
+
             return;
         }
 
@@ -2203,7 +3713,8 @@ window.deleteMessage =
                 await fetch(
                     `${API_BASE_URL}/api/contact/admin/${id}`,
                     {
-                        method: "DELETE"
+                        method:
+                            "DELETE"
                     }
                 );
 
@@ -2227,9 +3738,9 @@ window.deleteMessage =
                 );
             }
 
-        } catch (err) {
+        } catch (error) {
 
-            console.error(err);
+            console.error(error);
 
             showToast(
                 "Server error.",
@@ -2238,11 +3749,20 @@ window.deleteMessage =
         }
     };
 
-// =========================
+// =========================================================
 // RENDER CONTACT MESSAGES
-// =========================
+// =========================================================
 
-function renderMessages(messages) {
+function renderMessages(
+    messages
+) {
+
+    if (
+        !messagesTableBody
+    ) {
+
+        return;
+    }
 
     if (
         !messages ||
@@ -2261,7 +3781,8 @@ function renderMessages(messages) {
     }
 
     messagesTableBody.innerHTML =
-        messages.map(message => `
+        messages.map(
+            message => `
 
             <tr>
 
@@ -2304,50 +3825,284 @@ function renderMessages(messages) {
 
             </tr>
 
-        `).join("");
+        `
+        ).join("");
 }
 
-// =========================
+// =========================================================
 // SIDEBAR ACTIVE STATE
-// =========================
+// =========================================================
 
 document
-    .querySelectorAll(".sidebar-nav a")
-    .forEach(link => {
+    .querySelectorAll(
+        ".sidebar-nav a"
+    )
+    .forEach(
+        link => {
 
-        link.addEventListener(
-            "click",
-            () => {
+            link.addEventListener(
+                "click",
+                () => {
 
-                document
-                    .querySelectorAll(
-                        ".sidebar-nav a"
-                    )
-                    .forEach(a =>
-                        a.classList.remove(
-                            "active"
+                    document
+                        .querySelectorAll(
+                            ".sidebar-nav a"
                         )
+                        .forEach(
+                            a =>
+                                a.classList.remove(
+                                    "active"
+                                )
+                        );
+
+                    link.classList.add(
+                        "active"
                     );
+                }
+            );
+        }
+    );
 
-                link.classList.add(
-                    "active"
-                );
-            }
+// =========================================================
+// ORDER SEARCH & FILTERS
+// =========================================================
+
+function filterOrders() {
+
+    if (!ordersTableBody) {
+        return;
+    }
+
+    // IMPORTANT:
+    // These IDs match your admin.html
+
+    const searchInput =
+        document.getElementById(
+            "order-search"
         );
-    });
 
-// =========================
+    const statusFilter =
+        document.getElementById(
+            "status-filter"
+        );
+
+    const paymentFilter =
+        document.getElementById(
+            "payment-status-filter"
+        );
+
+    const search =
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+    const selectedStatus =
+        statusFilter
+            ? statusFilter.value
+            : "all";
+
+    const selectedPayment =
+        paymentFilter
+            ? paymentFilter.value
+            : "all";
+
+    const rows =
+        ordersTableBody.querySelectorAll(
+            "tr"
+        );
+
+    rows.forEach(
+        row => {
+
+            const text =
+                row.textContent
+                    .toLowerCase();
+
+            // Order status
+            const statusSelect =
+                row.querySelector(
+                    ".order-status-select"
+                ) ||
+                row.querySelector(
+                    "select"
+                );
+
+            const rowStatus =
+                statusSelect
+                    ? statusSelect.value
+                    : "";
+
+            // Payment status
+            const paymentElement =
+                row.querySelector(
+                    ".payment-status"
+                );
+
+            const rowPayment =
+                paymentElement
+                    ? paymentElement.textContent
+                        .trim()
+                        .toLowerCase()
+                    : "";
+
+            const matchesSearch =
+                !search ||
+                text.includes(
+                    search
+                );
+
+            const matchesStatus =
+                selectedStatus ===
+                    "all" ||
+                selectedStatus ===
+                    "" ||
+                rowStatus.toLowerCase() ===
+                    selectedStatus.toLowerCase();
+
+            const matchesPayment =
+                selectedPayment ===
+                    "all" ||
+                selectedPayment ===
+                    "" ||
+                rowPayment ===
+                    selectedPayment.toLowerCase();
+
+            row.style.display =
+                matchesSearch &&
+                matchesStatus &&
+                matchesPayment
+                    ? ""
+                    : "none";
+        }
+    );
+}
+
+// =========================================================
+// CONNECT ORDER FILTERS
+// =========================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const searchInput =
+            document.getElementById(
+                "order-search"
+            );
+
+        const statusFilter =
+            document.getElementById(
+                "status-filter"
+            );
+
+        const paymentFilter =
+            document.getElementById(
+                "payment-status-filter"
+            );
+
+        if (searchInput) {
+
+            searchInput.addEventListener(
+                "input",
+                filterOrders
+            );
+        }
+
+        if (statusFilter) {
+
+            statusFilter.addEventListener(
+                "change",
+                filterOrders
+            );
+        }
+
+        if (paymentFilter) {
+
+            paymentFilter.addEventListener(
+                "change",
+                filterOrders
+            );
+        }
+
+        // Initial filter
+        filterOrders();
+    }
+);
+
+// =========================================================
+// REFRESH ORDERS BUTTON
+// =========================================================
+
+const refreshOrdersBtn =
+    document.getElementById(
+        "refresh-orders"
+    );
+
+if (refreshOrdersBtn) {
+
+    refreshOrdersBtn.addEventListener(
+        "click",
+        async () => {
+
+            const originalHTML =
+                refreshOrdersBtn.innerHTML;
+
+            refreshOrdersBtn.disabled =
+                true;
+
+            refreshOrdersBtn.innerHTML = `
+                <i class="fas fa-spinner fa-spin"></i>
+                Refreshing...
+            `;
+
+            try {
+
+                await loadOrders();
+
+                showToast(
+                    "Orders refreshed successfully.",
+                    "success"
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                showToast(
+                    "Failed to refresh orders.",
+                    "error"
+                );
+
+            } finally {
+
+                refreshOrdersBtn.disabled =
+                    false;
+
+                refreshOrdersBtn.innerHTML =
+                    originalHTML;
+            }
+        }
+    );
+}
+
+// =========================================================
 // INITIAL LOAD
-// =========================
+// =========================================================
 
 document.addEventListener(
     "DOMContentLoaded",
     () => {
 
         loadProducts();
+
         loadOrders();
+
         loadUsers();
+
         loadReviews();
+
         loadMessages();
 
     }
