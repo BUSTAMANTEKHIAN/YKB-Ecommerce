@@ -595,9 +595,10 @@ router.get("/:user_id", async (req, res) => {
                 user_id,
                 total,
                 payment_method,
+                payment_status,
                 status,
                 created_at
-             FROM orders
+            FROM orders
              WHERE user_id = ?
              ORDER BY created_at DESC`,
             [user_id]

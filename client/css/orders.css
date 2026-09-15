@@ -390,3 +390,31 @@ body{
         max-width: none;
     }
 }
+
+/* =====================================================
+   PAYMENT STATUS
+===================================================== */
+
+.payment-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.payment-status i {
+    font-size: 14px;
+}
+
+.payment-status.paid {
+    color: var(--delivered);
+}
+
+.payment-status.pending {
+    color: var(--pending);
+}
+
+.payment-status.failed,
+.payment-status.cancelled {
+    color: var(--cancelled);
+}

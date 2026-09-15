@@ -102,10 +102,30 @@ function renderOrders(orders) {
                 <span class="status-badge ${statusClass}">${status}</span>
             </div>
 
-            <div class="order-meta">
-                <span><strong>Total:</strong> ₱${Number(order.total).toLocaleString()}</span>
-                <span><strong>Payment:</strong> ${order.payment_method}</span>
-            </div>
+        <div class="order-meta">
+            
+            <span>
+                <strong>Total:</strong>
+                ₱${Number(order.total).toLocaleString()}
+            </span>
+            
+            <span>
+                <strong>Payment:</strong>
+                ${order.payment_method || "N/A"}
+            </span>
+            
+            <span class="payment-status ${String(order.payment_status || "Pending").toLowerCase()}">
+                <i class="fas ${
+                    String(order.payment_status || "Pending").toLowerCase() === "paid"
+                        ? "fa-circle-check"
+                        : "fa-clock"
+                }"></i>
+            
+                <strong>Payment:</strong>
+                ${order.payment_status || "Pending"}
+            </span>
+            
+        </div>
 
             ${!isCancelled ? `
             <div class="tracker">
