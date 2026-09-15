@@ -93,7 +93,10 @@ router.post("/webhook", async (req, res) => {
         const signature =
             req.headers["paymongo-signature"];
 
-        // Verify PayMongo request
+        // =================================================
+        // VERIFY PAYMONGO REQUEST
+        // =================================================
+
         const valid =
             verifyPayMongoSignature(
                 rawBody,
@@ -113,21 +116,29 @@ router.post("/webhook", async (req, res) => {
 
         }
 
+
+        // =================================================
+        // PARSE EVENT
+        // =================================================
+
         const event =
             JSON.parse(rawBody);
 
+        const eventType =
+            event?.data?.attributes?.type;
+
         console.log(
             "🔔 PayMongo Webhook:",
-            event?.data?.attributes?.type
+            eventType
         );
 
 
         // =================================================
-        // ONLY HANDLE SUCCESSFUL CHECKOUT
+        // ONLY HANDLE SUCCESSFUL CHECKOUT PAYMENT
         // =================================================
 
         if (
-            event?.data?.attributes?.type !==
+            eventType !==
             "checkout_session.payment.paid"
         ) {
 
@@ -138,6 +149,10 @@ router.post("/webhook", async (req, res) => {
         }
 
 
+        // =================================================
+        // GET CHECKOUT SESSION
+        // =================================================
+
         const checkoutSession =
             event?.data?.attributes?.data;
 
@@ -145,7 +160,10 @@ router.post("/webhook", async (req, res) => {
             checkoutSession?.attributes || {};
 
 
-        // reference_number contains our YKB order ID
+        // =================================================
+        // GET YKB ORDER ID
+        // =================================================
+
         const orderId =
             attributes.reference_number;
 
@@ -174,7 +192,12 @@ router.post("/webhook", async (req, res) => {
 
         const [orders] =
             await db.query(
-                "SELECT order_id, status FROM orders WHERE order_id = ? LIMIT 1",
+                `SELECT
+                    order_id,
+                    payment_status,
+                    status
+                 FROM orders
+                 WHERE order_id = ?`,
                 [orderId]
             );
 
@@ -197,36 +220,39 @@ router.post("/webhook", async (req, res) => {
 
 
         // =================================================
-        // AVOID DUPLICATE PROCESSING
+        // AVOID DUPLICATE PAYMENT PROCESSING
         // =================================================
 
-        if (order.status === "Paid") {
+        if (
+            order.payment_status === "Paid"
+        ) {
 
             console.log(
                 `ℹ️ ${orderId} is already marked Paid.`
             );
 
             return res.json({
-                received: true
+                received: true,
+                success: true
             });
 
         }
 
 
         // =================================================
-        // MARK ORDER AS PAID
+        // MARK PAYMENT AS PAID
         // =================================================
 
         await db.query(
             `UPDATE orders
-             SET status = 'Paid'
+             SET payment_status = 'Paid'
              WHERE order_id = ?`,
             [orderId]
         );
 
 
         console.log(
-            `✅ ${orderId} marked as PAID`
+            `✅ ${orderId} payment_status marked as PAID`
         );
 
 
