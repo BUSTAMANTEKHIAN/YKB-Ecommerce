@@ -498,6 +498,10 @@ body.dark-mode .about-page .bubble-left {
     color: #eafaf8;
 }
 
+body.dark-mode .teal-hero h1 .highlight {
+    color: #072421;
+}
+
 /* FORCE THESE 3 HOME BANNERS TO ALWAYS HAVE WHITE TEXT */
 .banner-white-text,
 .banner-white-text h2,

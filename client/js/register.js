@@ -27,8 +27,8 @@ registerForm.addEventListener("submit", async (e) => {
         return;
     }
 
-    if (password.length < 6) {
-        alert("Password must be at least 6 characters long.");
+    if (password.length < 8 || !/[A-Za-z]/.test(password) || !/\d/.test(password)) {
+        alert("Password must be at least 8 characters and include a letter and a number.");
         return;
     }
 

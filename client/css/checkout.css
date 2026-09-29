@@ -107,6 +107,26 @@ body {
     margin: 0 0 38px;
 }
 
+.saved-address-card{
+    display:flex;
+    gap:15px;
+    margin:24px 0 28px;
+    padding:18px;
+    border:1px solid rgba(8,129,120,.2);
+    border-radius:16px;
+    background:#fff;
+    box-shadow:0 12px 30px rgba(14,20,20,.045);
+}
+
+.saved-address-card[hidden]{ display:none; }
+.saved-address-card__icon{ display:grid; place-items:center; flex:none; width:42px; height:42px; border-radius:13px; background:var(--teal-tint); color:var(--teal); }
+.saved-address-card__content{ min-width:0; }
+.saved-address-card__label{ display:block; margin-bottom:7px; color:var(--teal-dark); font:700 9px/1.4 var(--font-mono); letter-spacing:1.4px; text-transform:uppercase; }
+.saved-address-card__content strong{ color:var(--ink); font-size:14px; }
+.saved-address-card__content p{ margin:6px 0 11px; color:var(--ink-70); font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
+.saved-address-card__content a{ color:var(--teal-dark); font-size:12px; font-weight:700; text-decoration:none; }
+.saved-address-card__content a:hover{ color:var(--teal); }
+
 /* ===== Form fields (floating label) ===== */
 
 #checkout-form { display: flex; flex-direction: column; gap: 20px; }

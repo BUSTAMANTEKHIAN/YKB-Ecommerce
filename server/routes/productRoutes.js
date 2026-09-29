@@ -4,6 +4,8 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 
 const productController = require("../controllers/productController");
+const authenticate = require("../middleware/authMiddleware");
+const requireAdmin = require("../middleware/adminMiddleware");
 
 // ===============================
 // CLOUDINARY CONFIG
@@ -44,17 +46,17 @@ router.get("/", productController.getProducts);
 
 router.get("/:id", productController.getProductById);
 
-router.post("/", productController.addProduct);
+router.post("/", authenticate, requireAdmin, productController.addProduct);
 
-router.put("/:id", productController.updateProduct);
+router.put("/:id", authenticate, requireAdmin, productController.updateProduct);
 
-router.delete("/:id", productController.deleteProduct);
+router.delete("/:id", authenticate, requireAdmin, productController.deleteProduct);
 
 // ===============================
 // CLOUDINARY IMAGE UPLOAD
 // ===============================
 
-router.post("/upload", upload.single("image"), async (req, res) => {
+router.post("/upload", authenticate, requireAdmin, upload.single("image"), async (req, res) => {
 
     try {
 
@@ -124,7 +126,7 @@ router.post("/upload", upload.single("image"), async (req, res) => {
 
         return res.status(500).json({
             success: false,
-            message: error.message || "Image upload failed."
+            message: "Image upload failed. Please check the image and try again."
         });
     }
 });

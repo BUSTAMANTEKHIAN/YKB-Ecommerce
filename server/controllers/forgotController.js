@@ -3,7 +3,7 @@ const crypto = require("crypto");
 
 exports.forgotPassword = async (req, res) => {
     try {
-        const { email } = req.body;
+        const email = String(req.body.email || "").trim().toLowerCase();
 
         if (!email) {
             return res.status(400).json({
@@ -18,12 +18,7 @@ exports.forgotPassword = async (req, res) => {
             [email]
         );
 
-        if (users.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "No account found with that email."
-            });
-        }
+        if (users.length === 0) return res.json({ success: true, message: "If an account matches that email, reset instructions will be sent." });
 
         // Generate secure token
         const token = crypto.randomBytes(32).toString("hex");
@@ -40,22 +35,19 @@ exports.forgotPassword = async (req, res) => {
         // Store new token
         await db.query(
             "INSERT INTO password_resets (email, token, expires_at) VALUES (?, ?, ?)",
-            [email, token, expires]
+            [email, crypto.createHash("sha256").update(token).digest("hex"), expires]
         );
 
-        const resetLink = `${process.env.FRONTEND_URL}/reset-password.html?token=${token}`;
-
-        // Development: print link in terminal
-        console.log("====================================");
-        console.log("PASSWORD RESET LINK:");
-        console.log(resetLink);
-        console.log("====================================");
-
-        return res.json({
+        const response = {
             success: true,
-            message: "Reset link generated successfully.",
-            resetLink
-        });
+            message: "If an account matches that email, reset instructions will be sent."
+        };
+        // Development-only convenience until an email provider is configured.
+        // Never return or log reset tokens in production.
+        if (process.env.NODE_ENV === "development") {
+            response.resetLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/reset-password.html?token=${token}`;
+        }
+        return res.json(response);
 
     } catch (error) {
         console.error("Forgot Password Error:", error);
@@ -80,17 +72,18 @@ exports.resetPassword = async (req, res) => {
             });
         }
 
-        if (password.length < 6) {
+        if (typeof password !== "string" || password.length < 8 || !/[A-Za-z]/.test(password) || !/\d/.test(password)) {
             return res.status(400).json({
                 success: false,
-                message: "Password must be at least 6 characters long."
+                message: "Password must be at least 8 characters and include a letter and a number."
             });
         }
 
         // Check token
+        const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
         const [tokens] = await db.query(
-            "SELECT * FROM password_resets WHERE token = ?",
-            [token]
+            "SELECT * FROM password_resets WHERE token = ? OR token = ? LIMIT 1",
+            [tokenHash, token]
         );
 
         if (tokens.length === 0) {

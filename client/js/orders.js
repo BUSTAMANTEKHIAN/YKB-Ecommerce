@@ -96,10 +96,10 @@ function renderOrders(orders) {
 
             <div class="order-header">
                 <div>
-                    <span class="order-id">Order #${order.order_id}</span>
+                    <span class="order-id">Order #${escapeHtml(order.order_id)}</span>
                     <span class="order-date">${new Date(order.created_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}</span>
                 </div>
-                <span class="status-badge ${statusClass}">${status}</span>
+                <span class="status-badge ${escapeHtml(statusClass)}">${escapeHtml(status)}</span>
             </div>
 
         <div class="order-meta">
@@ -111,10 +111,10 @@ function renderOrders(orders) {
             
             <span>
                 <strong>Payment:</strong>
-                ${order.payment_method || "N/A"}
+                ${escapeHtml(order.payment_method || "N/A")}
             </span>
             
-            <span class="payment-status ${String(order.payment_status || "Pending").toLowerCase()}">
+            <span class="payment-status ${escapeHtml(String(order.payment_status || "Pending").toLowerCase())}">
                 <i class="fas ${
                     String(order.payment_status || "Pending").toLowerCase() === "paid"
                         ? "fa-circle-check"
@@ -122,7 +122,7 @@ function renderOrders(orders) {
                 }"></i>
             
                 <strong>Payment:</strong>
-                ${order.payment_status || "Pending"}
+                ${escapeHtml(order.payment_status || "Pending")}
             </span>
             
         </div>

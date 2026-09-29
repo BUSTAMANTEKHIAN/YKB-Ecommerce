@@ -8,7 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>Checkout — YKB Clothing</title>
     <link rel="icon" href="images/banner/favicon.jpg" type="image/png">
-    <link rel="stylesheet" href="css/checkout.css">
+    <link rel="stylesheet" href="css/checkout.css?v=saved-address-1">
+    <link rel="stylesheet" href="css/newsletter.css">
 </head>
 <body>
 
@@ -29,8 +30,19 @@
             <h1>Shipping Details</h1>
             <p class="checkout-sub">Tell us where the order should land.</p>
 
+            <div id="saved-address-card" class="saved-address-card" hidden>
+                <div class="saved-address-card__icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></div>
+                <div class="saved-address-card__content">
+                    <span class="saved-address-card__label">Delivering to your saved address</span>
+                    <strong id="saved-address-name"></strong>
+                    <p id="saved-address-details"></p>
+                    <a href="profile.html">Change address in profile <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
             <form id="checkout-form" novalidate>
 
+                <div id="shipping-fields">
                 <div class="field">
                     <input type="text" id="fullName" name="fullName" placeholder=" " autocomplete="name" required>
                     <label for="fullName">Full name</label>
@@ -67,6 +79,7 @@
                         <label for="postalCode">Postal code</label>
                         <span class="field-error" data-error-for="postalCode"></span>
                     </div>
+                </div>
                 </div>
 
                 <h3 class="section-label">Payment Method</h3>
@@ -186,5 +199,22 @@
 
     <script src="js/config.js"></script>
     <script src="js/checkout.js"></script>
+
+<section id="newsletter" class="section-p1 section-m1" aria-labelledby="site-newsletter-heading">
+  <div class="newstext">
+    <h4 id="site-newsletter-heading">Sign Up For Newsletter</h4>
+    <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+  </div>
+  <form class="form site-newsletter-form" novalidate>
+    <div class="newsletter-field">
+      <label class="sr-only" for="site-newsletter-email">Email address</label>
+      <input type="email" id="site-newsletter-email" placeholder="Your Email Address" autocomplete="email" required>
+      <span class="field-error" role="status" aria-live="polite"></span>
+    </div>
+    <button class="normal" type="submit"><span class="btn-label">Sign Up</span></button>
+  </form>
+</section>
+
+<script src="js/newsletter.js"></script>
 </body>
 </html>

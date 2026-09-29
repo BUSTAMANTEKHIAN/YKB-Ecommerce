@@ -14,7 +14,7 @@ exports.getProducts = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json(err);
+        res.status(500).json([]);
     }
 };
 
@@ -64,7 +64,7 @@ exports.addProduct = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json(err);
+        res.status(500).json({ success: false, message: "Unable to load this product right now." });
     }
 
 };
@@ -93,7 +93,7 @@ exports.getProductById = async (req, res) => {
 
         console.error(err);
 
-        res.status(500).json(err);
+        res.status(500).json({ success: false, message: "Unable to add this product right now." });
 
     }
 
@@ -145,7 +145,7 @@ exports.updateProduct = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json(err);
+        res.status(500).json({ success: false, message: "Unable to update this product right now." });
     }
 };
 
@@ -168,6 +168,6 @@ exports.deleteProduct = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json(err);
+        res.status(500).json({ success: false, message: "Unable to delete this product right now." });
     }
 };

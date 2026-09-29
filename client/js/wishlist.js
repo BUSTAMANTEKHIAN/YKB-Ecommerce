@@ -144,8 +144,8 @@ function renderWishlist() {
 
             <div class="wish-card__image">
                 <img
-                    src="${item.image}"
-                    alt="${item.name}"
+                    src="${safeImageUrl(item.image)}"
+                    alt="${escapeHtml(item.name)}"
                     onerror="this.src='images/placeholder.jpg'"
                 >
             </div>
@@ -153,16 +153,18 @@ function renderWishlist() {
             <div class="wish-card__perf"></div>
 
             <div class="wish-card__body">
-                <h3 class="wish-card__name">${item.name}</h3>
+                <h3 class="wish-card__name">${escapeHtml(item.name)}</h3>
             <p class="wish-card__price">
                 ₱${Number(item.price).toLocaleString()}
             </p>
 
             <div class="wish-card__details">
-                <span>
-                    <strong>Size:</strong>
-                    ${item.size || "Not selected"}
-                </span>
+                ${item.size ? `
+                    <span>
+                        <strong>Size:</strong>
+                        ${escapeHtml(item.size)}
+                    </span>
+                ` : ""}
 
                 <span>
                     <strong>Quantity:</strong>

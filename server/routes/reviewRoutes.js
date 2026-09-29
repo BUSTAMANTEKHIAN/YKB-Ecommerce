@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const authenticate = require("../middleware/authMiddleware");
+const requireAdmin = require("../middleware/adminMiddleware");
 
 
 // =========================
 // GET ALL REVIEWS (ADMIN)
 // =========================
-router.get("/admin/all", async (req, res) => {
+router.get("/admin/all", authenticate, requireAdmin, async (req, res) => {
 
     try {
 
@@ -38,7 +40,7 @@ router.get("/admin/all", async (req, res) => {
 // =========================
 // DELETE REVIEW (ADMIN)
 // =========================
-router.delete("/admin/:id", async (req, res) => {
+router.delete("/admin/:id", authenticate, requireAdmin, async (req, res) => {
 
     try {
 
@@ -114,20 +116,22 @@ router.get("/:productId", async (req, res) => {
 // =========================
 // ADD REVIEW
 // =========================
-router.post("/add", async (req, res) => {
+router.post("/add", authenticate, async (req, res) => {
 
     try {
 
         const {
             product_id,
-            user_id,
             rating,
             review
         } = req.body;
 
+        if (!Number.isInteger(Number(product_id)) || !Number.isInteger(Number(rating)) || Number(rating) < 1 || Number(rating) > 5 || typeof review !== "string" || review.trim().length < 1 || review.length > 2000) {
+            return res.status(400).json({ success: false, message: "Enter a rating from 1 to 5 and a review under 2,000 characters." });
+        }
         await db.query(
             "INSERT INTO reviews (product_id, user_id, rating, review) VALUES (?, ?, ?, ?)",
-            [product_id, user_id, rating, review]
+            [product_id, req.user.id, rating, review.trim()]
         );
 
         res.json({

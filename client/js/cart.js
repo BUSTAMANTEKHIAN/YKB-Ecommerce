@@ -83,20 +83,20 @@ function renderCart(items) {
 
             <td>
                 <img
-                    src="${item.image || 'images/default.png'}"
+                    src="${safeImageUrl(item.image, 'images/default.png')}"
                     width="60"
-                    alt="${item.product_name}"
+                    alt="${escapeHtml(item.product_name)}"
                     onerror="this.src='images/default.png'"
                 >
             </td>
 
-            <td>${item.product_name}</td>
+            <td data-label="Product">${escapeHtml(item.product_name)}</td>
 
-            <td>${item.size || '-'}</td>
+            <td class="size-cell${item.size ? "" : " is-empty"}" data-label="Size">${escapeHtml(item.size || "")}</td>
 
-            <td>₱${Number(item.price).toLocaleString()}</td>
+            <td data-label="Price">₱${Number(item.price).toLocaleString()}</td>
 
-            <td>
+            <td data-label="Quantity">
                 <div class="qty-box">
                     <button onclick="updateQty(${item.id}, ${item.quantity - 1}, this)" aria-label="Decrease quantity">-</button>
                     <span>${item.quantity}</span>
@@ -104,7 +104,7 @@ function renderCart(items) {
                 </div>
             </td>
 
-            <td>₱${total.toLocaleString()}</td>
+            <td data-label="Total">₱${total.toLocaleString()}</td>
         </tr>
         `;
 
@@ -260,20 +260,6 @@ function validateCheckout() {
     }
 
     window.location.href = "checkout.html";
-}
-
-function applyCoupon() {
-    const input = document.getElementById("coupon-input");
-    const code = input ? input.value.trim() : "";
-
-    if (!code) {
-        showMessage("Enter a coupon code first.", "error");
-        return;
-    }
-
-    // No coupon endpoint exists yet — placeholder feedback so the button
-    // isn't dead UI. Wire this up to a real API when one's available.
-    showMessage(`Coupon "${code}" isn't valid right now.`, "error");
 }
 
 // Same stacked-toast pattern used on wishlist.html / checkout.html,

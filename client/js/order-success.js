@@ -1,75 +1,72 @@
-// Single source of truth: checkout.js writes "lastOrder" to localStorage
-// right before redirecting here. This page has no API call of its own —
-// it only ever renders what checkout.js handed off.
-
 document.addEventListener("DOMContentLoaded", renderOrderSuccess);
 
 function renderOrderSuccess() {
-
     const orderNumberEl = document.getElementById("order-number");
     const orderDateEl = document.getElementById("order-date");
     const orderTotalEl = document.getElementById("order-total");
     const orderItemsEl = document.getElementById("order-items");
+    const placeholderImage = "images/products/p1.jpg";
 
     let lastOrder = null;
-
     try {
         lastOrder = JSON.parse(localStorage.getItem("lastOrder"));
-    } catch (e) {
+    } catch (error) {
         lastOrder = null;
     }
 
-    // No order on record — most likely the page was opened directly
-    // rather than reached via checkout. Bounce to shop rather than
-    // showing a confirmation for an order that doesn't exist.
-    if (!lastOrder || !lastOrder.orderId) {
+    const orderId = new URLSearchParams(window.location.search).get("order_id") || lastOrder?.orderId;
+    if (!orderId) {
         window.location.href = "shop.html";
         return;
     }
 
-    orderNumberEl.textContent = `#${lastOrder.orderId}`;
-
-    if (lastOrder.placedAt) {
-        const date = new Date(lastOrder.placedAt);
-        orderDateEl.textContent = date.toLocaleDateString(undefined, {
-            year: "numeric", month: "long", day: "numeric"
-        });
-    }
-
-    if (typeof lastOrder.total === "number") {
-        orderTotalEl.textContent = `₱${lastOrder.total.toLocaleString()}`;
-    }
-
-    renderItems(lastOrder.items);
-
-    // Order is confirmed and rendered — clear it so refreshing or
-    // revisiting this URL later doesn't show a stale "success" screen.
-    localStorage.removeItem("lastOrder");
+    orderNumberEl.textContent = `#${orderId}`;
 
     function renderItems(items) {
-
-        if (!items || !items.length) {
+        if (!Array.isArray(items) || !items.length) {
             orderItemsEl.innerHTML = "";
             return;
         }
 
-        const rows = items.map(item => `
+        orderItemsEl.innerHTML = items.map(item => {
+            const storedImage = String(item.image || "").trim();
+            // Old product rows may store the development server's full URL.
+            // Use the same image path on the current host when that happens.
+            const imageSource = /^http:\/\/localhost(?::3000)?\//i.test(storedImage)
+                ? storedImage.replace(/^http:\/\/localhost(?::3000)?\//i, "")
+                : storedImage;
+            return `
             <div class="order-item">
                 <div class="order-item__img">
-                    <img
-                        src="${item.image || 'images/placeholder.jpg'}"
-                        alt="${item.product_name}"
-                        onerror="this.src='images/placeholder.jpg'"
-                    >
+                    <img src="${safeImageUrl(imageSource, placeholderImage)}"
+                         alt="${escapeHtml(item.product_name)}"
+                         onerror="this.onerror=null;this.src='${placeholderImage}'">
                 </div>
                 <div class="order-item__info">
-                    <h4>${item.product_name}</h4>
-                    <span>Qty ${item.quantity}${item.size ? ` · ${item.size}` : ""}</span>
+                    <h4>${escapeHtml(item.product_name)}</h4>
+                    <span>Qty ${Number(item.quantity)}${item.size ? ` · ${escapeHtml(item.size)}` : ""}</span>
                 </div>
-                <div class="order-item__price">₱${(item.price * item.quantity).toLocaleString()}</div>
+                <div class="order-item__price">₱${(Number(item.price) * Number(item.quantity)).toLocaleString()}</div>
             </div>
-        `).join("");
-
-        orderItemsEl.innerHTML = rows;
+        `;
+        }).join("");
     }
+
+    fetch(`${API_BASE_URL}/api/orders/receipt/${encodeURIComponent(orderId)}`)
+        .then(response => {
+            if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            orderDateEl.textContent = new Date(data.order.created_at).toLocaleDateString(undefined, {
+                year: "numeric", month: "long", day: "numeric"
+            });
+            orderTotalEl.textContent = `₱${Number(data.order.total).toLocaleString()}`;
+            renderItems(data.items);
+            localStorage.removeItem("lastOrder");
+        })
+        .catch(error => {
+            console.error("Order confirmation load error:", error);
+            orderItemsEl.textContent = "Your order was submitted, but its summary could not be loaded. Check My Orders for the latest status.";
+        });
 }

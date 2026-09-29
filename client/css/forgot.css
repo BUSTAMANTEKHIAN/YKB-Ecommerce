@@ -204,3 +204,17 @@ button:hover{
         font-size:30px;
     }
 }
+
+@media (max-width: 600px) {
+    body { align-items: flex-start; padding: 16px; }
+    .auth-container { min-height: 0; border-radius: 20px; }
+    .auth-right { padding: 30px 22px; }
+    .auth-right input, .auth-right button { min-height: 48px; }
+    .brand h1 { font-size: clamp(30px, 9vw, 42px); }
+}
+
+@media (max-height: 560px) and (max-width: 900px) {
+    body { align-items: flex-start; padding-top: 12px; padding-bottom: 12px; }
+    .auth-container { min-height: 0; }
+    .auth-right { padding-top: 24px; padding-bottom: 24px; }
+}

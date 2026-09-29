@@ -1,6 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const authenticate = require("../middleware/authMiddleware");
+const requireAdmin = require("../middleware/adminMiddleware");
+router.use(authenticate);
+router.use("/admin", requireAdmin);
+
+const isAccessory = (category) => {
+    const normalized = String(category || "").trim().toLowerCase();
+    return normalized === "accessory" || normalized === "accessories";
+};
 
 // =====================================================
 // CHECKOUT
@@ -9,28 +18,21 @@ const db = require("../config/db");
 
 router.post("/checkout", async (req, res) => {
 
-    const {
-        user_id,
-        payment_method,
-        items
-    } = req.body;
+    const { payment_method, shipping_info: shippingInfo } = req.body;
+    const user_id = req.user.id;
 
     // -------------------------------------------------
     // BASIC VALIDATION
     // -------------------------------------------------
 
-    if (!user_id) {
-        return res.status(400).json({
-            success: false,
-            message: "User ID is required."
-        });
+    const maxShippingLengths = { fullName: 200, email: 254, phone: 25, address: 500, city: 200, postalCode: 20 };
+    const requiredShipping = Object.keys(maxShippingLengths);
+    if (!shippingInfo || requiredShipping.some(key => typeof shippingInfo[key] !== "string" || !shippingInfo[key].trim() || shippingInfo[key].length > maxShippingLengths[key]) ||
+        typeof shippingInfo.email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingInfo.email) || shippingInfo.email.length > 254) {
+        return res.status(400).json({ success: false, message: "Enter a valid name, email, phone, address, city/province, and postal code." });
     }
-
-    if (!items || !Array.isArray(items) || items.length === 0) {
-        return res.status(400).json({
-            success: false,
-            message: "Your cart is empty."
-        });
+    if (!/^[+\d() .-]{7,25}$/.test(shippingInfo.phone.trim())) {
+        return res.status(400).json({ success: false, message: "Enter a valid phone number." });
     }
 
     const allowedPaymentMethods = [
@@ -79,15 +81,35 @@ router.post("/checkout", async (req, res) => {
 
         }
 
-        // -------------------------------------------------
-        // GET REAL PRODUCTS FROM DATABASE
-        // -------------------------------------------------
+        // Keep the customer's default delivery address for their next order.
+        await connection.query(
+            `UPDATE users
+             SET phone = ?, address = ?, city = ?, postal_code = ?
+             WHERE id = ?`,
+            [
+                shippingInfo.phone.trim(),
+                shippingInfo.address.trim(),
+                shippingInfo.city.trim(),
+                shippingInfo.postalCode.trim(),
+                user_id
+            ]
+        );
+
+        // Use the authenticated user's cart as the source of the order.
+        const [cartRows] = await connection.query(
+            "SELECT product_id, size, quantity FROM cart WHERE user_id = ? FOR UPDATE",
+            [user_id]
+        );
+        if (!cartRows.length) {
+            await connection.rollback();
+            return res.status(400).json({ success: false, message: "Your cart is empty." });
+        }
 
         const verifiedItems = [];
 
         let total = 0;
 
-        for (const item of items) {
+        for (const item of cartRows) {
 
             const productId = Number(item.product_id);
             const quantity = Number(item.quantity);
@@ -109,10 +131,11 @@ router.post("/checkout", async (req, res) => {
                     name,
                     price,
                     stock,
-                    image
+                    image,
+                    category
                  FROM products
                  WHERE id = ?
-                 LIMIT 1`,
+                 LIMIT 1 FOR UPDATE`,
                 [productId]
             );
 
@@ -128,6 +151,16 @@ router.post("/checkout", async (req, res) => {
             }
 
             const product = products[0];
+            const size = isAccessory(product.category) ? null : (item.size || null);
+
+            if (!isAccessory(product.category) && !size) {
+                await connection.rollback();
+
+                return res.status(400).json({
+                    success: false,
+                    message: `Please select a size for ${product.name}.`
+                });
+            }
 
             // -------------------------------------------------
             // CHECK STOCK
@@ -159,7 +192,8 @@ router.post("/checkout", async (req, res) => {
                 price: price,
                 quantity: quantity,
                 subtotal: subtotal,
-                image: product.image
+                image: product.image,
+                size: size
             });
 
         }
@@ -187,16 +221,28 @@ router.post("/checkout", async (req, res) => {
                     user_id,
                     total,
                     payment_method,
-                    payment_status
+                    payment_status,
+                    shipping_name,
+                    shipping_email,
+                    shipping_phone,
+                    shipping_address,
+                    shipping_city,
+                    shipping_postal_code
                 )
              VALUES
-                (?, ?, ?, ?, ?)`,
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 orderId,
                 user_id,
                 total,
                 payment_method,
-                "Pending"
+                "Pending",
+                shippingInfo.fullName.trim(),
+                shippingInfo.email.trim().toLowerCase(),
+                shippingInfo.phone.trim(),
+                shippingInfo.address.trim(),
+                shippingInfo.city.trim(),
+                shippingInfo.postalCode.trim()
             ]
         );
 
@@ -211,22 +257,24 @@ router.post("/checkout", async (req, res) => {
                     (
                         order_id,
                         product_name,
+                        size,
                         price,
                         quantity,
                         subtotal
                     )
                  VALUES
-                    (?, ?, ?, ?, ?)`,
+                    (?, ?, ?, ?, ?, ?)`,
                 [
                     orderId,
                     item.product_name,
+                    item.size,
                     item.price,
                     item.quantity,
                     item.subtotal
                 ]
             );
 
-            await connection.query(
+            const [stockUpdate] = await connection.query(
                 `UPDATE products
                  SET stock = stock - ?
                  WHERE id = ?
@@ -237,6 +285,10 @@ router.post("/checkout", async (req, res) => {
                     item.quantity
                 ]
             );
+            if (!stockUpdate.affectedRows) {
+                await connection.rollback();
+                return res.status(409).json({ success: false, message: `${item.product_name} stock changed. Please review your cart.` });
+            }
 
         }
 
@@ -411,27 +463,16 @@ router.post("/checkout", async (req, res) => {
 
         if (!paymongoResponse.ok) {
 
-            console.error(
-                "❌ PayMongo Error:",
-                JSON.stringify(
-                    paymongoData,
-                    null,
-                    2
-                )
-            );
+            const providerErrorCodes = Array.isArray(paymongoData?.errors)
+                ? paymongoData.errors.map(error => error.code).filter(Boolean)
+                : [];
+            console.error("PayMongo checkout failed:", providerErrorCodes.join(", ") || "provider error");
 
             await connection.rollback();
 
             return res.status(400).json({
-
                 success: false,
-
-                message:
-                    "Unable to create PayMongo checkout.",
-
-                error:
-                    paymongoData
-
+                message: "Unable to create PayMongo checkout. Please try again or choose another payment method."
             });
 
         }
@@ -545,11 +586,6 @@ router.post("/checkout", async (req, res) => {
             message:
                 "Something went wrong while processing your order.",
 
-            error:
-                process.env.NODE_ENV === "development"
-                    ? error.message
-                    : undefined
-
         });
 
     } finally {
@@ -582,6 +618,12 @@ router.get("/admin/all", async (req, res) => {
                 orders.payment_method,
                 orders.payment_status,
                 orders.created_at,
+                orders.shipping_name,
+                orders.shipping_email,
+                orders.shipping_phone,
+                orders.shipping_address,
+                orders.shipping_city,
+                orders.shipping_postal_code,
                 users.fullname,
                 users.email
 
@@ -643,6 +685,12 @@ router.get("/admin/:order_id", async (req, res) => {
                 orders.payment_status,
                 orders.status,
                 orders.created_at,
+                orders.shipping_name,
+                orders.shipping_email,
+                orders.shipping_phone,
+                orders.shipping_address,
+                orders.shipping_city,
+                orders.shipping_postal_code,
                 users.fullname,
                 users.email
 
@@ -681,6 +729,7 @@ router.get("/admin/:order_id", async (req, res) => {
             `SELECT
                 order_id,
                 product_name,
+                size,
                 price,
                 quantity,
                 subtotal
@@ -861,7 +910,31 @@ router.put("/admin/:order_id/status", async (req, res) => {
 
 
 // =====================================================
-// USER - GET ORDERS
+// USER - GET OWN RECEIPT
+router.get("/receipt/:order_id", async (req, res) => {
+    try {
+        const [orders] = await db.query(
+            "SELECT order_id, user_id, total, payment_method, payment_status, status, created_at FROM orders WHERE order_id = ? AND user_id = ? LIMIT 1",
+            [req.params.order_id, req.user.id]
+        );
+        if (!orders.length) return res.status(404).json({ success: false, message: "Order not found." });
+        const [items] = await db.query(
+            `SELECT oi.product_name, oi.size, oi.price, oi.quantity, oi.subtotal,
+                    (SELECT p.image FROM products p
+                     WHERE p.name = oi.product_name
+                     ORDER BY p.id ASC LIMIT 1) AS image
+             FROM order_items oi
+             WHERE oi.order_id = ?`,
+            [orders[0].order_id]
+        );
+        return res.json({ order: orders[0], items });
+    } catch (error) {
+        console.error("Receipt lookup failed:", error.message);
+        return res.status(500).json({ success: false, message: "Unable to load this receipt." });
+    }
+});
+
+// USER - GET OWN ORDERS
 // GET /api/orders/:user_id
 // =====================================================
 
@@ -869,7 +942,7 @@ router.get("/:user_id", async (req, res) => {
 
     try {
 
-        const { user_id } = req.params;
+        const user_id = req.user.id;
 
         const [orders] = await db.query(
 

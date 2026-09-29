@@ -51,7 +51,9 @@ body{
 
 #product1 .pro-container{
     display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    /* Keep empty tracks when search/filter results contain few items so
+       a single product card stays the same width as the normal grid. */
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     gap: 28px;
     padding: 40px 20px;
     max-width: 1200px;

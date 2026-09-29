@@ -14,100 +14,54 @@
 
 
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/cart.css?v=cart-ecommerce-2">
 
+    <link rel="stylesheet" href="css/newsletter.css">
 </head>
 <body>
 
     <section id="header">
-
-        <a href="#">
-            <img src= "images/banner/b1.png" class="logo" alt="YKB Clothing">
-        </a>
-
-        <div>
-            <ul id="navbar">
-
-    <li>
-        <a href="index.html">Home</a>
-    </li>
-
-    <li>
-        <a href="shop.html">Shop</a>
-    </li>
-
-    <li>
-        <a href="blog.html">Blog</a>
-    </li>
-
-    <li>
-        <a href="about.html">About</a>
-    </li>
-
-    <li>
-        <a href="contact.html">Contact</a>
-    </li>
-
+  <a href="index.html" class="brand-logo" aria-label="YKB Clothing home">
+    <img src="images/banner/b1.png" class="logo" alt="">
+    <span class="brand-text"><span class="brand-name">YKB Clothing</span><span class="brand-tag">Premium Streetwear</span></span>
+  </a>
+  <ul id="navbar" aria-label="Main navigation">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
     <li id="auth-area">
-
-    <div id="guest-links">
-        <a href="login.html" class="nav-login">Login</a>
-        <a href="register.html" class="nav-register">Register</a>
-    </div>
-
-    <div id="user-menu" class="user-menu hidden">
-        <a href="#" id="user-btn">
-            <i class="fas fa-user-circle"></i>
-            <span id="nav-username"></span>
-        </a>
-
+      <div id="guest-links"><a href="login.html" class="nav-login">Login</a><a href="register.html" class="nav-register">Sign up</a></div>
+      <div id="user-menu" class="user-menu hidden">
+        <a href="#" id="user-btn" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle" aria-hidden="true"></i><span id="nav-username">Account</span><i class="fas fa-chevron-down dropdown-caret" aria-hidden="true"></i></a>
         <div class="dropdown" id="user-dropdown">
-            <a href="profile.html" id="profile-link">My Profile</a>
-            <a href="orders.html">My Orders</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="#" onclick="logout()">Logout</a>
+          <a href="profile.html"><i class="fas fa-user" aria-hidden="true"></i>My Profile</a>
+          <a href="orders.html"><i class="fas fa-box" aria-hidden="true"></i>My Orders</a>
+          <a href="wishlist.html"><i class="fas fa-heart" aria-hidden="true"></i>Wishlist</a>
+          <a href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt" aria-hidden="true"></i>Logout</a>
         </div>
-    </div>
-
-</li>
-
-    <li class="wishlist-icon">
-        <a href="wishlist.html">
-            <i class="fas fa-heart"></i>
-            <span id="wishlist-count">0</span>
-        </a>
+      </div>
     </li>
-
-    <li id="lg-bag">
-        <a href="cart.html">
-            <i class="fas fa-shopping-bag"></i>
-            <span id="cart-count">0</span>
-        </a>
-    </li>
-
-    <li>
-        <button id="dark-mode-btn">
-            <i class="fas fa-moon"></i>
-        </button>
-    </li>
-
-    <!-- Mobile close button -->
-    <li id="close-item">
-        <a href="#" id="close"><i class="fas fa-times"></i></a>
-    </li>
-
-</ul>
-        </div>
-        <div id="mobile">
-            <a href="cart.html"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
-            <i id="bar" class="fas fa-outdent"></i>
-        </div>
-    </section>
+    <li class="wishlist-icon"><a href="wishlist.html" aria-label="Wishlist"><i class="fas fa-heart" aria-hidden="true"></i><span class="nav-label">Wishlist</span><span id="wishlist-count" class="count-badge" aria-label="Wishlist items">0</span></a></li>
+    <li id="lg-bag"><a href="cart.html" aria-label="Cart"><i class="fas fa-shopping-bag" aria-hidden="true"></i><span class="nav-label">Cart</span><span id="cart-count" class="count-badge" aria-label="Cart items">0</span></a></li>
+    <li><button id="dark-mode-btn" type="button" aria-label="Switch to dark mode" title="Switch theme"><i class="fas fa-moon" aria-hidden="true"></i></button></li>
+    <li id="close-item"><a href="#" id="close" aria-label="Close navigation menu"><i class="fas fa-times" aria-hidden="true"></i></a></li>
+  </ul>
+  <div id="mobile">
+    <a href="cart.html" aria-label="Shopping cart"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
+    <button type="button" id="bar" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navbar"><i class="fas fa-bars" aria-hidden="true"></i></button>
+  </div>
+</section>
+<div id="nav-overlay" aria-hidden="true"></div>
 
     <section id="page-header" class="cart-header">
-        <span class="cart-header__eyebrow">Your fitting room</span>
-        <h2>#My_Cart</h2>
-        <p>Add your coupon code & SAVE up to 70%!</p>
+        <span class="cart-header__eyebrow">YKB / YOUR SELECTION</span>
+        <h2>Your Cart</h2>
+        <p>Review your pieces, then continue to secure checkout.</p>
+        <div class="cart-steps" aria-label="Checkout progress">
+            <span class="is-active"><b>01</b> Cart</span><i></i><span><b>02</b> Delivery</span><i></i><span><b>03</b> Payment</span>
+        </div>
     </section>
 
     <!-- Toast notifications, same pattern as wishlist.html / checkout.html -->
@@ -142,14 +96,14 @@
     <section id="cart-add" class="section-p1">
 
     <div id="coupon">
-        <h3>Apply Coupon</h3>
-        <div>
-            <input type="text" id="coupon-input" placeholder="Enter Your Coupon">
-            <button class="normal" onclick="applyCoupon()">Apply</button>
-        </div>
+        <span class="cart-card-kicker">GOOD TO KNOW</span>
+        <h3>Ready when you are</h3>
+        <p class="coupon-unavailable">Your cart is saved to your account. Continue to checkout to confirm delivery details and choose a payment method.</p>
+        <a class="continue-shopping" href="shop.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Continue shopping</a>
     </div>
 
     <div id="subtotal">
+    <span class="cart-card-kicker">ORDER SUMMARY</span>
     <h3>Cart Totals</h3>
 
     <table>
@@ -181,27 +135,6 @@
     </button>
 </div>
 
-    <!-- PAYMENT METHOD -->
-    <div id="payment-method">
-        <h3>Payment Method</h3>
-        <p class="payment-hint">You'll confirm this again at checkout.</p>
-
-        <label>
-            <input type="radio" name="payment" checked>
-            Cash on Delivery (COD)
-        </label>
-
-        <label>
-            <input type="radio" name="payment">
-            GCash
-        </label>
-
-        <label>
-            <input type="radio" name="payment">
-            PayPal
-        </label>
-    </div>
-
 </section>
 
 
@@ -209,5 +142,22 @@
     <script src="js/script.js"></script>   
     <script src="js/cart.js"></script>
     <script src="js/darkmode.js"></script>
+
+<section id="newsletter" class="section-p1 section-m1" aria-labelledby="site-newsletter-heading">
+  <div class="newstext">
+    <h4 id="site-newsletter-heading">Sign Up For Newsletter</h4>
+    <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+  </div>
+  <form class="form site-newsletter-form" novalidate>
+    <div class="newsletter-field">
+      <label class="sr-only" for="site-newsletter-email">Email address</label>
+      <input type="email" id="site-newsletter-email" placeholder="Your Email Address" autocomplete="email" required>
+      <span class="field-error" role="status" aria-live="polite"></span>
+    </div>
+    <button class="normal" type="submit"><span class="btn-label">Sign Up</span></button>
+  </form>
+</section>
+
+<script src="js/newsletter.js"></script>
 </body>
 </html>

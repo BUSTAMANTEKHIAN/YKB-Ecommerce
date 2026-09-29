@@ -11,15 +11,22 @@
 
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/orders.css">
+    <link rel="stylesheet" href="css/newsletter.css">
 </head>
 <body>
 
 <section class="orders-page show">
 
     <div class="orders-header">
-        <span class="orders-eyebrow">Order tracker</span>
-        <h1>My Orders</h1>
-        <p>Track your purchases and view your order history.</p>
+        <div>
+            <span class="orders-eyebrow">Order tracker</span>
+            <h1>My Orders</h1>
+            <p>Track your purchases and view your order history.</p>
+        </div>
+        <a class="orders-shop-link" href="shop.html">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            Continue shopping
+        </a>
     </div>
 
     <div id="orders-loading" class="orders-loading">
@@ -38,5 +45,22 @@
 <script src="js/config.js"></script>
 <script src="js/orders.js"></script>
 
+
+<section id="newsletter" class="section-p1 section-m1" aria-labelledby="site-newsletter-heading">
+  <div class="newstext">
+    <h4 id="site-newsletter-heading">Sign Up For Newsletter</h4>
+    <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+  </div>
+  <form class="form site-newsletter-form" novalidate>
+    <div class="newsletter-field">
+      <label class="sr-only" for="site-newsletter-email">Email address</label>
+      <input type="email" id="site-newsletter-email" placeholder="Your Email Address" autocomplete="email" required>
+      <span class="field-error" role="status" aria-live="polite"></span>
+    </div>
+    <button class="normal" type="submit"><span class="btn-label">Sign Up</span></button>
+  </form>
+</section>
+
+<script src="js/newsletter.js"></script>
 </body>
 </html>

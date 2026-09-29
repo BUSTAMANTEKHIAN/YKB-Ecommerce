@@ -11,53 +11,44 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/product.css">
 
+    <link rel="stylesheet" href="css/newsletter.css">
 </head>
 <body>
 
     <section id="header">
-
-        <a href="#">
-            <img src= "images/banner/b1.png" class="logo" alt="YKB Clothing">
-        </a>
-
-        <div>
-            <ul id="navbar">
-                <li><a href="index.html">Home</a></li>
-                <li><a class="active" href="shop.html">Shop</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            
-                <li id="lg-bag">
-                    <a href="cart.html" class="cart-icon">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span id="cart-count">0</span>
-                    </a>
-                </li>
-            
-                <li id="close">
-                    <a href="#" aria-label="Close Menu">
-                        <i class="far fa-times"></i>
-                    </a>
-                </li>
-
-                <li class="wishlist-icon">
-                    <a href="wishlist.html" style="position: relative;">
-                        <i class="fas fa-heart"></i>
-                        <span id="wishlist-count">0</span>
-                    </a>
-                </li>
-
-            <button id="dark-mode-btn">
-                <i class="fas fa-moon"></i>
-            </button>
-            </ul>
+  <a href="index.html" class="brand-logo" aria-label="YKB Clothing home">
+    <img src="images/banner/b1.png" class="logo" alt="">
+    <span class="brand-text"><span class="brand-name">YKB Clothing</span><span class="brand-tag">Premium Streetwear</span></span>
+  </a>
+  <ul id="navbar" aria-label="Main navigation">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html" class="active">Shop</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+    <li id="auth-area">
+      <div id="guest-links"><a href="login.html" class="nav-login">Login</a><a href="register.html" class="nav-register">Sign up</a></div>
+      <div id="user-menu" class="user-menu hidden">
+        <a href="#" id="user-btn" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle" aria-hidden="true"></i><span id="nav-username">Account</span><i class="fas fa-chevron-down dropdown-caret" aria-hidden="true"></i></a>
+        <div class="dropdown" id="user-dropdown">
+          <a href="profile.html"><i class="fas fa-user" aria-hidden="true"></i>My Profile</a>
+          <a href="orders.html"><i class="fas fa-box" aria-hidden="true"></i>My Orders</a>
+          <a href="wishlist.html"><i class="fas fa-heart" aria-hidden="true"></i>Wishlist</a>
+          <a href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt" aria-hidden="true"></i>Logout</a>
         </div>
-        <div id="mobile">
-            <a href="cart.html"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
-            <i id="bar" class="fas fa-outdent"></i>
-        </div>
-    </section>
+      </div>
+    </li>
+    <li class="wishlist-icon"><a href="wishlist.html" aria-label="Wishlist"><i class="fas fa-heart" aria-hidden="true"></i><span class="nav-label">Wishlist</span><span id="wishlist-count" class="count-badge" aria-label="Wishlist items">0</span></a></li>
+    <li id="lg-bag"><a href="cart.html" aria-label="Cart"><i class="fas fa-shopping-bag" aria-hidden="true"></i><span class="nav-label">Cart</span><span id="cart-count" class="count-badge" aria-label="Cart items">0</span></a></li>
+    <li><button id="dark-mode-btn" type="button" aria-label="Switch to dark mode" title="Switch theme"><i class="fas fa-moon" aria-hidden="true"></i></button></li>
+    <li id="close-item"><a href="#" id="close" aria-label="Close navigation menu"><i class="fas fa-times" aria-hidden="true"></i></a></li>
+  </ul>
+  <div id="mobile">
+    <a href="cart.html" aria-label="Shopping cart"><i class="fas fa-shopping-bag" aria-hidden="true"></i></a>
+    <button type="button" id="bar" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navbar"><i class="fas fa-bars" aria-hidden="true"></i></button>
+  </div>
+</section>
+<div id="nav-overlay" aria-hidden="true"></div>
 
     <section id="prodetails" class="section-p1 section-m1">
 
@@ -106,6 +97,7 @@
 
         <!-- SIZE -->
 
+        <div id="size-field" class="product-option" hidden>
         <label for="size">
             Size
         </label>
@@ -123,17 +115,20 @@
                 Select Size
             </option>
 
-            <option value="XXL">XXL</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
             <option value="XL">XL</option>
-            <option value="Large">Large</option>
-            <option value="Medium">Medium</option>
-            <option value="Small">Small</option>
+            <option value="XXL">XXL</option>
 
         </select>
+        </div>
 
 
         <!-- QUANTITY -->
 
+        <div class="product-option">
         <label for="quantity">
             Quantity
         </label>
@@ -145,6 +140,7 @@
             id="quantity"
             name="quantity"
         >
+        </div>
 
 
         <!-- BUTTONS -->
@@ -244,33 +240,36 @@
 
     </section>
 
-    <section id="newsletter" class="section-p1 section-m1">
+    <section id="newsletter" class="section-p1 section-m1" aria-labelledby="site-newsletter-heading">
         <div class="newstext">
-            <h4>Sign Up For Newsletter</h4>
-            <p>Get E-mail updates about our latest shop and <span>special offers.</span> 
-            </p>
+            <h4 id="site-newsletter-heading">Sign Up For Newsletter</h4>
+            <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
         </div>
-        <div class="form">
-            <input type="text" placeholder="Your Email Address">
-            <button class="normal">Sign Up</button>
-        </div>
+        <form class="form site-newsletter-form" novalidate>
+            <div class="newsletter-field">
+                <label class="sr-only" for="site-newsletter-email">Email address</label>
+                <input type="email" id="site-newsletter-email" placeholder="Your Email Address" autocomplete="email" required>
+                <span class="field-error" role="status" aria-live="polite"></span>
+            </div>
+            <button class="normal" type="submit"><span class="btn-label">Sign Up</span></button>
+        </form>
     </section>
 
     <footer class="section-p1">
         <div class="col">
             <img class="logo" src="images/banner/b1.png" alt="">
             <h4>Contact</h4>
-            <p> <strong>Address:</strong> 4170 Malaban Binan laguna ilaya st, zone 4</p>
+            <p> <strong>Address:</strong> Binan laguna Philippines </p>
             <p> <strong>Phone:</strong> 09510699549</p>
             <p> <strong>Hours:</strong> 9:00am - 9:00pm Mon - Sat</p>
             <div class="follow">
                 <h4>Follow us</h4>
                 <div class="icon">
-                    <i class="fab fa-facebook-f"></i>
-                    <i class="fab fa-twitter"></i>
-                    <i class="fab fa-instagram"></i>
-                    <i class="fab fa-tiktok"></i>
-                    <i class="fab fa-youtube"></i>
+                    <a href="https://www.facebook.com/khian.bustamante.9" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    <a href="https://x.com/Bustamante35863" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    <a href="https://www.instagram.com/yaaankeyyyy/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    <a href="https://www.tiktok.com/@osgesabimoe" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+                    <a href="https://www.youtube.com/channel/UCaHrhvvIIjrVQByQUCPq17Q" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
                 </div>
             </div>
             <div></div>
@@ -316,5 +315,6 @@
     <script src="js/product.js"></script>
     <script src="js/darkmode.js"></script>
 
+<script src="js/newsletter.js"></script>
 </body>
 </html>

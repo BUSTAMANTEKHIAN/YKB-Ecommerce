@@ -43,12 +43,7 @@ forgotForm.addEventListener("submit", async (e) => {
 
         }
 
-        // Development: show the reset link
-        alert(
-            "Reset link generated!\\n\\n" +
-            "For now, copy the link from the browser console or terminal.\\n\\n" +
-            data.resetLink
-        );
+        alert(data.resetLink ? `Development reset link:\n${data.resetLink}` : (data.message || "If an account matches that email, reset instructions will be sent."));
 
         resetBtn.disabled = false;
         resetBtn.textContent = "Send Reset Link";

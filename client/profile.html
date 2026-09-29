@@ -8,8 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/profile.css?v=account-dashboard-1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/newsletter.css">
 </head>
 <body>
 
@@ -60,6 +61,15 @@
     <!-- MAIN -->
     <div class="main">
 
+        <header class="account-heading">
+            <div>
+                <span class="account-kicker">YKB MEMBER ACCOUNT</span>
+                <h1>Your account</h1>
+                <p>Manage your details, delivery address, and order activity.</p>
+            </div>
+            <a class="account-shop-link" href="shop.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Continue shopping</a>
+        </header>
+
         <!-- HEADER CARD -->
         <div class="header-card">
 
@@ -78,7 +88,7 @@
                 <div class="info">
                     <h2 id="profile-name"></h2>
                     <p id="profile-email"></p>
-
+                    <span class="member-badge"><i class="fas fa-circle-check" aria-hidden="true"></i> YKB member</span>
                     <button id="editBtn">
                         <i class="fas fa-pen"></i> Edit Profile
                     </button>
@@ -91,21 +101,50 @@
         <div class="stats">
 
             <div class="card">
+                <i class="fas fa-box-open" aria-hidden="true"></i>
                 <h3 id="orderCount">—</h3>
                 <p>Orders</p>
             </div>
 
             <div class="card">
+                <i class="fas fa-peso-sign" aria-hidden="true"></i>
                 <h3 id="totalSpent">—</h3>
                 <p>Total Spent</p>
             </div>
 
             <div class="card">
-                <h3>Active</h3>
-                <p>Status</p>
+                <i class="fas fa-shield-heart" aria-hidden="true"></i>
+                <h3 class="status-value">Active</h3>
+                <p>Account status</p>
             </div>
 
         </div>
+
+        <section class="account-panels" aria-label="Account details">
+            <article class="account-panel">
+                <div class="panel-heading">
+                    <div class="panel-icon"><i class="fas fa-user" aria-hidden="true"></i></div>
+                    <div><span>YOUR DETAILS</span><h2>Personal information</h2></div>
+                </div>
+                <dl class="profile-details">
+                    <div><dt>Full name</dt><dd id="detail-name">—</dd></div>
+                    <div><dt>Email address</dt><dd id="detail-email">—</dd></div>
+                    <div><dt>Phone number</dt><dd id="detail-phone">Not added yet</dd></div>
+                </dl>
+            </article>
+
+            <article class="account-panel address-panel">
+                <div class="panel-heading">
+                    <div class="panel-icon"><i class="fas fa-location-dot" aria-hidden="true"></i></div>
+                    <div><span>DEFAULT DELIVERY</span><h2>Shipping address</h2></div>
+                    <button class="panel-edit" type="button" id="editAddressBtn" aria-label="Edit shipping address"><i class="fas fa-pen" aria-hidden="true"></i></button>
+                </div>
+                <div id="profile-address" class="profile-address">
+                    <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+                    <p>No saved address yet. Your first checkout will save your delivery details here.</p>
+                </div>
+            </article>
+        </section>
 
     </div>
 </div>
@@ -126,6 +165,27 @@
             <span class="field-error" id="edit-email-error"></span>
         </div>
 
+        <div class="field">
+            <input type="tel" id="edit-phone" placeholder="Phone number" autocomplete="tel">
+            <span class="field-error" id="edit-phone-error"></span>
+        </div>
+
+        <div class="field">
+            <input type="text" id="edit-address" placeholder="Street address" autocomplete="street-address">
+            <span class="field-error" id="edit-address-error"></span>
+        </div>
+
+        <div class="field-row">
+            <div class="field">
+                <input type="text" id="edit-city" placeholder="City / province" autocomplete="address-level2">
+                <span class="field-error" id="edit-city-error"></span>
+            </div>
+            <div class="field">
+                <input type="text" id="edit-postal-code" placeholder="Postal code" autocomplete="postal-code">
+                <span class="field-error" id="edit-postal-code-error"></span>
+            </div>
+        </div>
+
         <div class="modal-actions">
             <button class="save-btn" id="saveProfileBtn" onclick="saveProfile()">Save</button>
             <button class="cancel-btn" onclick="closeModal()">Cancel</button>
@@ -142,5 +202,22 @@
 <script src="js/profile.js"></script>
 <script src="js/auth.js"></script>
 
+
+<section id="newsletter" class="section-p1 section-m1" aria-labelledby="site-newsletter-heading">
+  <div class="newstext">
+    <h4 id="site-newsletter-heading">Sign Up For Newsletter</h4>
+    <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+  </div>
+  <form class="form site-newsletter-form" novalidate>
+    <div class="newsletter-field">
+      <label class="sr-only" for="site-newsletter-email">Email address</label>
+      <input type="email" id="site-newsletter-email" placeholder="Your Email Address" autocomplete="email" required>
+      <span class="field-error" role="status" aria-live="polite"></span>
+    </div>
+    <button class="normal" type="submit"><span class="btn-label">Sign Up</span></button>
+  </form>
+</section>
+
+<script src="js/newsletter.js"></script>
 </body>
 </html>

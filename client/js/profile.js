@@ -17,14 +17,57 @@ const profileName = document.getElementById("profile-name");
 const profileEmail = document.getElementById("profile-email");
 const editName = document.getElementById("edit-name");
 const editEmail = document.getElementById("edit-email");
+const editPhone = document.getElementById("edit-phone");
+const editAddress = document.getElementById("edit-address");
+const editCity = document.getElementById("edit-city");
+const editPostalCode = document.getElementById("edit-postal-code");
 const modal = document.getElementById("modal");
 const editBtn = document.getElementById("editBtn");
 const saveProfileBtn = document.getElementById("saveProfileBtn");
 const toastStack = document.getElementById("toast-stack");
 
-// Display user information
-profileName.textContent = user.fullname;
-profileEmail.textContent = user.email;
+let profile = { ...user, phone: "", address: "", city: "", postalCode: "" };
+
+function renderProfile() {
+    profileName.textContent = profile.fullname || "YKB Member";
+    profileEmail.textContent = profile.email || "";
+    document.getElementById("detail-name").textContent = profile.fullname || "—";
+    document.getElementById("detail-email").textContent = profile.email || "—";
+    document.getElementById("detail-phone").textContent = profile.phone || "Not added yet";
+
+    const addressEl = document.getElementById("profile-address");
+    if (profile.address && profile.city && profile.postalCode) {
+        addressEl.innerHTML = `
+            <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+            <div><strong>${escapeHtml(profile.address)}</strong>
+            <p>${escapeHtml(profile.city)} ${escapeHtml(profile.postalCode)}${profile.phone ? ` · ${escapeHtml(profile.phone)}` : ""}</p></div>
+        `;
+    } else {
+        addressEl.innerHTML = `
+            <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+            <p>No saved address yet. Your first checkout will save your delivery details here.</p>
+        `;
+    }
+}
+
+async function loadProfile() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/profile`);
+        const data = await response.json();
+        if (!response.ok || !data.profile) throw new Error(data.message || "Unable to load profile.");
+        profile = data.profile;
+        Object.assign(user, profile);
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        renderProfile();
+    } catch (error) {
+        console.error("Profile load failed:", error);
+        showToast(error.message || "Unable to load profile details.", "error");
+    }
+}
+
+renderProfile();
+document.getElementById("editAddressBtn").addEventListener("click", () => editBtn.click());
+document.addEventListener("DOMContentLoaded", loadProfile);
 
 // =========================
 // TOASTS
@@ -45,8 +88,12 @@ function showToast(message, type = "default") {
 
 // Open modal
 editBtn.addEventListener("click", () => {
-    editName.value = user.fullname;
-    editEmail.value = user.email;
+    editName.value = profile.fullname || "";
+    editEmail.value = profile.email || "";
+    editPhone.value = profile.phone || "";
+    editAddress.value = profile.address || "";
+    editCity.value = profile.city || "";
+    editPostalCode.value = profile.postalCode || "";
     clearFieldErrors();
     modal.style.display = "flex";
 });
@@ -58,10 +105,8 @@ function closeModal() {
 window.closeModal = closeModal;
 
 function clearFieldErrors() {
-    document.getElementById("edit-name-error").textContent = "";
-    document.getElementById("edit-email-error").textContent = "";
-    editName.classList.remove("has-error");
-    editEmail.classList.remove("has-error");
+    document.querySelectorAll(".modal-box .field-error").forEach(error => error.textContent = "");
+    document.querySelectorAll(".modal-box input").forEach(input => input.classList.remove("has-error"));
 }
 
 function validateProfileForm() {
@@ -94,18 +139,20 @@ function validateProfileForm() {
 // =========================
 // SAVE PROFILE
 // =========================
-// NOTE: No confirmed backend endpoint for updating a user profile exists
-// yet in the API list I have (/api/auth/login, /api/auth/register, cart
-// endpoints only). This calls a placeholder PUT to /api/auth/profile —
-// swap in the real path once the backend route exists. Until then this
-// falls back to a localStorage-only update so the UI still works, but
-// changes won't persist across devices or logins.
 async function saveProfile() {
 
     if (!validateProfileForm()) return;
 
     const newName = editName.value.trim();
     const newEmail = editEmail.value.trim();
+    const updatedProfile = {
+        fullname: newName,
+        email: newEmail,
+        phone: editPhone.value.trim(),
+        address: editAddress.value.trim(),
+        city: editCity.value.trim(),
+        postalCode: editPostalCode.value.trim()
+    };
 
     saveProfileBtn.disabled = true;
     saveProfileBtn.textContent = "Saving...";
@@ -115,42 +162,23 @@ async function saveProfile() {
         const response = await fetch(`${API_BASE_URL}/api/auth/profile`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                user_id: user.id,
-                fullname: newName,
-                email: newEmail
-            })
+            body: JSON.stringify(updatedProfile)
         });
 
-        if (!response.ok) {
-            throw new Error(`Server responded ${response.status}`);
-        }
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || `Server responded ${response.status}`);
 
-        user.fullname = newName;
-        user.email = newEmail;
+        profile = data.profile;
+        Object.assign(user, profile);
         localStorage.setItem("currentUser", JSON.stringify(user));
-
-        profileName.textContent = user.fullname;
-        profileEmail.textContent = user.email;
+        renderProfile();
 
         showToast("Profile updated.", "success");
         closeModal();
 
     } catch (err) {
-
-        console.error("Profile update failed, saving locally only:", err);
-
-        // Fallback so the page still functions until the backend route exists —
-        // remove this fallback once /api/auth/profile is confirmed working.
-        user.fullname = newName;
-        user.email = newEmail;
-        localStorage.setItem("currentUser", JSON.stringify(user));
-
-        profileName.textContent = user.fullname;
-        profileEmail.textContent = user.email;
-
-        showToast("Saved locally — couldn't reach the server.", "error");
-        closeModal();
+        console.error("Profile update failed:", err);
+        showToast(err.message || "Couldn't save profile changes.", "error");
 
     } finally {
 

@@ -1,0 +1,152 @@
+/* Shared newsletter banner used throughout the customer storefront. */
+body #newsletter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin: 70px auto;
+    padding: 48px;
+    border-radius: 30px;
+    background: #0e1414;
+    color: #fff;
+}
+
+body #newsletter .newstext { flex: 1 1 280px; }
+body #newsletter .newstext h4 {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 32px;
+    font-weight: 800;
+}
+body #newsletter .newstext p {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 16px;
+    line-height: 1.7;
+}
+body #newsletter .newstext p span { color: #5eead4; font-weight: 700; }
+body #newsletter .form {
+    display: flex;
+    align-items: flex-start;
+    flex: 0 1 460px;
+    width: min(460px, 100%);
+    gap: 10px;
+}
+body #newsletter .newsletter-field { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+body #newsletter input {
+    width: 100%;
+    height: 58px;
+    padding: 0 20px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    outline: none;
+    background: #fff;
+    color: #0e1414;
+    font-size: 15px;
+}
+body #newsletter input:focus { border-color: #5eead4; }
+body #newsletter .field-error { min-height: 18px; margin: 6px 0 0; padding-left: 8px; color: #fca5a5; font-size: 12px; }
+body #newsletter .field-error { display: block; }
+body #newsletter button {
+    flex-shrink: 0;
+    height: 58px;
+    padding: 0 24px;
+    border: 0;
+    border-radius: 999px;
+    background: #088178;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+body #newsletter button:hover { background: #066b63; }
+body #newsletter button:disabled { opacity: .7; cursor: wait; }
+
+@media (max-width: 799px) {
+    body #newsletter { padding: 32px 24px; }
+    body #newsletter .newstext h4 { font-size: 26px; }
+    body #newsletter .form { flex: 1 1 100%; flex-direction: column; width: 100%; }
+    body #newsletter .newsletter-field, body #newsletter button { width: 100%; }
+}
+
+@media (max-width: 480px) {
+    body #newsletter { margin: 44px 16px; padding: 26px 20px; border-radius: 22px; }
+}
+
+body.dark-mode #newsletter { background: #1b1d22; }
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Page-specific stylesheets used to give these same blocks a different look. */
+html body .about-page #newsletter,
+html body .blog-page #newsletter {
+    margin: 70px auto !important;
+    padding: 48px !important;
+    border-radius: 30px !important;
+    background: #0e1414 !important;
+    color: #fff !important;
+}
+html body .about-page #newsletter .newstext h4,
+html body .blog-page #newsletter .newstext h4 {
+    color: #fff !important;
+    font-size: 32px !important;
+}
+html body .about-page #newsletter .newstext p,
+html body .blog-page #newsletter .newstext p {
+    color: #cbd5e1 !important;
+}
+html body .about-page #newsletter .newstext p span,
+html body .blog-page #newsletter .newstext p span {
+    color: #5eead4 !important;
+}
+html body .about-page #newsletter .form,
+html body .blog-page #newsletter .form {
+    flex: 0 1 460px !important;
+    flex-wrap: nowrap !important;
+    width: min(460px, 100%) !important;
+}
+html body .about-page #newsletter button,
+html body .blog-page #newsletter button {
+    height: 58px !important;
+    padding: 0 24px !important;
+    background: #088178 !important;
+    color: #fff !important;
+}
+html body.dark-mode .about-page #newsletter,
+html body.dark-mode .blog-page #newsletter { background: #1b1d22 !important; }
+html body.dark-mode .about-page #newsletter .newstext p,
+html body.dark-mode .blog-page #newsletter .newstext p { color: #cbd5e1 !important; }
+
+@media (max-width: 799px) {
+    html body .about-page #newsletter,
+    html body .blog-page #newsletter { padding: 32px 24px !important; }
+    html body .about-page #newsletter .newstext h4,
+    html body .blog-page #newsletter .newstext h4 { font-size: 26px !important; }
+    html body .about-page #newsletter .form,
+    html body .blog-page #newsletter .form {
+        flex: 1 1 100% !important;
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+    html body .about-page #newsletter button,
+    html body .blog-page #newsletter button { width: 100% !important; }
+}
+
+@media (max-width: 480px) {
+    html body .about-page #newsletter,
+    html body .blog-page #newsletter {
+        margin: 44px 16px !important;
+        padding: 26px 20px !important;
+        border-radius: 22px !important;
+    }
+}

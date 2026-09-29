@@ -1,7 +1,5 @@
 const container = document.getElementById("receipt-content");
 
-const user = JSON.parse(localStorage.getItem("currentUser"));
-
 // get order_id from URL
 const params = new URLSearchParams(window.location.search);
 const order_id = params.get("order_id");
@@ -10,8 +8,11 @@ if (!order_id) {
     window.location.href = "orders.html";
 }
 
-fetch(`${API_BASE_URL}/api/orders/receipt/${order_id}`)
-.then(res => res.json())
+fetch(`${API_BASE_URL}/api/orders/receipt/${encodeURIComponent(order_id)}`)
+.then(res => {
+    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+    return res.json();
+})
 .then(data => {
 
     if (!data) {
@@ -32,10 +33,11 @@ fetch(`${API_BASE_URL}/api/orders/receipt/${order_id}`)
 
         productsHTML += `
             <div class="receipt-product">
-                <img src="${item.image || 'images/product.png'}">
+                <img src="${safeImageUrl(item.image, 'images/product.png')}" alt="${escapeHtml(item.product_name)}">
 
                 <div class="product-details">
-                    <h3>${item.product_name}</h3>
+                    <h3>${escapeHtml(item.product_name)}</h3>
+                    ${item.size ? `<p>Size: ${escapeHtml(item.size)}</p>` : ""}
                     <p>Quantity: ${item.quantity}</p>
                     <p class="product-price">₱${total.toLocaleString()}</p>
                 </div>
@@ -52,24 +54,24 @@ fetch(`${API_BASE_URL}/api/orders/receipt/${order_id}`)
 
         <div class="info-card">
             <h4>Order Number</h4>
-            <p>${order.order_id}</p>
+            <p>${escapeHtml(order.order_id)}</p>
         </div>
 
         <div class="info-card">
             <h4>Date</h4>
-            <p>${order.created_at}</p>
+            <p>${escapeHtml(order.created_at)}</p>
         </div>
 
         <div class="info-card">
             <h4>Status</h4>
-            <p class="status ${order.status.toLowerCase()}">
-                ${order.status}
+            <p class="status ${escapeHtml(order.status.toLowerCase())}">
+                ${escapeHtml(order.status)}
             </p>
         </div>
 
         <div class="info-card">
             <h4>Payment</h4>
-            <p>${order.payment_method}</p>
+            <p>${escapeHtml(order.payment_method)}</p>
         </div>
 
     </div>
@@ -91,4 +93,8 @@ fetch(`${API_BASE_URL}/api/orders/receipt/${order_id}`)
 
     </div>
     `;
+})
+.catch(error => {
+    console.error("Receipt load error:", error);
+    container.textContent = "Unable to load this receipt. Please check your orders or try again.";
 });

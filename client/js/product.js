@@ -10,6 +10,24 @@ const productId = params.get("id");
 
 let currentProduct = null;
 
+function isAccessory(product = currentProduct) {
+    const category = String(product?.category || "").trim().toLowerCase();
+    return category === "accessory" || category === "accessories";
+}
+
+function productRequiresSize() {
+    return !isAccessory();
+}
+
+function setSizeVisibility(product) {
+    const sizeField = document.getElementById("size-field");
+    const sizeSelect = document.getElementById("size");
+    const requiresSize = !isAccessory(product);
+    sizeField.hidden = !requiresSize;
+    sizeSelect.required = requiresSize;
+    if (!requiresSize) sizeSelect.value = "";
+}
+
 
 // ==========================================
 // IMAGE URL
@@ -38,6 +56,8 @@ function getProductImage(image) {
 // ==========================================
 
 function validateSize() {
+
+    if (!productRequiresSize()) return true;
 
     const size = document.getElementById("size").value;
 
@@ -79,8 +99,9 @@ async function saveProductToCart() {
         image:
             document.getElementById("MainImg").src,
 
-        size:
-            document.getElementById("size").value,
+        size: productRequiresSize()
+            ? document.getElementById("size").value
+            : null,
 
         quantity:
             Number(
@@ -220,7 +241,7 @@ wishlistBtn.addEventListener("click", async () => {
     // REQUIRE SIZE
     // ==============================
 
-    if (!size) {
+    if (productRequiresSize() && !size) {
 
         alert(
             "Please select a size before adding this item to your wishlist."
@@ -290,7 +311,7 @@ wishlistBtn.addEventListener("click", async () => {
                 body: JSON.stringify({
                     user_id: user.id,
                     product_id: Number(productId),
-                    size: size,
+                    size: productRequiresSize() ? size : null,
                     quantity: quantity
                 })
             }
@@ -325,9 +346,7 @@ wishlistBtn.addEventListener("click", async () => {
             updateWishlistCount();
         }
         
-        alert(
-            `Added to wishlist!\n\nSize: ${size}\nQuantity: ${quantity}`
-        );
+        alert(`Added to wishlist!\n\n${productRequiresSize() ? `Size: ${size}\n` : ""}Quantity: ${quantity}`);
 
         
 
@@ -456,6 +475,7 @@ async function loadProduct() {
         const product = await response.json();
 
         currentProduct = product;
+        setSizeVisibility(product);
 
         console.log("================================");
         console.log("PRODUCT DATA FROM DATABASE:");
@@ -516,7 +536,7 @@ async function loadProduct() {
                     src="${imageUrl}"
                     class="small-img"
                     width="100%"
-                    alt="${product.name || "Product"}"
+                    alt="${escapeHtml(product.name || "Product")}"
                 >
             </div>
         `;
@@ -836,20 +856,20 @@ async function loadRelatedProducts() {
                 <div
                     class="pro"
                     onclick="
-                        window.location.href='product.html?id=${product.id}'
+                        window.location.href='product.html?id=${encodeURIComponent(product.id)}'
                     "
                 >
 
                     <img
                         src="${getProductImage(product.image)}"
-                        alt="${product.name}"
+                        alt="${escapeHtml(product.name)}"
                     >
 
                     <div class="des">
 
-                        <span>${product.brand}</span>
+                        <span>${escapeHtml(product.brand)}</span>
 
-                        <h5>${product.name}</h5>
+                        <h5>${escapeHtml(product.name)}</h5>
 
                         <h4>
                             ₱${Number(product.price).toLocaleString()}
@@ -929,7 +949,7 @@ async function loadReviews() {
                 <div class="review-card">
 
                     <h4>
-                        ${review.fullname}
+                        ${escapeHtml(review.fullname)}
                     </h4>
 
                     <div class="review-stars">
@@ -947,7 +967,7 @@ async function loadReviews() {
                     </div>
 
                     <p>
-                        ${review.review}
+                        ${escapeHtml(review.review)}
                     </p>
 
                     <div class="review-date">

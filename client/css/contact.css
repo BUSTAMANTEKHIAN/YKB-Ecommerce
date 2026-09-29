@@ -646,6 +646,25 @@ body.dark-mode .person {
     }
 }
 
+@media (max-width: 400px) {
+    #contact-details { padding-left: 16px; padding-right: 16px; gap: 18px; }
+    #contact-details .details,
+    #contact-details .map { min-width: 0; width: 100%; max-width: 100%; box-sizing: border-box; }
+    #contact-details .details { padding: 24px 18px; }
+    #contact-details .details h2 { font-size: 22px; overflow-wrap: anywhere; }
+    #contact-details li a,
+    #contact-details li .static-row { min-width: 0; padding: 14px 12px; gap: 10px; overflow-wrap: anywhere; }
+    #contact-details iframe { max-width: 100%; }
+    #form-details { margin-left: 16px; margin-right: 16px; gap: 18px; }
+    #form-details form,
+    #form-details .people { min-width: 0; width: 100%; max-width: 100%; box-sizing: border-box; }
+    #form-details form { padding: 24px 18px; }
+    #form-details input,
+    #form-details textarea { min-width: 0; max-width: 100%; }
+    #form-details .person { min-width: 0; gap: 12px; padding: 16px; }
+    #form-details .person p { min-width: 0; overflow-wrap: anywhere; }
+}
+
 /* ==========================================
    CONTACT — DARK MODE FIX
 ========================================== */

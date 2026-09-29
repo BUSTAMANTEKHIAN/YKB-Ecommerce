@@ -461,8 +461,8 @@ function renderProducts(
                     product.image
                         ? `
                             <img
-                                src="${product.image}"
-                                alt="${product.name}"
+                                src="${safeImageUrl(product.image)}"
+                                alt="${escapeHtml(product.name)}"
                                 class="admin-product-image"
                                 onerror="
                                     this.style.display='none';
@@ -481,11 +481,11 @@ function renderProducts(
             </td>
 
             <td>
-                ${product.name}
+                ${escapeHtml(product.name)}
             </td>
 
             <td>
-                ${product.category}
+                ${escapeHtml(product.category)}
             </td>
 
             <td>
@@ -1568,7 +1568,7 @@ async function loadOrders() {
                             <td>
 
                                 <strong>
-                                    ${order.order_id}
+                                    ${escapeHtml(order.order_id)}
                                 </strong>
 
                             </td>
@@ -1578,19 +1578,13 @@ async function loadOrders() {
                             <td>
 
                                 <strong>
-                                    ${
-                                        order.fullname ||
-                                        "Unknown Customer"
-                                    }
+                                    ${escapeHtml(order.fullname || "Unknown Customer")}
                                 </strong>
 
                                 <br>
 
                                 <small>
-                                    ${
-                                        order.email ||
-                                        "No email"
-                                    }
+                                    ${escapeHtml(order.email || "No email")}
                                 </small>
 
                             </td>
@@ -1630,10 +1624,7 @@ async function loadOrders() {
                                             : "fa-credit-card"
                                     }"></i>
 
-                                    ${
-                                        order.payment_method ||
-                                        "N/A"
-                                    }
+                                    ${escapeHtml(order.payment_method || "N/A")}
 
                                 </span>
 
@@ -2595,10 +2586,17 @@ window.viewOrder =
 
                                             <strong>
                                                 ${
-                                                    item.product_name ||
+                                                    escapeHtml(item.product_name ||
                                                     "Unknown Product"
+                                                    )
                                                 }
                                             </strong>
+
+                                            ${
+                                                item.size
+                                                    ? `<small>Size: ${escapeHtml(item.size)}</small>`
+                                                    : ""
+                                            }
 
                                         </div>
 
@@ -2713,6 +2711,19 @@ window.viewOrder =
 
                     </div>
 
+                </div>
+
+                <div class="order-detail-section">
+                    <div class="order-detail-section-title">
+                        <i class="fas fa-truck"></i>
+                        <h3>Shipping Information</h3>
+                    </div>
+                    <div class="order-info">
+                        <div class="order-card"><span>Recipient</span><strong>${escapeHtml(order.shipping_name || "Not recorded")}</strong></div>
+                        <div class="order-card"><span>Phone</span><strong>${escapeHtml(order.shipping_phone || "Not recorded")}</strong></div>
+                        <div class="order-card"><span>Delivery email</span><strong>${escapeHtml(order.shipping_email || order.email || "Not recorded")}</strong></div>
+                        <div class="order-card"><span>Address</span><strong>${escapeHtml([order.shipping_address, order.shipping_city, order.shipping_postal_code].filter(Boolean).join(", ") || "Not recorded")}</strong></div>
+                    </div>
                 </div>
 
                 <!-- ORDER INFORMATION -->
@@ -3075,19 +3086,20 @@ function renderUsers(
                 </td>
 
                 <td>
-                    ${user.fullname}
+                    ${escapeHtml(user.fullname)}
+                    ${user.role === "owner" ? `<span class="protected-owner-label">Protected Owner</span>` : ""}
                 </td>
 
                 <td>
-                    ${user.email}
+                    ${escapeHtml(user.email)}
                 </td>
 
                 <td>
 
                     <span
-                        class="status-badge ${user.role}"
+                        class="status-badge ${escapeHtml(user.role)}"
                     >
-                        ${user.role}
+                        ${escapeHtml(user.role)}
                     </span>
 
                     ${
@@ -3119,12 +3131,6 @@ function renderUsers(
                         "owner"
 
                             ? `
-
-                                <span
-                                    class="status-badge owner"
-                                >
-                                    Protected Owner
-                                </span>
 
                               `
 
@@ -3513,11 +3519,11 @@ async function loadReviews() {
                 <tr>
 
                     <td>
-                        ${r.product_name}
+                        ${escapeHtml(r.product_name)}
                     </td>
 
                     <td>
-                        ${r.fullname}
+                        ${escapeHtml(r.fullname)}
                     </td>
 
                     <td>
@@ -3530,7 +3536,7 @@ async function loadReviews() {
                     </td>
 
                     <td>
-                        ${r.review}
+                        ${escapeHtml(r.review)}
                     </td>
 
                     <td>
@@ -3787,19 +3793,19 @@ function renderMessages(
             <tr>
 
                 <td>
-                    ${message.name}
+                    ${escapeHtml(message.name)}
                 </td>
 
                 <td>
-                    ${message.email}
+                    ${escapeHtml(message.email)}
                 </td>
 
                 <td>
-                    ${message.subject || "-"}
+                    ${escapeHtml(message.subject || "-")}
                 </td>
 
                 <td>
-                    ${message.message}
+                    ${escapeHtml(message.message)}
                 </td>
 
                 <td>

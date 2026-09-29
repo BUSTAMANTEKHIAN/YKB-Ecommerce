@@ -62,21 +62,13 @@ function renderProducts(products){
 
         <div class="pro">
 
-            <img src="${product.image}" alt="${product.name}">
+            <img src="${safeImageUrl(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy">
 
             <div class="des">
 
-                <span>${product.brand}</span>
+                <span>${escapeHtml(product.brand)}</span>
 
-                <h5>${product.name}</h5>
-
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
+                <h5>${escapeHtml(product.name)}</h5>
 
                 <h4>₱${Number(product.price).toLocaleString()}</h4>
 

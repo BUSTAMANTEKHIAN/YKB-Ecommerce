@@ -1,11 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const authenticate = require("../middleware/authMiddleware");
+router.use(authenticate);
+
+const isAccessory = (category) => {
+    const normalized = String(category || "").trim().toLowerCase();
+    return normalized === "accessory" || normalized === "accessories";
+};
 
 // GET USER WISHLIST
 router.get("/:userId", async (req, res) => {
     try {
-        const { userId } = req.params;
+        const userId = req.user.id;
 
         const [items] = await db.query(
             `SELECT
@@ -15,6 +22,7 @@ router.get("/:userId", async (req, res) => {
                 products.price,
                 products.image,
                 products.brand,
+                products.category,
                 wishlist.size,
                 wishlist.quantity,
                 wishlist.created_at
@@ -25,6 +33,10 @@ router.get("/:userId", async (req, res) => {
              ORDER BY wishlist.created_at DESC`,
             [userId]
         );
+
+        items.forEach(item => {
+            if (isAccessory(item.category)) item.size = null;
+        });
 
         res.json(items);
 
@@ -43,32 +55,23 @@ router.get("/:userId", async (req, res) => {
 router.post("/add", async (req, res) => {
     try {
         const {
-            user_id,
             product_id,
             size,
             quantity
         } = req.body;
 
         // Validate user and product
-        if (!user_id || !product_id) {
+        if (!product_id) {
             return res.status(400).json({
                 success: false,
                 message: "User and product are required."
             });
         }
 
-        // Validate size
-        if (!size) {
-            return res.status(400).json({
-                success: false,
-                message: "Please select a size."
-            });
-        }
-
         // Validate quantity
         const requestedQuantity = Number(quantity);
 
-        if (!requestedQuantity || requestedQuantity < 1) {
+        if (!Number.isInteger(requestedQuantity) || requestedQuantity < 1 || requestedQuantity > 99) {
             return res.status(400).json({
                 success: false,
                 message: "Please enter a valid quantity."
@@ -77,7 +80,7 @@ router.post("/add", async (req, res) => {
 
         // Check product
         const [products] = await db.query(
-            "SELECT stock FROM products WHERE id = ?",
+            "SELECT stock, category FROM products WHERE id = ?",
             [product_id]
         );
 
@@ -89,6 +92,15 @@ router.post("/add", async (req, res) => {
         }
 
         const stock = Number(products[0].stock);
+        const wishlistSize = isAccessory(products[0].category) ? null : (size || null);
+
+        if (wishlistSize && !/^[\p{L}\d -]{1,20}$/u.test(String(wishlistSize))) {
+            return res.status(400).json({ success: false, message: "Choose a valid size." });
+        }
+
+        if (!isAccessory(products[0].category) && !wishlistSize) {
+            return res.status(400).json({ success: false, message: "Please select a size." });
+        }
 
         if (stock <= 0) {
             return res.status(400).json({
@@ -113,9 +125,9 @@ router.post("/add", async (req, res) => {
                 size = VALUES(size),
                 quantity = VALUES(quantity)`,
             [
-                user_id,
+                req.user.id,
                 product_id,
-                size,
+                wishlistSize,
                 requestedQuantity
             ]
         );
@@ -140,8 +152,8 @@ router.post("/add", async (req, res) => {
 router.delete("/remove/:id", async (req, res) => {
     try {
         await db.query(
-            "DELETE FROM wishlist WHERE id = ?",
-            [req.params.id]
+            "DELETE FROM wishlist WHERE id = ? AND user_id = ?",
+            [req.params.id, req.user.id]
         );
 
         res.json({

@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const authenticate = require("../middleware/authMiddleware");
+const requireAdmin = require("../middleware/adminMiddleware");
+router.use(authenticate, requireAdmin);
 
 
 router.get("/dashboard", async (req, res) => {
@@ -76,6 +79,10 @@ router.put("/order-status/:order_id", async (req, res) => {
 
         const { order_id } = req.params;
         const { status } = req.body;
+        const allowedStatuses = ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
+        if (!allowedStatuses.includes(status)) {
+            return res.status(400).json({ success: false, message: "Choose a valid order status." });
+        }
 
         await db.query(
             "UPDATE orders SET status = ? WHERE order_id = ?",
@@ -98,7 +105,7 @@ router.get("/users", async (req, res) => {
     try {
 
         const [users] = await db.query(
-            "SELECT id, fullname, email, role, created_at FROM users ORDER BY created_at DESC"
+            "SELECT id, fullname, email, role, created_at FROM users ORDER BY CASE WHEN role = 'owner' THEN 0 ELSE 1 END, created_at DESC, id ASC"
         );
 
         res.json(users);
@@ -117,7 +124,14 @@ router.put("/users/:id/role", async (req, res) => {
     try {
 
         const { id } = req.params;
-        const { role, adminRole } = req.body;
+        const { role } = req.body;
+        const adminRole = req.user.role;
+        if (!["user", "admin", "owner"].includes(role)) {
+            return res.status(400).json({ success: false, message: "Invalid account role." });
+        }
+        if (Number(id) === req.user.id) {
+            return res.status(400).json({ success: false, message: "You cannot change your own role." });
+        }
 
         // Get target user
         const [rows] = await db.query(
@@ -177,7 +191,14 @@ router.put('/users/:id/suspend', async (req, res) => {
     try {
 
         const { id } = req.params;
-        const { days, adminRole } = req.body;
+        const { days } = req.body;
+        const adminRole = req.user.role;
+        if (!([1, 3, 7, 30].includes(Number(days)) || days === "permanent")) {
+            return res.status(400).json({ success: false, message: "Choose a valid suspension duration." });
+        }
+        if (Number(id) === req.user.id) {
+            return res.status(400).json({ success: false, message: "You cannot suspend your own account." });
+        }
 
         const [rows] = await db.query(
             'SELECT role FROM users WHERE id = ?',

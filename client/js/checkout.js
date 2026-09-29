@@ -72,6 +72,8 @@ async function loadCheckoutCart() {
 
     try {
 
+        await loadSavedAddress();
+
         const response = await fetch(
             `${API_BASE}/cart/${user.id}`
         );
@@ -97,6 +99,38 @@ async function loadCheckoutCart() {
         );
 
         renderCartError();
+    }
+}
+
+async function loadSavedAddress() {
+    try {
+        const response = await fetch(`${API_BASE}/auth/profile`);
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const profile = data.profile;
+        if (!profile) return;
+
+        form.fullName.value = profile.fullname || "";
+        form.email.value = profile.email || "";
+        form.phone.value = profile.phone || "";
+        form.address.value = profile.address || "";
+        form.city.value = profile.city || "";
+        form.postalCode.value = profile.postalCode || "";
+
+        const hasSavedAddress = Boolean(
+            profile.phone && profile.address && profile.city && profile.postalCode
+        );
+        if (!hasSavedAddress) return;
+
+        document.getElementById("saved-address-name").textContent = profile.fullname || "";
+        document.getElementById("saved-address-details").textContent =
+            `${profile.phone} · ${profile.address}, ${profile.city} ${profile.postalCode}`;
+        document.getElementById("saved-address-card").hidden = false;
+        document.getElementById("shipping-fields").hidden = true;
+    } catch (error) {
+        // Leave the shipping form available when the saved profile cannot load.
+        console.warn("Saved delivery address unavailable.");
     }
 }
 
@@ -181,11 +215,8 @@ function renderOrderSummary() {
                     <div class="order-item__img">
 
                         <img
-                            src="${
-                                item.image ||
-                                "images/placeholder.jpg"
-                            }"
-                            alt="${item.product_name}"
+                            src="${safeImageUrl(item.image)}"
+                            alt="${escapeHtml(item.product_name)}"
                             onerror="
                                 this.src='images/placeholder.jpg'
                             "
@@ -196,14 +227,14 @@ function renderOrderSummary() {
                     <div class="order-item__info">
 
                         <h4>
-                            ${item.product_name}
+                            ${escapeHtml(item.product_name)}
                         </h4>
 
                         <span>
                             Qty ${item.quantity}
                             ${
                                 item.size
-                                    ? ` · ${item.size}`
+                                ? ` · ${escapeHtml(item.size)}`
                                     : ""
                             }
                         </span>
@@ -385,23 +416,13 @@ async function handleCheckoutSubmit(e) {
 
                     body: JSON.stringify({
 
-                        user_id:
-                            user.id,
-
                         payment_method:
                             payment.value,
 
                         shipping_info:
                             shippingInfo,
 
-                        items:
-                            cartData,
-
-                        // This is only sent for compatibility.
-                        // Backend now calculates the real total
-                        // from the database.
-                        total:
-                            cartTotal
+                        // The backend reads the authenticated user's cart and calculates the total.
                     })
                 }
             );
@@ -453,21 +474,6 @@ async function handleCheckoutSubmit(e) {
                     orderId:
                         data.order_id,
 
-                    items:
-                        cartData,
-
-                    total:
-                        Number(data.total),
-
-                    shippingInfo:
-                        shippingInfo,
-
-                    paymentMethod:
-                        payment.value,
-
-                    paymentStatus:
-                        "Pending",
-
                     placedAt:
                         new Date().toISOString()
                 })
@@ -502,21 +508,6 @@ async function handleCheckoutSubmit(e) {
 
                 orderId:
                     data.order_id,
-
-                items:
-                    cartData,
-
-                total:
-                    Number(data.total),
-
-                shippingInfo:
-                    shippingInfo,
-
-                paymentMethod:
-                    payment.value,
-
-                paymentStatus:
-                    "Paid on Delivery",
 
                 placedAt:
                     new Date().toISOString()

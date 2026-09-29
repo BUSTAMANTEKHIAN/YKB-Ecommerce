@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const authenticate = require("../middleware/authMiddleware");
+const requireAdmin = require("../middleware/adminMiddleware");
 
 // Save contact message
 router.post("/send", async (req, res) => {
@@ -8,9 +10,15 @@ router.post("/send", async (req, res) => {
 
         const { name, email, subject, message } = req.body;
 
+        if ([name, email, subject, message].some(value => typeof value !== "string" || !value.trim()) ||
+            name.length > 200 || email.length > 254 || subject.length > 200 || message.length > 5000 ||
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return res.status(400).json({ success: false, message: "Enter a valid name, email, subject, and message." });
+        }
+
         await db.query(
             "INSERT INTO contact_messages (name, email, subject, message) VALUES (?, ?, ?, ?)",
-            [name, email, subject, message]
+            [name.trim(), email.trim().toLowerCase(), subject.trim(), message.trim()]
         );
 
         res.json({ success: true });
@@ -25,7 +33,7 @@ router.post("/send", async (req, res) => {
 });
 
 // Get all messages (admin)
-router.get("/admin", async (req, res) => {
+router.get("/admin", authenticate, requireAdmin, async (req, res) => {
     try {
 
         const [messages] = await db.query(
@@ -44,7 +52,7 @@ router.get("/admin", async (req, res) => {
 });
 
 // Delete message (admin)
-router.delete("/admin/:id", async (req, res) => {
+router.delete("/admin/:id", authenticate, requireAdmin, async (req, res) => {
     try {
 
         await db.query(

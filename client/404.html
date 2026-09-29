@@ -1,5 +1,29 @@
-# Page not found
-
-Sorry, the page you’re looking for doesn’t exist.
-
-Return to the home page.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page not found — YKB Clothing</title>
+  <link rel="stylesheet" href="css/newsletter.css">
+  <style>
+    body { margin: 0; padding: 48px 20px; background: #f8fafc; color: #0e1414; font: 16px/1.6 Inter, Arial, sans-serif; }
+    .not-found { max-width: 780px; margin: 8vh auto; padding: 56px 28px; text-align: center; }
+    .not-found h1 { margin: 0 0 12px; color: #088178; font-size: clamp(38px, 8vw, 64px); }
+    .not-found p { margin: 0 0 22px; }
+    .not-found a { color: #066b63; font-weight: 700; }
+    body.dark-mode { background: #0f1115; color: #fff; }
+  </style>
+</head>
+<body>
+  <main class="not-found">
+    <h1>Page not found</h1>
+    <p>Sorry, the page you’re looking for doesn’t exist.</p>
+    <a href="index.html">Return to the home page</a>
+  </main>
+  <section id="newsletter" class="section-p1 section-m1" aria-labelledby="site-newsletter-heading">
+    <div class="newstext"><h4 id="site-newsletter-heading">Sign Up For Newsletter</h4><p>Get E-mail updates about our latest shop and <span>special offers.</span></p></div>
+    <form class="form site-newsletter-form" novalidate><div class="newsletter-field"><label class="sr-only" for="site-newsletter-email">Email address</label><input type="email" id="site-newsletter-email" placeholder="Your Email Address" autocomplete="email" required><span class="field-error" role="status" aria-live="polite"></span></div><button class="normal" type="submit"><span class="btn-label">Sign Up</span></button></form>
+  </section>
+  <script src="js/newsletter.js"></script>
+</body>
+</html>

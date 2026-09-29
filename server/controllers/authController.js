@@ -21,10 +21,10 @@ exports.register = async (req, res) => {
             });
         }
 
-        if (password.length < 6) {
+        if (!isStrongEnoughPassword(password)) {
             return res.status(400).json({
                 success: false,
-                message: "Password must be at least 6 characters long."
+                message: "Password must be at least 8 characters and include a letter and a number."
             });
         }
 
@@ -51,11 +51,7 @@ exports.register = async (req, res) => {
             [fullname, email, hashedPassword]
         );
 
-        console.log("✅ New user registered:", {
-            id: result.insertId,
-            fullname,
-            email
-        });
+        console.log("✅ New user registered:", result.insertId);
 
         return res.status(201).json({
             success: true,
@@ -77,10 +73,14 @@ exports.register = async (req, res) => {
 
         return res.status(500).json({
             success: false,
-            message: err.message || "Registration failed."
+            message: "Registration failed. Please try again."
         });
     }
 };
+
+function isStrongEnoughPassword(password) {
+    return typeof password === "string" && password.length >= 8 && /[A-Za-z]/.test(password) && /\d/.test(password);
+}
 
 
 // ==========================================
@@ -223,7 +223,7 @@ exports.login = async (req, res) => {
 
         return res.status(500).json({
             success: false,
-            message: err.message || "Login failed."
+            message: "Login failed. Please try again."
         });
     }
 };

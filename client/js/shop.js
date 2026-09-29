@@ -307,27 +307,19 @@ function renderProducts(products) {
 
                 <img
                     src="${getProductImage(product.image)}"
-                    alt="${product.name}"
+                    alt="${escapeHtml(product.name)}"
                     loading="lazy"
                 >
 
                 <div class="des">
 
                     <span>
-                        ${product.brand || ""}
+                        ${escapeHtml(product.brand || "")}
                     </span>
 
                     <h5>
-                        ${product.name}
+                        ${escapeHtml(product.name)}
                     </h5>
-
-                    <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
 
                     <h4>
                         ₱${Number(product.price).toLocaleString()}
@@ -340,7 +332,7 @@ function renderProducts(products) {
                 <button
                     class="cart ${Number(product.stock) <= 0 ? "disabled" : ""}"
                     type="button"
-                    aria-label="View ${product.name}"
+                    aria-label="View ${escapeHtml(product.name)}"
                 >
                     <i class="fas fa-shopping-cart"></i>
                 </button>

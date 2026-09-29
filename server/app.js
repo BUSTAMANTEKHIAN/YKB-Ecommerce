@@ -1,13 +1,8 @@
 const path = require("path");
-const fs = require("fs");
 
 require("dotenv").config({
     path: path.join(__dirname, ".env")
 });
-
-console.log("DB_HOST:", process.env.DB_HOST);
-console.log("DB_USER:", process.env.DB_USER);
-console.log("DB_NAME:", process.env.DB_NAME);
 
 const express = require("express");
 const cors = require("cors");
@@ -26,8 +21,35 @@ const contactRoutes = require("./routes/contactRoutes");
 const paymongoRoutes = require("./routes/paymongoRoutes");
 
 const app = express();
+app.set("trust proxy", 1);
 
-app.use(cors());
+const allowedOrigins = new Set([
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://ykb-ecommerce.onrender.com",
+    ...(process.env.CORS_ALLOWED_ORIGINS || "").split(",").map(origin => origin.trim()).filter(Boolean)
+]);
+
+app.use((req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    if (process.env.NODE_ENV === "production" && req.secure) {
+        res.setHeader("Strict-Transport-Security", "max-age=15552000");
+    }
+    next();
+});
+
+app.use(cors({
+    origin(origin, callback) {
+        if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+        return callback(null, false);
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Paymongo-Signature"],
+    maxAge: 600
+}));
 
 // PayMongo webhook MUST receive the raw body
 app.use(
@@ -46,21 +68,6 @@ app.use(express.json());
 // ================================
 
 const clientPath = path.join(__dirname, "../client");
-
-console.log("=================================");
-console.log("CLIENT FILE DEBUG");
-console.log("__dirname:", __dirname);
-console.log("clientPath:", clientPath);
-console.log("client exists:", fs.existsSync(clientPath));
-
-const imagePath = path.join(
-    clientPath,
-    "images/products/1786721110721.jpg"
-);
-
-console.log("imagePath:", imagePath);
-console.log("image exists:", fs.existsSync(imagePath));
-console.log("=================================");
 
 app.use(express.static(clientPath));
 
@@ -85,6 +92,11 @@ app.use("/api/products", productRoutes);
 // ==========================================
 // ROOT
 // ==========================================
+
+// Support the clean URL as well as the existing about.html links.
+app.get("/about", (req, res) => {
+    res.sendFile(path.join(clientPath, "about.html"));
+});
 
 app.get("/", (req, res) => {
     res.json({
