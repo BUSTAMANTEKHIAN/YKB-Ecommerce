@@ -4,14 +4,40 @@ const API_BASE_URL =
         ? "http://localhost:3000"
         : "https://ykb-ecommerce.onrender.com";
 
-// Attach the short-lived JWT to existing API calls. UI profile data in
-// localStorage is never sent as proof of identity.
+// Resolve API origin for safe authorization header attachment
+function isTrustedApiUrl(input) {
+    try {
+        const rawUrl = typeof input === "string" ? input : input?.url;
+        if (!rawUrl) return false;
+        // Resolve relative paths against current window location
+        const targetUrl = new URL(rawUrl, window.location.href);
+        const configuredApiOrigin = new URL(API_BASE_URL, window.location.href).origin;
+
+        // Allow configured backend API origin or same-origin /api/ endpoints
+        if (targetUrl.origin === configuredApiOrigin) return true;
+        if (targetUrl.origin === window.location.origin && targetUrl.pathname.startsWith("/api/")) return true;
+
+        return false;
+    } catch {
+        return false;
+    }
+}
+window.isTrustedApiUrl = isTrustedApiUrl;
+
+// Attach the JWT exclusively to trusted API endpoints. Never leak credentials
+// to third-party CDNs, external gateways, or image hosts.
 const nativeFetch = window.fetch.bind(window);
 window.fetch = (input, init = {}) => {
     const token = localStorage.getItem("token");
-    if (!token) return nativeFetch(input, init);
+    if (!token || !isTrustedApiUrl(input)) {
+        return nativeFetch(input, init);
+    }
+
     const headers = new Headers(init.headers || (input instanceof Request ? input.headers : undefined));
-    if (!headers.has("Authorization")) headers.set("Authorization", `Bearer ${token}`);
+    if (!headers.has("Authorization")) {
+        headers.set("Authorization", `Bearer ${token}`);
+    }
+
     return nativeFetch(input, { ...init, headers });
 };
 

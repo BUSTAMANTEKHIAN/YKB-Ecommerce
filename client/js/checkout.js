@@ -68,6 +68,11 @@ if (!user || !user.id) {
 // =========================
 async function loadCheckoutCart() {
 
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("cancelled") === "true") {
+        showToast("Online payment was cancelled. Your cart has been preserved.", "default");
+    }
+
     renderSkeleton();
 
     try {

@@ -4,6 +4,13 @@ require("dotenv").config({
     path: path.join(__dirname, ".env")
 });
 
+// Enforce minimum cryptographic security for JWT
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim().length < 32) {
+    console.error("❌ FATAL CONFIGURATION ERROR: JWT_SECRET environment variable is missing or shorter than 32 characters.");
+    console.error("Please configure a cryptographically random JWT_SECRET of at least 32 characters in your environment or server/.env file.");
+    process.exit(1);
+}
+
 const express = require("express");
 const cors = require("cors");
 

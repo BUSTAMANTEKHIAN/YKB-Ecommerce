@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password - YKB Clothing</title>
     <link rel="icon" href="images/banner/favicon.jpg" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/forgot.css">
     <link rel="stylesheet" href="css/newsletter.css">
 </head>
 <body>
 
-```
+<div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
 <div class="auth-container">
 
     <!-- LEFT SIDE -->
@@ -39,7 +44,7 @@
             Enter the email address associated with your account and we'll send you a password reset link.
         </p>
 
-        <form id="forgotForm" autocomplete="off">
+        <form id="forgotForm" autocomplete="off" novalidate>
 
             <div class="input-box">
 
@@ -51,10 +56,16 @@
                     id="email"
                     type="email"
                     placeholder=" "
+                    autocomplete="email"
                     required>
 
-                <label>Email</label>
+                <label for="email">Email</label>
 
+            </div>
+
+            <div id="email-dev-link" class="dev-reset-container" style="display: none; margin: 12px 0; padding: 12px; background: #e6f6f4; border: 1px solid #088178; border-radius: 8px; font-size: 13px; word-break: break-all;">
+                <strong>Development Reset Link:</strong><br>
+                <a id="email-dev-url" href="#" style="color: #088178;"></a>
             </div>
 
             <button type="submit" id="resetBtn">
@@ -77,29 +88,11 @@
 </div>
 
 <!-- Ion Icons -->
-<script type="module"
-    src="https://unpkg.com/ionicons@7.2.1/dist/ionicons/ionicons.esm.js">
-</script>
+<script type="module" src="https://unpkg.com/ionicons@7.2.1/dist/ionicons/ionicons.esm.js"></script>
 
 <script src="js/config.js"></script>
 <script src="js/forgot.js"></script>
-```
 
-
-<section id="newsletter" class="section-p1 section-m1" aria-labelledby="site-newsletter-heading">
-  <div class="newstext">
-    <h4 id="site-newsletter-heading">Sign Up For Newsletter</h4>
-    <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
-  </div>
-  <form class="form site-newsletter-form" novalidate>
-    <div class="newsletter-field">
-      <label class="sr-only" for="site-newsletter-email">Email address</label>
-      <input type="email" id="site-newsletter-email" placeholder="Your Email Address" autocomplete="email" required>
-      <span class="field-error" role="status" aria-live="polite"></span>
-    </div>
-    <button class="normal" type="submit"><span class="btn-label">Sign Up</span></button>
-  </form>
-</section>
 
 <script src="js/newsletter.js"></script>
 </body>

@@ -4,26 +4,25 @@ const ordersContainer = document.getElementById("orders-list");
 const ordersLoading = document.getElementById("orders-loading");
 const toastStack = document.getElementById("toast-stack");
 
-// Guard was missing a `return` — without it, the fetch below still fired
-// with `user.id` on a null user (throwing) even after starting the
-// redirect. The redirect now short-circuits everything past this point.
 if (!user) {
     showToast("Please log in to view your orders.", "error");
     setTimeout(() => {
         window.location.href = "login.html";
     }, 900);
 } else {
-    document.addEventListener("DOMContentLoaded", loadOrders);
+    document.addEventListener("DOMContentLoaded", () => {
+        loadOrders();
+        setupOrderActions();
+    });
 }
 
 // =========================
 // LOAD ORDERS FROM MYSQL
 // =========================
 function loadOrders() {
-
     setLoading(true);
 
-    fetch(`${API_BASE_URL}/api/orders/${user.id}`)
+    fetch(`${API_BASE_URL}/api/orders/my-orders`)
         .then(res => {
             if (!res.ok) throw new Error(`Server responded ${res.status}`);
             return res.json();
@@ -56,10 +55,9 @@ function renderError() {
 }
 
 // =========================
-// RENDER ORDERS WITH TRACKER
+// RENDER ORDERS WITH TRACKER & ACTIONS
 // =========================
 function renderOrders(orders) {
-
     if (!orders || orders.length === 0) {
         ordersContainer.innerHTML = `
             <div class="empty">
@@ -72,12 +70,8 @@ function renderOrders(orders) {
         return;
     }
 
-    // Built as an array and joined once, instead of `innerHTML +=` inside
-    // the loop — `+=` re-parses the entire container on every iteration,
-    // which is wasteful and would drop any listeners attached to earlier cards.
     const cards = orders.map(order => {
-
-        const status = (order.status || "Pending");
+        const status = order.status || "Pending";
         const statusClass = status.toLowerCase();
 
         let progress = 0;
@@ -90,9 +84,11 @@ function renderOrders(orders) {
         }
 
         const isCancelled = status === "Cancelled";
+        const isEligibleRetry = !isCancelled && order.payment_method !== "COD" && String(order.payment_status).toLowerCase() === "pending" && status === "Pending";
+        const isEligibleCancel = !isCancelled && (status === "Pending" || status === "Processing");
 
         return `
-        <div class="order-card">
+        <div class="order-card" data-order-id="${escapeHtml(order.order_id)}">
 
             <div class="order-header">
                 <div>
@@ -102,30 +98,27 @@ function renderOrders(orders) {
                 <span class="status-badge ${escapeHtml(statusClass)}">${escapeHtml(status)}</span>
             </div>
 
-        <div class="order-meta">
-            
-            <span>
-                <strong>Total:</strong>
-                ₱${Number(order.total).toLocaleString()}
-            </span>
-            
-            <span>
-                <strong>Payment:</strong>
-                ${escapeHtml(order.payment_method || "N/A")}
-            </span>
-            
-            <span class="payment-status ${escapeHtml(String(order.payment_status || "Pending").toLowerCase())}">
-                <i class="fas ${
-                    String(order.payment_status || "Pending").toLowerCase() === "paid"
-                        ? "fa-circle-check"
-                        : "fa-clock"
-                }"></i>
-            
-                <strong>Payment:</strong>
-                ${escapeHtml(order.payment_status || "Pending")}
-            </span>
-            
-        </div>
+            <div class="order-meta">
+                <span>
+                    <strong>Total:</strong>
+                    ₱${Number(order.total).toLocaleString()}
+                </span>
+                
+                <span>
+                    <strong>Payment:</strong>
+                    ${escapeHtml(order.payment_method || "N/A")}
+                </span>
+                
+                <span class="payment-status ${escapeHtml(String(order.payment_status || "Pending").toLowerCase())}">
+                    <i class="fas ${
+                        String(order.payment_status || "Pending").toLowerCase() === "paid"
+                            ? "fa-circle-check"
+                            : "fa-clock"
+                    }"></i>
+                    <strong>Payment:</strong>
+                    ${escapeHtml(order.payment_status || "Pending")}
+                </span>
+            </div>
 
             ${!isCancelled ? `
             <div class="tracker">
@@ -146,15 +139,91 @@ function renderOrders(orders) {
             </div>
             `}
 
+            <div class="order-actions" style="margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="receipt.html?order_id=${encodeURIComponent(order.order_id)}" class="btn-receipt" style="display: inline-block; padding: 6px 16px; border-radius: 50px; border: 1px solid #088178; color: #088178; text-decoration: none; font-size: 13px; font-weight: 600;">
+                    <i class="fas fa-file-invoice"></i> View Receipt
+                </a>
+                ${isEligibleRetry ? `
+                <button type="button" class="btn-retry-payment" data-id="${escapeHtml(order.order_id)}" style="background: #088178; color: #fff; border: none; padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    <i class="fas fa-credit-card"></i> Pay Now
+                </button>
+                ` : ""}
+                ${isEligibleCancel ? `
+                <button type="button" class="btn-cancel-order" data-id="${escapeHtml(order.order_id)}" style="background: transparent; color: #dc2626; border: 1px solid #dc2626; padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    Cancel Order
+                </button>
+                ` : ""}
+            </div>
+
         </div>
         `;
-
     }).join("");
 
     ordersContainer.innerHTML = cards;
 }
 
-// Same stacked-toast pattern used on cart.js / checkout.js
+// =========================
+// ACTION EVENT HANDLERS
+// =========================
+function setupOrderActions() {
+    if (!ordersContainer) return;
+
+    ordersContainer.addEventListener("click", async (e) => {
+        const retryBtn = e.target.closest(".btn-retry-payment");
+        const cancelBtn = e.target.closest(".btn-cancel-order");
+
+        if (retryBtn) {
+            const orderId = retryBtn.dataset.id;
+            retryBtn.disabled = true;
+            retryBtn.textContent = "Redirecting...";
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/orders/${encodeURIComponent(orderId)}/retry-payment`, {
+                    method: "POST"
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success || !data.checkout_url) {
+                    showToast(data.message || "Unable to restart payment session.", "error");
+                    retryBtn.disabled = false;
+                    retryBtn.innerHTML = '<i class="fas fa-credit-card"></i> Pay Now';
+                    return;
+                }
+                showToast("Redirecting to payment gateway...", "success");
+                setTimeout(() => {
+                    window.location.href = data.checkout_url;
+                }, 600);
+            } catch (err) {
+                console.error("Retry payment error:", err);
+                showToast("Failed to connect. Please try again.", "error");
+                retryBtn.disabled = false;
+                retryBtn.innerHTML = '<i class="fas fa-credit-card"></i> Pay Now';
+            }
+            return;
+        }
+
+        if (cancelBtn) {
+            const orderId = cancelBtn.dataset.id;
+            cancelBtn.disabled = true;
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/orders/${encodeURIComponent(orderId)}/cancel`, {
+                    method: "POST"
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) {
+                    showToast(data.message || "Failed to cancel order.", "error");
+                    cancelBtn.disabled = false;
+                    return;
+                }
+                showToast(data.message || "Order cancelled.", "success");
+                loadOrders();
+            } catch (err) {
+                console.error("Cancel order error:", err);
+                showToast("Failed to connect. Please try again.", "error");
+                cancelBtn.disabled = false;
+            }
+        }
+    });
+}
+
 function showToast(text, type = "success") {
     if (!toastStack) return;
 
