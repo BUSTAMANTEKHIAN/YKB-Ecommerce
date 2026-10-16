@@ -9,12 +9,12 @@ async function sendEmail({ to, subject, text, html }) {
     const brevoApiKey = process.env.BREVO_API_KEY;
     const smtpHost = process.env.SMTP_HOST;
 
-    const defaultFrom = "YKB Clothing <noreply@ykbclothing.com>";
+    const defaultFrom = process.env.RESEND_FROM || "YKB Clothing <onboarding@resend.dev>";
 
     // Provider 1: Resend HTTP API
     if (resendApiKey) {
         try {
-            const from = process.env.RESEND_FROM || defaultFrom;
+            const from = process.env.RESEND_FROM || "YKB Clothing <onboarding@resend.dev>";
             const response = await fetch("https://api.resend.com/emails", {
                 method: "POST",
                 headers: {

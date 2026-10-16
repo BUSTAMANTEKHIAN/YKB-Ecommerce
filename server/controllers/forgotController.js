@@ -56,8 +56,24 @@ exports.forgotPassword = async (req, res) => {
         const appUrl = process.env.APP_URL || "http://localhost:3000";
         const resetUrl = `${appUrl}/reset-password.html?token=${encodeURIComponent(rawToken)}`;
 
-        // Dispatch email via configured mailer provider
-        await sendPasswordResetEmail({ to: email, resetUrl });
+const delivery = await sendPasswordResetEmail({
+    to: email,
+    resetUrl
+});
+
+if (!delivery?.sent) {
+    await db.query(
+        "DELETE FROM password_resets WHERE email = ?",
+        [email]
+    );
+
+    console.error(
+        "[Forgot Password] Reset email was not delivered.",
+        delivery?.reason || delivery?.error || "Unknown delivery failure"
+    );
+
+    return res.json(genericSuccess);
+}
 
         const responsePayload = { ...genericSuccess };
 
